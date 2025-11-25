@@ -1,0 +1,296 @@
+<template>
+  <MainLayout page-title="Ativos">
+    <div class="assets-page">
+      <div class="page-header">
+        <h2>Gerenciar Ativos</h2>
+        <button @click="showAddForm = true">+ Adicionar Ativos</button>
+      </div>
+
+      <!-- User Selection -->
+      <div class="card user-selector">
+        <div class="form-group">
+          <label>Selecione o Usuário</label>
+          <input 
+            v-model.number="selectedUserId" 
+            type="number" 
+            placeholder="Digite o ID do usuário"
+            @change="fetchObservedAssets"
+          />
+        </div>
+      </div>
+
+      <!-- Add Assets Form Modal -->
+      <div v-if="showAddForm" class="modal-overlay" @click.self="closeAddForm">
+        <div class="modal card">
+          <h3>Adicionar Ativos</h3>
+          
+          <form @submit.prevent="addAssets">
+            <div class="form-group">
+              <label>Ações (separadas por vírgula)</label>
+              <input v-model="formData.acoes" type="text" placeholder="VALE3, PETR4, BBAS3" />
+            </div>
+            
+            <div class="form-group">
+              <label>FIIs (separados por vírgula)</label>
+              <input v-model="formData.fiis" type="text" placeholder="HGLG11, XPML11, MXRF11" />
+            </div>
+            
+            <div v-if="error" class="error-message">{{ error }}</div>
+            <div v-if="success" class="success-message">{{ success }}</div>
+            
+            <div class="form-actions">
+              <button type="button" class="secondary" @click="closeAddForm">Cancelar</button>
+              <button type="submit" :disabled="loading">
+                {{ loading ? 'Salvando...' : 'Salvar' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Assets List -->
+      <div v-if="selectedUserId" class="card">
+        <h3>Ativos Observados</h3>
+        
+        <div v-if="loading" class="loading">
+          <div class="spinner"></div>
+        </div>
+        
+        <table v-else-if="observedAssets.length">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="asset in observedAssets" :key="asset.id">
+              <td>{{ asset.id }}</td>
+              <td>{{ asset.codigo }}</td>
+              <td>{{ asset.tipo }}</td>
+              <td>
+                <select 
+                  :value="asset.status" 
+                  @change="updateAssetStatus(asset.id, $event.target.value)"
+                  class="status-select"
+                >
+                  <option value="observando">Observando</option>
+                  <option value="comprado">Comprado</option>
+                  <option value="vendido">Vendido</option>
+                </select>
+              </td>
+              <td>
+                <button class="btn-small secondary" @click="viewQuote(asset.codigo)">
+                  Ver Cotação
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div v-else class="empty-state">
+          <p>Nenhum ativo observado</p>
+        </div>
+      </div>
+      
+      <div v-else class="card empty-state">
+        <p>Selecione um usuário para ver os ativos</p>
+      </div>
+    </div>
+  </MainLayout>
+</template>
+
+<script>
+import MainLayout from '../components/MainLayout.vue'
+import assetService from '../services/assetService'
+
+export default {
+  name: 'Assets',
+  components: {
+    MainLayout
+  },
+  data() {
+    return {
+      selectedUserId: null,
+      observedAssets: [],
+      showAddForm: false,
+      formData: {
+        acoes: '',
+        fiis: ''
+      },
+      loading: false,
+      error: '',
+      success: ''
+    }
+  },
+  methods: {
+    async fetchObservedAssets() {
+      if (!this.selectedUserId) return
+      
+      this.loading = true
+      this.error = ''
+      
+      try {
+        const response = await assetService.getObservedAssets(this.selectedUserId)
+        this.observedAssets = response.data
+      } catch (err) {
+        this.error = 'Erro ao carregar ativos observados'
+        console.error(err)
+      } finally {
+        this.loading = false
+      }
+    },
+    
+    async addAssets() {
+      if (!this.selectedUserId) {
+        this.error = 'Selecione um usuário primeiro'
+        return
+      }
+      
+      this.loading = true
+      this.error = ''
+      this.success = ''
+      
+      try {
+        const ativos = {}
+        
+        if (this.formData.acoes) {
+          ativos['Ação'] = this.formData.acoes.split(',').map(a => a.trim()).filter(a => a)
+        }
+        
+        if (this.formData.fiis) {
+          ativos['FII'] = this.formData.fiis.split(',').map(f => f.trim()).filter(f => f)
+        }
+        
+        if (Object.keys(ativos).length === 0) {
+          this.error = 'Adicione pelo menos um ativo'
+          this.loading = false
+          return
+        }
+        
+        await assetService.createUserAssets(this.selectedUserId, ativos)
+        this.success = 'Ativos adicionados com sucesso'
+        
+        await this.fetchObservedAssets()
+        setTimeout(() => this.closeAddForm(), 1500)
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Erro ao adicionar ativos'
+      } finally {
+        this.loading = false
+      }
+    },
+    
+    async updateAssetStatus(ativoId, status) {
+      if (!this.selectedUserId) return
+      
+      try {
+        await assetService.updateAssetStatus(this.selectedUserId, [
+          { ativo_id: ativoId, status }
+        ])
+        
+        // Update local state
+        const asset = this.observedAssets.find(a => a.id === ativoId)
+        if (asset) asset.status = status
+      } catch (err) {
+        this.error = 'Erro ao atualizar status'
+        console.error(err)
+      }
+    },
+    
+    viewQuote(codigo) {
+      this.$router.push({ name: 'Quotes', query: { codigo } })
+    },
+    
+    closeAddForm() {
+      this.showAddForm = false
+      this.formData = {
+        acoes: '',
+        fiis: ''
+      }
+      this.error = ''
+      this.success = ''
+    }
+  }
+}
+</script>
+
+<style scoped>
+.assets-page {
+  max-width: 1200px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  margin: 0;
+}
+
+.user-selector {
+  margin-bottom: 2rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modal {
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h3 {
+  margin-bottom: 1.5rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.btn-small {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.status-select {
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  width: auto;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+</style>

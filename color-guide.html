@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance - Guia de Cores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #212121;
+        }
+        
+        .colors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .color-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .color-preview {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .color-info {
+            padding: 1.5rem;
+        }
+        
+        .color-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #212121;
+        }
+        
+        .color-code {
+            font-family: monospace;
+            font-size: 1rem;
+            color: #757575;
+            margin-bottom: 0.5rem;
+        }
+        
+        .color-usage {
+            font-size: 0.9rem;
+            color: #757575;
+            margin-top: 1rem;
+        }
+        
+        .primary { background: #6200EE; }
+        .secondary { background: #3700B3; }
+        .accent { background: #BB86FC; }
+        .bg-primary { background: #FFFFFF; color: #212121; border: 1px solid #E0E0E0; }
+        .bg-secondary { background: #F5F5F5; color: #212121; }
+        .text-primary { background: #212121; }
+        .text-secondary { background: #757575; }
+        .border { background: #E0E0E0; color: #212121; }
+        .error { background: #B00020; }
+        .success { background: #00C853; }
+        
+        .examples {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .examples h2 {
+            margin-bottom: 1.5rem;
+            color: #6200EE;
+        }
+        
+        .button-examples {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #6200EE;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #F5F5F5;
+            color: #6200EE;
+            border: 1px solid #E0E0E0;
+        }
+        
+        .btn-danger {
+            background: #B00020;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #00C853;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Finance - Guia de Cores</h1>
+        
+        <div class="colors-grid">
+            <div class="color-card">
+                <div class="color-preview primary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Primária</div>
+                    <div class="color-code">#6200EE</div>
+                    <div class="color-code">rgb(98, 0, 238)</div>
+                    <div class="color-usage">Botões principais, links, sidebar ativa</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview secondary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Secundária</div>
+                    <div class="color-code">#3700B3</div>
+                    <div class="color-code">rgb(55, 0, 179)</div>
+                    <div class="color-usage">Hover states, elementos secundários</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview accent">A</div>
+                <div class="color-info">
+                    <div class="color-name">Destaque</div>
+                    <div class="color-code">#BB86FC</div>
+                    <div class="color-code">rgb(187, 134, 252)</div>
+                    <div class="color-usage">Destaques especiais, badges</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview bg-primary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Background Primário</div>
+                    <div class="color-code">#FFFFFF</div>
+                    <div class="color-code">rgb(255, 255, 255)</div>
+                    <div class="color-usage">Cards, modais, sidebar</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview bg-secondary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Background Secundário</div>
+                    <div class="color-code">#F5F5F5</div>
+                    <div class="color-code">rgb(245, 245, 245)</div>
+                    <div class="color-usage">Fundo da página, hover em tabelas</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview text-primary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Texto Primário</div>
+                    <div class="color-code">#212121</div>
+                    <div class="color-code">rgb(33, 33, 33)</div>
+                    <div class="color-usage">Títulos, textos principais</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview text-secondary">A</div>
+                <div class="color-info">
+                    <div class="color-name">Texto Secundário</div>
+                    <div class="color-code">#757575</div>
+                    <div class="color-code">rgb(117, 117, 117)</div>
+                    <div class="color-usage">Descrições, labels, textos auxiliares</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview border">A</div>
+                <div class="color-info">
+                    <div class="color-name">Borda</div>
+                    <div class="color-code">#E0E0E0</div>
+                    <div class="color-code">rgb(224, 224, 224)</div>
+                    <div class="color-usage">Bordas de inputs, divisores</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview error">A</div>
+                <div class="color-info">
+                    <div class="color-name">Erro</div>
+                    <div class="color-code">#B00020</div>
+                    <div class="color-code">rgb(176, 0, 32)</div>
+                    <div class="color-usage">Mensagens de erro, validações</div>
+                </div>
+            </div>
+            
+            <div class="color-card">
+                <div class="color-preview success">A</div>
+                <div class="color-info">
+                    <div class="color-name">Sucesso</div>
+                    <div class="color-code">#00C853</div>
+                    <div class="color-code">rgb(0, 200, 83)</div>
+                    <div class="color-usage">Mensagens de sucesso, status positivo</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="examples">
+            <h2>Exemplos de Uso</h2>
+            
+            <h3 style="margin-bottom: 1rem;">Botões</h3>
+            <div class="button-examples">
+                <button class="btn btn-primary">Primário</button>
+                <button class="btn btn-secondary">Secundário</button>
+                <button class="btn btn-danger">Excluir</button>
+                <button class="btn btn-success">Salvar</button>
+            </div>
+            
+            <h3 style="margin: 2rem 0 1rem 0;">Mensagens</h3>
+            <div style="padding: 1rem; background: rgba(0, 200, 83, 0.1); color: #00C853; border-radius: 4px; margin-bottom: 1rem;">
+                ✓ Operação realizada com sucesso!
+            </div>
+            <div style="padding: 1rem; background: rgba(176, 0, 32, 0.1); color: #B00020; border-radius: 4px;">
+                ✗ Erro ao processar a solicitação
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<template>
+  <div v-if="isValidQuote" class="quote-card">
+    <!-- Header -->
+    <div class="quote-header">
+      <div class="quote-logo-wrapper">
+        <img 
+          v-if="quote.logourl" 
+          :src="quote.logourl" 
+          :alt="quote.symbol"
+          class="quote-logo"
+          @error="handleImageError"
+        />
+        <div v-else class="quote-logo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="quote-info">
+        <div class="symbol-row">
+          <h3 class="quote-symbol">{{ quote.symbol }}</h3>
+          <span v-if="quote.status" class="status-badge" :class="`status-${quote.status}`">
+            {{ getStatusLabel(quote.status) }}
+          </span>
+        </div>
+        <p class="quote-name">{{ quote.shortName || quote.longName || 'N/A' }}</p>
+      </div>
+    </div>
+    
+    <!-- Price Section -->
+    <div class="quote-main">
+      <div class="price-row">
+        <div class="price-section">
+          <span class="currency">{{ quote.currency || 'BRL' }}</span>
+          <span class="price-value">{{ formatPrice(currentPrice) }}</span>
+        </div>
+        
+        <div class="change-section" :class="changeClass">
+          <svg class="change-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path v-if="isPositive" d="M7 14l5-5 5 5H7z"/>
+            <path v-else d="M7 10l5 5 5-5H7z"/>
+          </svg>
+          <span class="change-value">{{ formattedChange }}</span>
+          <span class="change-percent">{{ formattedChangePercent }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Details -->
+    <div class="quote-details">
+      <div class="detail-item">
+        <span class="detail-label">Vol</span>
+        <span class="detail-value">{{ formatLargeNumber(quote.regularMarketVolume || quote.volume) }}</span>
+      </div>
+      
+      <div v-if="quote.marketCap" class="detail-item">
+        <span class="detail-label">Cap</span>
+        <span class="detail-value">{{ formatLargeNumber(quote.marketCap) }}</span>
+      </div>
+      
+      <div v-if="quote.regularMarketDayHigh && quote.regularMarketDayLow" class="detail-item">
+        <span class="detail-label">Min/Max</span>
+        <span class="detail-value">{{ formatPrice(quote.regularMarketDayLow) }}/{{ formatPrice(quote.regularMarketDayHigh) }}</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'QuoteCard',
+  props: {
+    quote: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    isValidQuote() {
+      return this.quote && this.quote.symbol && (this.quote.regularMarketPrice || this.quote.price)
+    },
+    currentPrice() {
+      return this.quote.regularMarketPrice || this.quote.price || 0
+    },
+    change() {
+      return this.quote.regularMarketChange || this.quote.change || 0
+    },
+    changePercent() {
+      return this.quote.regularMarketChangePercent || this.quote.changePercent || 0
+    },
+    isPositive() {
+      return this.changePercent >= 0
+    },
+    changeClass() {
+      return this.isPositive ? 'positive' : 'negative'
+    },
+    formattedChange() {
+      const prefix = this.change >= 0 ? '+' : ''
+      return `${prefix}${this.change.toFixed(2)}`
+    },
+    formattedChangePercent() {
+      const prefix = this.changePercent >= 0 ? '+' : ''
+      return `${prefix}${this.changePercent.toFixed(2)}%`
+    }
+  },
+  methods: {
+    formatPrice(price) {
+      return price ? price.toFixed(2) : '0.00'
+    },
+    formatLargeNumber(num) {
+      if (!num) return 'N/A'
+      if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`
+      if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`
+      if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`
+      return num.toString()
+    },
+    handleImageError(event) {
+      event.target.style.display = 'none'
+    },
+    getStatusLabel(status) {
+      const labels = {
+        'ativo': 'Ativo',
+        'inativo': 'Inativo',
+        'pausado': 'Pausado'
+      }
+      return labels[status] || status
+    }
+  }
+}
+</script>
+
+<style scoped>
+.quote-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 1.75rem;
+  border: 2px solid var(--border);
+  transition: all 0.3s;
+}
+
+.quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-color: var(--primary);
+}
+
+/* Header */
+.quote-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.quote-logo-wrapper {
+  flex-shrink: 0;
+}
+
+.quote-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.quote-logo-placeholder {
+  width: 52px;
+  height: 52px;
+  background: var(--background);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.quote-logo-placeholder svg {
+  width: 28px;
+  height: 28px;
+}
+
+.quote-info {
+  flex: 1;
+}
+
+.quote-symbol {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-ativo {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.status-inativo {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.status-pausado {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.quote-name {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.quote-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quote-badge.positive {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.quote-badge.negative {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.trend-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* Main Price */
+.quote-main {
+  margin-bottom: 1.5rem;
+}
+
+.price-section {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.currency {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.price-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.change-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.125rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.change-section.positive {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.change-section.negative {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.change-amount {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.change-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.change-value {
+  font-size: 1.125rem;
+}
+
+.change-percent {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* Details */
+.quote-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--border);
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  background: var(--background);
+  border-radius: 8px;
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .detail-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .price-value {
+    font-size: 1.875rem;
+  }
+}
+</style>
