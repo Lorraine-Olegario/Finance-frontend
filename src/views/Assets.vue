@@ -357,14 +357,20 @@ export default {
     async fetchCategorias() {
       try {
         const response = await categoryService.getAll()
-        const categoriasFromAPI = response.data?.map(cat => cat.nome || cat.name) || []
+        if (response.data) {
+          if (Array.isArray(response.data)) {
+            this.categorias = response.data.map(cat => cat.nome || cat.name || cat)
+          } else if (response.data.data && Array.isArray(response.data.data)) {
+            this.categorias = response.data.data.map(cat => cat.nome || cat.name || cat)
+          }
+        }
         
-        const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria))]
+        const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria).filter(Boolean))]
+        this.categorias = [...new Set([...this.categorias, ...categoriasFromAssets])]
         
-        this.categorias = [...new Set([...categoriasFromAPI, ...categoriasFromAssets])]
       } catch (error) {
-        const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria))]
-        this.categorias = categoriasFromAssets
+        const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria).filter(Boolean))]
+        this.categorias = categoriasFromAssets.length > 0 ? categoriasFromAssets : ['Ações', 'FIIs', 'Criptomoedas']
       }
     },
     getCategoryColor(categoria) {
