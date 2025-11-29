@@ -200,6 +200,16 @@
                 placeholder="Ex: PETR4, VALE3, ITUB4"
                 class="form-control"
               />
+              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
+                <select v-model="formData.acaoCategoria" class="form-control" style="max-width:220px;">
+                  <option>Ações</option>
+                  <option>FIIs</option>
+                  <option v-for="c in categorias" :key="c">{{ c }}</option>
+                  <option>Outra</option>
+                </select>
+                <input v-if="formData.acaoCategoria === 'Outra'" v-model="formData.acaoCategoriaOther" type="text" placeholder="Nome da categoria" class="form-control" style="max-width:220px;" />
+                <small class="form-hint">Selecione a categoria que será atribuída às ações inseridas acima.</small>
+              </div>
             </div>
 
             <div class="form-group">
@@ -210,6 +220,16 @@
                 placeholder="Ex: HGLG11, MXRF11"
                 class="form-control"
               />
+              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
+                <select v-model="formData.fiiCategoria" class="form-control" style="max-width:220px;">
+                  <option>FIIs</option>
+                  <option>Ações</option>
+                  <option v-for="c in categorias" :key="'f-'+c">{{ c }}</option>
+                  <option>Outra</option>
+                </select>
+                <input v-if="formData.fiiCategoria === 'Outra'" v-model="formData.fiiCategoriaOther" type="text" placeholder="Nome da categoria" class="form-control" style="max-width:220px;" />
+                <small class="form-hint">Selecione a categoria que será atribuída aos FIIs inseridos acima.</small>
+              </div>
             </div>
 
             <div class="modal-actions">
@@ -501,7 +521,11 @@ export default {
       editCategoryColor: '',
       formData: {
         acoes: '',
-        fiis: ''
+        fiis: '',
+        acaoCategoria: 'Ações',
+        fiiCategoria: 'FIIs',
+        acaoCategoriaOther: '',
+        fiiCategoriaOther: ''
       },
       loading: false,
       saving: false,
@@ -641,7 +665,7 @@ export default {
           .split(',')
           .map(s => s.trim())
           .filter(s => s.length > 0)
-        
+
         const fiis = this.formData.fiis
           .split(',')
           .map(s => s.trim())
@@ -652,15 +676,43 @@ export default {
           return
         }
 
-        // Aqui você chamaria a API para adicionar os ativos
-        
-        this.success = 'Ativos adicionados com sucesso!'
-        this.formData = { acoes: '', fiis: '' }
-        
-        setTimeout(() => {
-          this.closeModal('add')
-          this.fetchAssets()
-        }, 1500)
+        // Montar payload de ativos com categorias selecionadas
+        const ativosPayload = []
+
+        // função utilitária para resolver categoria 'Outra'
+        const resolveCategory = (selected, other) => {
+          if (!selected) return 'Ações'
+          if (selected === 'Outra') return (other && other.trim()) || 'Outra'
+          return selected
+        }
+
+        const acaoCategory = resolveCategory(this.formData.acaoCategoria, this.formData.acaoCategoriaOther)
+        const fiiCategory = resolveCategory(this.formData.fiiCategoria, this.formData.fiiCategoriaOther)
+
+        acoes.forEach(codigo => {
+          ativosPayload.push({ codigo, categoria: acaoCategory })
+        })
+
+        fiis.forEach(codigo => {
+          ativosPayload.push({ codigo, categoria: fiiCategory })
+        })
+
+        try {
+          // Enviar para o backend
+          await assetService.createUserAssets(userId, ativosPayload)
+
+          this.success = 'Ativos adicionados com sucesso!'
+          this.formData.acoes = ''
+          this.formData.fiis = ''
+
+          setTimeout(() => {
+            this.closeModal('add')
+            this.fetchAssets()
+          }, 800)
+        } catch (err) {
+          console.error('Erro ao criar ativos:', err)
+          this.error = err.response?.data?.message || 'Erro ao adicionar ativos'
+        }
       } catch (err) {
         this.error = err.response?.data?.message || 'Erro ao adicionar ativos'
       } finally {
