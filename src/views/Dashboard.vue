@@ -155,11 +155,11 @@
 
 <script>
 import MainLayout from '../components/MainLayout.vue'
-import StatCard from '../components/StatCard.vue'
-import DashboardCard from '../components/DashboardCard.vue'
-import EmptyState from '../components/EmptyState.vue'
-import QuickActionCard from '../components/QuickActionCard.vue'
-import CategoryListItem from '../components/CategoryListItem.vue'
+import StatCard from '../components/dashboard/StatCard.vue'
+import DashboardCard from '../components/dashboard/DashboardCard.vue'
+import EmptyState from '../components/common/EmptyState.vue'
+import QuickActionCard from '../components/dashboard/QuickActionCard.vue'
+import CategoryListItem from '../components/dashboard/CategoryListItem.vue'
 import { useAuthStore } from '../stores/auth'
 import userService from '../services/userService'
 import assetService from '../services/assetService'

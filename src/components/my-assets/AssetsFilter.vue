@@ -30,31 +30,32 @@
       </template>
       <select v-model="localFilters.categoria" class="filter-select">
         <option value="">Todas as categorias</option>
-        <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+        <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
       </select>
     </FilterSection>
 
-    <FilterSection label="Status do Alerta">
+    <FilterSection label="Status">
       <template #icon>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
         </svg>
       </template>
-      <select v-model="localFilters.hasAlert" class="filter-select">
-        <option value="">Todos os alertas</option>
-        <option value="with">Com alerta configurado</option>
-        <option value="without">Sem alerta</option>
+      <select v-model="localFilters.status" class="filter-select">
+        <option value="">Todos os status</option>
+        <option value="ativo">Ativo</option>
+        <option value="observando">Observando</option>
+        <option value="inativo">Inativo</option>
       </select>
     </FilterSection>
   </FilterSidebar>
 </template>
 
 <script>
-import FilterSidebar from './FilterSidebar.vue'
-import FilterSection from './FilterSection.vue'
+import FilterSidebar from '../common/FilterSidebar.vue'
+import FilterSection from '../common/FilterSection.vue'
 
 export default {
-  name: 'ObservedAssetsFilter',
+  name: 'AssetsFilter',
   components: {
     FilterSidebar,
     FilterSection
@@ -66,11 +67,10 @@ export default {
       default: () => ({
         search: '',
         categoria: '',
-        hasAlert: ''
+        status: ''
       })
     },
-    categories: { type: Array, default: () => [] },
-    resultCount: { type: Number, default: 0 }
+    categorias: { type: Array, default: () => [] }
   },
   data() {
     return {
@@ -94,7 +94,7 @@ export default {
       this.localFilters = {
         search: '',
         categoria: '',
-        hasAlert: ''
+        status: ''
       }
       this.$emit('apply', this.localFilters)
     }
@@ -125,12 +125,5 @@ export default {
 .filter-input::placeholder {
   color: var(--text-secondary);
   opacity: 0.6;
-}
-
-.filter-results {
-  flex: 1;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
 }
 </style>
