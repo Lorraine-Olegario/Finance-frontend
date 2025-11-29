@@ -544,7 +544,10 @@ export default {
       this.loading = true
       try {
         const userId = this.authStore.user?.id
-        if (!userId) return
+        if (!userId) {
+          this.loading = false
+          return
+        }
 
         const response = await assetService.getAssets(userId)
         const ativosPorCategoria = response.data?.ativos_por_categoria || {}
@@ -569,6 +572,7 @@ export default {
         }
       } catch (error) {
         console.error('Erro ao buscar ativos:', error)
+        this.error = error.response?.data?.message || 'Erro ao carregar ativos'
       } finally {
         this.loading = false
       }
@@ -794,6 +798,9 @@ export default {
     }
   },
   mounted() {
+    console.log('Assets component mounted')
+    console.log('Auth store user:', this.authStore.user)
+    console.log('Is authenticated:', this.authStore.isAuthenticated)
     this.fetchAssets()
   }
 }

@@ -30,7 +30,7 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/assets',
+    path: '/my-assets',
     name: 'Assets',
     component: Assets,
     meta: { requiresAuth: true }

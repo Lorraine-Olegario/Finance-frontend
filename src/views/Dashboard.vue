@@ -83,7 +83,7 @@
           </div>
           <EmptyState v-else title="Nenhum ativo observado" description="Adicione ativos para visualizar a distribuição por categoria">
             <template #action>
-              <router-link to="/assets" class="btn">Adicionar Ativos</router-link>
+              <router-link to="/my-assets" class="btn">Adicionar Ativos</router-link>
             </template>
           </EmptyState>
         </DashboardCard>
@@ -108,7 +108,7 @@
       <div class="quick-actions">
         <h3>Ações Rápidas</h3>
         <div class="actions-grid">
-          <QuickActionCard to="/assets" label="Adicionar Ativo">
+          <QuickActionCard to="/my-assets" label="Adicionar Ativo">
             <template #icon>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
