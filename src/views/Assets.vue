@@ -240,9 +240,9 @@
 <script>
 import MainLayout from '../components/MainLayout.vue'
 import AssetsFilter from '../components/my-assets/AssetsFilter.vue'
-import AddAssetModal from '../components/modals/AddAssetModal.vue'
-import EditAssetModal from '../components/modals/EditAssetModal.vue'
-import ConfirmationModal from '../components/modals/ConfirmationModal.vue'
+import AddAssetModal from '../components/my-assets/AddAssetModal.vue'
+import EditAssetModal from '../components/my-assets/EditAssetModal.vue'
+import ConfirmationModal from '../components/my-assets/ConfirmationModal.vue'
 import { useAuthStore } from '../stores/auth'
 import assetService from '../services/assetService'
 import categoryService from '../services/categoryService'

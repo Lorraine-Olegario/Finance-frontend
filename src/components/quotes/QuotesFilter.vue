@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import FilterSidebar from './FilterSidebar.vue'
-import FilterSection from './FilterSection.vue'
+import FilterSidebar from '../common/FilterSidebar.vue'
+import FilterSection from '../common/FilterSection.vue'
 
 export default {
   name: 'QuotesFilter',
