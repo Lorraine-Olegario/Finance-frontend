@@ -302,9 +302,9 @@
 <script>
 import { useAuthStore } from '../stores/auth'
 import assetService from '../services/assetService'
-import EditAlertModal from '../components/alert/EditAlertModal.vue'
+import EditAlertModal from '../components/EditAlertModal.vue'
 import MainLayout from '../components/MainLayout.vue'
-import ObservedAssetsFilter from '../components/observed-assets/ObservedAssetsFilter.vue'
+import ObservedAssetsFilter from '../components/ObservedAssetsFilter.vue'
 
 export default {
   name: 'ObservedAssets',

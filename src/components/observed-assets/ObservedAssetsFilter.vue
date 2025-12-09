@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import FilterSidebar from '../common/FilterSidebar.vue'
-import FilterSection from '../common/FilterSection.vue'
+import FilterSidebar from './FilterSidebar.vue'
+import FilterSection from './FilterSection.vue'
 
 export default {
   name: 'ObservedAssetsFilter',

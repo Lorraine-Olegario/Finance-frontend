@@ -112,11 +112,11 @@
 
 <script>
 import MainLayout from '../components/MainLayout.vue'
-import QuoteCard from '../components/quotes/QuoteCard.vue'
-import QuotesFilter from '../components/quotes/QuotesFilter.vue'
-import LoadingSpinner from '../components/common/LoadingSpinner.vue'
-import ErrorAlert from '../components/common/ErrorAlert.vue'
-import EmptyState from '../components/common/EmptyState.vue'
+import QuoteCard from '../components/QuoteCard.vue'
+import QuotesFilter from '../components/QuotesFilter.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
+import ErrorAlert from '../components/ErrorAlert.vue'
+import EmptyState from '../components/EmptyState.vue'
 import assetService from '../services/assetService'
 import { useAuthStore } from '../stores/auth'
 
