@@ -2,41 +2,89 @@
   <div class="layout">
     <Sidebar @toggle="handleSidebarToggle" />
     
-    <div class="main-wrapper" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
+    <div
+      class="main-wrapper"
+      :class="{ 'sidebar-collapsed': sidebarCollapsed }"
+    >
       <header class="main-header">
         <div class="header-left">
-          <button class="mobile-menu-btn" @click="toggleSidebar">
+          <button
+            class="mobile-menu-btn"
+            @click="toggleSidebar"
+          >
             ☰
           </button>
-          <h1 class="page-title">{{ pageTitle }}</h1>
+          <h1 class="page-title">
+            {{ pageTitle }}
+          </h1>
         </div>
         
-        <div v-if="authStore.user" class="header-user">
+        <div
+          v-if="authStore.user"
+          class="header-user"
+        >
           <div class="user-info">
             <span class="user-name">{{ authStore.user.name }}</span>
           </div>
-          <div class="user-menu" @click="toggleUserMenu" ref="userMenu">
-            <div class="user-avatar">{{ userInitials }}</div>
-            <div v-if="userMenuOpen" class="dropdown-menu">
+          <div
+            ref="userMenu"
+            class="user-menu"
+            @click="toggleUserMenu"
+          >
+            <div class="user-avatar">
+              {{ userInitials }}
+            </div>
+            <div
+              v-if="userMenuOpen"
+              class="dropdown-menu"
+            >
               <div class="dropdown-header">
                 <div class="dropdown-user-info">
                   <strong>{{ authStore.user.name }}</strong>
                   <span class="user-email">{{ authStore.user.email }}</span>
                 </div>
               </div>
-              <div class="dropdown-divider"></div>
-              <router-link to="/profile" class="dropdown-item" @click="userMenuOpen = false">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
+              <div class="dropdown-divider" />
+              <router-link
+                to="/profile"
+                class="dropdown-item"
+                @click="userMenuOpen = false"
+              >
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                  />
                 </svg>
                 Meu Perfil
               </router-link>
-              <button @click="handleLogout" class="dropdown-item logout">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
+              <button
+                class="dropdown-item logout"
+                @click="handleLogout"
+              >
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line
+                    x1="21"
+                    y1="12"
+                    x2="9"
+                    y2="12"
+                  />
                 </svg>
                 Sair
               </button>

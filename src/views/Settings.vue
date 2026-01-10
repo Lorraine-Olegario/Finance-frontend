@@ -4,37 +4,61 @@
       <h2>Personalizar Cores das Categorias</h2>
       <p>Escolha uma cor para cada tipo de ativo no seu dashboard</p>
 
-      <div v-if="loading" class="loading">
-        <div class="spinner"></div>
+      <div
+        v-if="loading"
+        class="loading"
+      >
+        <div class="spinner" />
       </div>
 
-      <div v-else class="color-settings-grid">
-        <div v-for="(color, categoria) in categoryColors" :key="categoria" class="color-setting-card card">
+      <div
+        v-else
+        class="color-settings-grid"
+      >
+        <div
+          v-for="(color, categoria) in categoryColors"
+          :key="categoria"
+          class="color-setting-card card"
+        >
           <div class="color-setting-content">
             <h3>{{ categoria }}</h3>
             <div class="color-picker-container">
               <input 
-                type="color" 
                 v-model="categoryColors[categoria]" 
+                type="color" 
                 class="color-picker"
                 @change="markAsChanged"
-              />
+              >
               <span class="color-value">{{ categoryColors[categoria] }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="hasChanges" class="action-buttons">
-        <button @click="saveColors" :disabled="saving" class="btn btn-primary">
+      <div
+        v-if="hasChanges"
+        class="action-buttons"
+      >
+        <button
+          :disabled="saving"
+          class="btn btn-primary"
+          @click="saveColors"
+        >
           {{ saving ? 'Salvando...' : 'Salvar Cores' }}
         </button>
-        <button @click="resetColors" :disabled="saving" class="btn btn-secondary">
+        <button
+          :disabled="saving"
+          class="btn btn-secondary"
+          @click="resetColors"
+        >
           Resetar
         </button>
       </div>
 
-      <div v-if="message" :class="['message', messageType]">
+      <div
+        v-if="message"
+        :class="['message', messageType]"
+      >
         {{ message }}
       </div>
     </div>
@@ -65,6 +89,9 @@ export default {
       message: '',
       messageType: ''
     }
+  },
+  mounted() {
+    this.fetchColors()
   },
   methods: {
     async fetchColors() {
@@ -148,9 +175,6 @@ export default {
         this.message = ''
       }, 3000)
     }
-  },
-  mounted() {
-    this.fetchColors()
   }
 }
 </script>

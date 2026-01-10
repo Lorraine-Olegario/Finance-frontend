@@ -1,72 +1,152 @@
 <template>
-  <div v-if="isOpen" class="modal fade show d-block" tabindex="-1" @click.self="close">
+  <div
+    v-if="isOpen"
+    class="modal fade show d-block"
+    tabindex="-1"
+    @click.self="close"
+  >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header border-bottom">
           <h5 class="modal-title d-flex align-items-center gap-2">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
             Editar Ativo
           </h5>
-          <button type="button" class="btn-close" @click="close" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="close"
+          />
         </div>
         
         <div class="modal-body">
-          <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div
+            v-if="error"
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
             {{ error }}
-            <button type="button" class="btn-close" @click="error = ''" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              @click="error = ''"
+            />
           </div>
-          <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div
+            v-if="success"
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
             {{ success }}
-            <button type="button" class="btn-close" @click="success = ''" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              @click="success = ''"
+            />
           </div>
 
           <form @submit.prevent="handleSubmit">
             <div class="mb-3">
-              <label for="codigo" class="form-label fw-semibold">Código</label>
+              <label
+                for="codigo"
+                class="form-label fw-semibold"
+              >Código</label>
               <input 
                 id="codigo"
                 v-model="formData.codigo" 
                 type="text" 
                 class="form-control"
                 readonly
-              />
+              >
             </div>
 
             <div class="mb-3">
-              <label for="nome" class="form-label fw-semibold">Nome</label>
+              <label
+                for="nome"
+                class="form-label fw-semibold"
+              >Nome</label>
               <input 
                 id="nome"
                 v-model="formData.nome" 
                 type="text" 
                 class="form-control"
                 placeholder="Nome do ativo"
-              />
+              >
             </div>
 
             <div class="mb-3">
-              <label for="status" class="form-label fw-semibold">Status</label>
+              <label
+                for="status"
+                class="form-label fw-semibold"
+              >Status</label>
               <select 
                 id="status"
                 v-model="formData.status" 
                 class="form-select"
               >
-                <option value="ativo">Ativo</option>
-                <option value="observando">Observando</option>
-                <option value="inativo">Inativo</option>
+                <option value="ativo">
+                  Ativo
+                </option>
+                <option value="observando">
+                  Observando
+                </option>
+                <option value="inativo">
+                  Inativo
+                </option>
               </select>
             </div>
 
             <div class="mb-3">
               <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <circle cx="12" cy="12" r="4"></circle>
-                  <line x1="21.17" y1="8" x2="12" y2="8"></line>
-                  <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
-                  <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                  />
+                  <line
+                    x1="21.17"
+                    y1="8"
+                    x2="12"
+                    y2="8"
+                  />
+                  <line
+                    x1="3.95"
+                    y1="6.06"
+                    x2="8.54"
+                    y2="14"
+                  />
+                  <line
+                    x1="10.88"
+                    y1="21.94"
+                    x2="15.46"
+                    y2="14"
+                  />
                 </svg>
                 Cor da Categoria: {{ formData.categoria }}
               </label>
@@ -77,23 +157,32 @@
                   class="form-control form-control-color"
                   :disabled="!formData.categoria"
                   style="width: 60px; height: 45px;"
-                />
-                <div class="flex-grow-1 rounded-2 border p-2 text-center fw-semibold" 
-                     :style="{ backgroundColor: formData.categoryColor, color: 'white', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }">
+                >
+                <div
+                  class="flex-grow-1 rounded-2 border p-2 text-center fw-semibold" 
+                  :style="{ backgroundColor: formData.categoryColor, color: 'white', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }"
+                >
                   {{ formData.categoryColor }}
                 </div>
                 <button 
                   type="button" 
-                  @click="resetColor" 
-                  class="btn btn-outline-secondary"
+                  class="btn btn-outline-secondary" 
                   :disabled="!formData.categoria"
                   title="Restaurar cor padrão"
                   style="width: 45px; height: 45px; padding: 0;"
+                  @click="resetColor"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="1 4 1 10 7 10"></polyline>
-                    <polyline points="23 20 23 14 17 14"></polyline>
-                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="1 4 1 10 7 10" />
+                    <polyline points="23 20 23 14 17 14" />
+                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
                   </svg>
                 </button>
               </div>
@@ -101,11 +190,24 @@
             </div>
 
             <div class="modal-footer border-top pt-3 mt-3 px-0">
-              <button type="button" class="btn btn-secondary" @click="close">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="close"
+              >
                 Cancelar
               </button>
-              <button type="submit" class="btn btn-primary" :disabled="saving">
-                <span v-if="saving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                :disabled="saving"
+              >
+                <span
+                  v-if="saving"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                />
                 {{ saving ? 'Salvando...' : 'Salvar Alterações' }}
               </button>
             </div>
@@ -114,7 +216,10 @@
       </div>
     </div>
   </div>
-  <div v-if="isOpen" class="modal-backdrop fade show"></div>
+  <div
+    v-if="isOpen"
+    class="modal-backdrop fade show"
+  />
 </template>
 
 <script>
@@ -148,6 +253,27 @@ export default {
       saving: false,
       error: '',
       success: ''
+    }
+  },
+  watch: {
+    isOpen(newVal) {
+      if (newVal && this.asset) {
+        this.formData = {
+          id: this.asset.id,
+          codigo: this.asset.codigo,
+          nome: this.asset.nome || '',
+          status: this.asset.status || 'ativo',
+          categoria: this.asset.categoria || '',
+          categoryColor: this.categoryColor
+        }
+      } else {
+        this.resetForm()
+      }
+    },
+    categoryColor(newVal) {
+      if (newVal) {
+        this.formData.categoryColor = newVal
+      }
     }
   },
   methods: {
@@ -186,27 +312,6 @@ export default {
         this.error = err.response?.data?.message || 'Erro ao atualizar ativo'
       } finally {
         this.saving = false
-      }
-    }
-  },
-  watch: {
-    isOpen(newVal) {
-      if (newVal && this.asset) {
-        this.formData = {
-          id: this.asset.id,
-          codigo: this.asset.codigo,
-          nome: this.asset.nome || '',
-          status: this.asset.status || 'ativo',
-          categoria: this.asset.categoria || '',
-          categoryColor: this.categoryColor
-        }
-      } else {
-        this.resetForm()
-      }
-    },
-    categoryColor(newVal) {
-      if (newVal) {
-        this.formData.categoryColor = newVal
       }
     }
   }

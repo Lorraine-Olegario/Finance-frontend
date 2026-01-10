@@ -5,64 +5,136 @@
       <div class="page-header">
         <div class="header-left">
           <h2>
-            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
+            <svg
+              class="header-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+              />
             </svg>
             Ativos Observados
           </h2>
-          <p class="subtitle">Gerencie os alertas dos seus ativos observados</p>
+          <p class="subtitle">
+            Gerencie os alertas dos seus ativos observados
+          </p>
         </div>
         <div class="header-actions">
-          <button @click="filterOpen = !filterOpen" class="btn-filter">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          <button
+            class="btn-filter"
+            @click="filterOpen = !filterOpen"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
             </svg>
             Filtros
-            <span class="badge-count" v-if="activeFiltersCount > 0">{{ activeFiltersCount }}</span>
+            <span
+              v-if="activeFiltersCount > 0"
+              class="badge-count"
+            >{{ activeFiltersCount }}</span>
           </button>
         </div>
       </div>
 
       <!-- Summary Cards no topo -->
-      <div v-if="!loading && filteredAssets.length > 0" class="stats-grid">
+      <div
+        v-if="!loading && filteredAssets.length > 0"
+        class="stats-grid"
+      >
         <div class="stat-card">
           <div class="stat-icon total">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+              />
             </svg>
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ filteredAssets.length }}</div>
-            <div class="stat-label">Total de ativos observados</div>
+            <div class="stat-value">
+              {{ filteredAssets.length }}
+            </div>
+            <div class="stat-label">
+              Total de ativos observados
+            </div>
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-icon success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ assetsWithAlerts }}</div>
-            <div class="stat-label">Com alertas configurados</div>
+            <div class="stat-value">
+              {{ assetsWithAlerts }}
+            </div>
+            <div class="stat-label">
+              Com alertas configurados
+            </div>
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-icon warning">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <line
+                x1="12"
+                y1="8"
+                x2="12"
+                y2="12"
+              />
+              <line
+                x1="12"
+                y1="16"
+                x2="12.01"
+                y2="16"
+              />
             </svg>
           </div>
           <div class="stat-content">
-            <div class="stat-value">{{ assetsWithoutAlerts }}</div>
-            <div class="stat-label">Sem alertas</div>
+            <div class="stat-value">
+              {{ assetsWithoutAlerts }}
+            </div>
+            <div class="stat-label">
+              Sem alertas
+            </div>
           </div>
         </div>
       </div>
@@ -77,222 +149,428 @@
         @apply="applyFilters"
       />
 
-    <!-- Loading State -->
-    <div v-if="loading" class="loading-container">
-      <div class="spinner"></div>
-      <p>Carregando ativos observados...</p>
-    </div>
+      <!-- Loading State -->
+      <div
+        v-if="loading"
+        class="loading-container"
+      >
+        <div class="spinner" />
+        <p>Carregando ativos observados...</p>
+      </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="error-container">
-      <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="8" x2="12" y2="12"></line>
-        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-      </svg>
-      <h3>Erro ao carregar ativos</h3>
-      <p>{{ error }}</p>
-      <button class="btn btn-primary" @click="fetchData">
-        Tentar novamente
-      </button>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="filteredAssets.length === 0 && !loading" class="empty-state">
-      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-        <circle cx="12" cy="12" r="3"></circle>
-      </svg>
-      <h3>Nenhum ativo observado</h3>
-      <p v-if="activeFiltersCount > 0">Ajuste os filtros de busca ou adicione novos ativos</p>
-      <p v-else>Adicione ativos à sua carteira e marque como "observando" para acompanhar alertas</p>
-      <router-link to="/my-assets" class="btn">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
+      <!-- Error State -->
+      <div
+        v-else-if="error"
+        class="error-container"
+      >
+        <svg
+          class="error-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"
+          />
         </svg>
-        Ir para Meus Ativos
-      </router-link>
-    </div>
-
-    <!-- Assets Table -->
-    <div v-else class="table-container">
-      <table class="assets-table">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th class="text-center">Valor Atual</th>
-            <th class="text-center">Valor Mínimo</th>
-            <th class="text-center">Valor Máximo</th>
-            <th class="text-center">Status Alerta</th>
-            <th class="text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="asset in paginatedAssets" :key="asset.id" class="asset-row">
-            <td>
-              <div class="asset-code">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-                <strong>{{ asset.codigo }}</strong>
-              </div>
-            </td>
-            <td>
-              <span class="asset-name">{{ asset.nome || 'N/A' }}</span>
-            </td>
-            <td>
-              <span class="badge" :style="getCategoryStyle(asset.categoria)">
-                {{ asset.categoria || 'N/A' }}
-              </span>
-            </td>
-            <td class="text-center">
-              <div v-if="asset.currentPrice !== null" class="current-price">
-                <span class="price-value">R$ {{ formatPrice(asset.currentPrice) }}</span>
-                <span v-if="asset.loadingPrice" class="loading-price">...</span>
-              </div>
-              <span v-else class="text-muted">-</span>
-            </td>
-            <td class="text-center">
-              <span v-if="asset.alert && asset.alert.valor_min" class="price">
-                R$ {{ formatPrice(asset.alert.valor_min) }}
-              </span>
-              <span v-else class="text-muted">-</span>
-            </td>
-            <td class="text-center">
-              <span v-if="asset.alert && asset.alert.valor_max" class="price">
-                R$ {{ formatPrice(asset.alert.valor_max) }}
-              </span>
-              <span v-else class="text-muted">-</span>
-            </td>
-            <td class="text-center">
-              <span v-if="asset.alert" :class="['status-badge', asset.alert.status]">
-                {{ asset.alert.status === 'ativo' ? 'Ativo' : 'Inativo' }}
-              </span>
-              <span v-else class="text-muted">Sem alerta</span>
-            </td>
-            <td class="text-center">
-              <div class="action-buttons">
-                <button
-                  @click="openEditModal(asset)"
-                  class="action-btn edit-btn"
-                  :title="asset.alert ? 'Editar alerta' : 'Configurar alerta'"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                  </svg>
-                </button>
-                <button
-                  @click="openStopObservingModal(asset)"
-                  class="action-btn delete-btn"
-                  title="Parar de observar"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <path d="m1 1 22 22"></path>
-                  </svg>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Pagination -->
-      <div v-if="totalPages > 1" class="pagination">
-        <button 
-          @click="previousPage" 
-          :disabled="currentPage === 1"
-          class="pagination-btn"
+        <h3>Erro ao carregar ativos</h3>
+        <p>{{ error }}</p>
+        <button
+          class="btn btn-primary"
+          @click="fetchData"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-          Anterior
+          Tentar novamente
         </button>
+      </div>
 
-        <div class="pagination-numbers">
-          <button
-            v-for="page in paginationRange"
-            :key="page"
-            @click="goToPage(page)"
-            :class="['pagination-number', { active: currentPage === page }]"
+      <!-- Empty State -->
+      <div
+        v-else-if="filteredAssets.length === 0 && !loading"
+        class="empty-state"
+      >
+        <svg
+          class="empty-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+          />
+        </svg>
+        <h3>Nenhum ativo observado</h3>
+        <p v-if="activeFiltersCount > 0">
+          Ajuste os filtros de busca ou adicione novos ativos
+        </p>
+        <p v-else>
+          Adicione ativos à sua carteira e marque como "observando" para acompanhar alertas
+        </p>
+        <router-link
+          to="/my-assets"
+          class="btn"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            {{ page }}
-          </button>
-        </div>
-
-        <button 
-          @click="nextPage" 
-          :disabled="currentPage === totalPages"
-          class="pagination-btn"
-        >
-          Próxima
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"></polyline>
+            <line
+              x1="12"
+              y1="5"
+              x2="12"
+              y2="19"
+            />
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+            />
           </svg>
-        </button>
+          Ir para Meus Ativos
+        </router-link>
       </div>
 
-      <div class="pagination-info">
-        Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - 
-        {{ Math.min(currentPage * itemsPerPage, filteredAssets.length) }} 
-        de {{ filteredAssets.length }} ativos
-      </div>
-    </div>
+      <!-- Assets Table -->
+      <div
+        v-else
+        class="table-container"
+      >
+        <table class="assets-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th class="text-center">
+                Valor Atual
+              </th>
+              <th class="text-center">
+                Valor Mínimo
+              </th>
+              <th class="text-center">
+                Valor Máximo
+              </th>
+              <th class="text-center">
+                Status Alerta
+              </th>
+              <th class="text-center">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="asset in paginatedAssets"
+              :key="asset.id"
+              class="asset-row"
+            >
+              <td>
+                <div class="asset-code">
+                  <svg
+                    class="icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <line
+                      x1="16.5"
+                      y1="9.4"
+                      x2="7.5"
+                      y2="4.21"
+                    />
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line
+                      x1="12"
+                      y1="22.08"
+                      x2="12"
+                      y2="12"
+                    />
+                  </svg>
+                  <strong>{{ asset.codigo }}</strong>
+                </div>
+              </td>
+              <td>
+                <span class="asset-name">{{ asset.nome || 'N/A' }}</span>
+              </td>
+              <td>
+                <span
+                  class="badge"
+                  :style="getCategoryStyle(asset.categoria)"
+                >
+                  {{ asset.categoria || 'N/A' }}
+                </span>
+              </td>
+              <td class="text-center">
+                <div
+                  v-if="asset.currentPrice !== null"
+                  class="current-price"
+                >
+                  <span class="price-value">R$ {{ formatPrice(asset.currentPrice) }}</span>
+                  <span
+                    v-if="asset.loadingPrice"
+                    class="loading-price"
+                  >...</span>
+                </div>
+                <span
+                  v-else
+                  class="text-muted"
+                >-</span>
+              </td>
+              <td class="text-center">
+                <span
+                  v-if="asset.alert && asset.alert.valor_min"
+                  class="price"
+                >
+                  R$ {{ formatPrice(asset.alert.valor_min) }}
+                </span>
+                <span
+                  v-else
+                  class="text-muted"
+                >-</span>
+              </td>
+              <td class="text-center">
+                <span
+                  v-if="asset.alert && asset.alert.valor_max"
+                  class="price"
+                >
+                  R$ {{ formatPrice(asset.alert.valor_max) }}
+                </span>
+                <span
+                  v-else
+                  class="text-muted"
+                >-</span>
+              </td>
+              <td class="text-center">
+                <span
+                  v-if="asset.alert"
+                  :class="['status-badge', asset.alert.status]"
+                >
+                  {{ asset.alert.status === 'ativo' ? 'Ativo' : 'Inativo' }}
+                </span>
+                <span
+                  v-else
+                  class="text-muted"
+                >Sem alerta</span>
+              </td>
+              <td class="text-center">
+                <div class="action-buttons">
+                  <button
+                    class="action-btn edit-btn"
+                    :title="asset.alert ? 'Editar alerta' : 'Configurar alerta'"
+                    @click="openEditModal(asset)"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <line
+                        x1="12"
+                        y1="9"
+                        x2="12"
+                        y2="13"
+                      />
+                      <line
+                        x1="12"
+                        y1="17"
+                        x2="12.01"
+                        y2="17"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="action-btn delete-btn"
+                    title="Parar de observar"
+                    @click="openStopObservingModal(asset)"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <path d="m1 1 22 22" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-    <!-- Edit Alert Modal -->
-    <EditAlertModal
-      v-if="showEditModal"
-      :asset="selectedAsset"
-      :alert="selectedAsset.alert"
-      @close="closeEditModal"
-      @save="handleSaveAlert"
-    />
-
-    <!-- Stop Observing Confirmation Modal -->
-    <div v-if="showStopObservingModal" class="modal-overlay" @click.self="closeStopObservingModal">
-      <div class="modal-content small">
-        <div class="modal-header">
-          <h3>
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <path d="m1 1 22 22"></path>
+        <!-- Pagination -->
+        <div
+          v-if="totalPages > 1"
+          class="pagination"
+        >
+          <button 
+            :disabled="currentPage === 1" 
+            class="pagination-btn"
+            @click="previousPage"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="15 18 9 12 15 6" />
             </svg>
-            Parar de observar ativo
-          </h3>
-          <button class="close-btn" @click="closeStopObservingModal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            Anterior
           </button>
-        </div>
-        
-        <div class="modal-body">
-          <p>Tem certeza que deseja parar de observar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
-          <p class="text-muted">Esta ação irá desativar todos os alertas configurados para este ativo.</p>
-          
-          <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeStopObservingModal">
-              Cancelar
-            </button>
-            <button @click="handleStopObserving" class="btn btn-danger" :disabled="saving">
-              <svg v-if="!saving" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              {{ saving ? 'Processando...' : 'Parar de observar' }}
+
+          <div class="pagination-numbers">
+            <button
+              v-for="page in paginationRange"
+              :key="page"
+              :class="['pagination-number', { active: currentPage === page }]"
+              @click="goToPage(page)"
+            >
+              {{ page }}
             </button>
           </div>
-    </div> <!-- End observed-assets-page -->
+
+          <button 
+            :disabled="currentPage === totalPages" 
+            class="pagination-btn"
+            @click="nextPage"
+          >
+            Próxima
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="pagination-info">
+          Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - 
+          {{ Math.min(currentPage * itemsPerPage, filteredAssets.length) }} 
+          de {{ filteredAssets.length }} ativos
+        </div>
+      </div>
+
+      <!-- Edit Alert Modal -->
+      <EditAlertModal
+        v-if="showEditModal"
+        :asset="selectedAsset"
+        :alert="selectedAsset.alert"
+        @close="closeEditModal"
+        @save="handleSaveAlert"
+      />
+
+      <!-- Stop Observing Confirmation Modal -->
+      <div
+        v-if="showStopObservingModal"
+        class="modal-overlay"
+        @click.self="closeStopObservingModal"
+      >
+        <div class="modal-content small">
+          <div class="modal-header">
+            <h3>
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <path d="m1 1 22 22" />
+              </svg>
+              Parar de observar ativo
+            </h3>
+            <button
+              class="close-btn"
+              @click="closeStopObservingModal"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line
+                  x1="18"
+                  y1="6"
+                  x2="6"
+                  y2="18"
+                />
+                <line
+                  x1="6"
+                  y1="6"
+                  x2="18"
+                  y2="18"
+                />
+              </svg>
+            </button>
+          </div>
+        
+          <div class="modal-body">
+            <p>Tem certeza que deseja parar de observar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
+            <p class="text-muted">
+              Esta ação irá desativar todos os alertas configurados para este ativo.
+            </p>
+          
+            <div class="modal-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeStopObservingModal"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-danger"
+                :disabled="saving"
+                @click="handleStopObserving"
+              >
+                <svg
+                  v-if="!saving"
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                {{ saving ? 'Processando...' : 'Parar de observar' }}
+              </button>
+            </div>
+          </div> <!-- End observed-assets-page -->
         </div>
       </div>
     </div>
@@ -417,6 +695,23 @@ export default {
       if (this.filters.hasAlert) count++
       return count
     }
+  },
+  watch: {
+    'filters.search'() {
+      this.currentPage = 1
+      this.fetchAssetPrices()
+    },
+    'filters.categoria'() {
+      this.currentPage = 1
+      this.fetchAssetPrices()
+    },
+    'filters.hasAlert'() {
+      this.currentPage = 1
+      this.fetchAssetPrices()
+    }
+  },
+  mounted() {
+    this.fetchData()
   },
   methods: {
     async fetchData() {
@@ -597,23 +892,6 @@ export default {
         color: 'white'
       }
     }
-  },
-  watch: {
-    'filters.search'() {
-      this.currentPage = 1
-      this.fetchAssetPrices()
-    },
-    'filters.categoria'() {
-      this.currentPage = 1
-      this.fetchAssetPrices()
-    },
-    'filters.hasAlert'() {
-      this.currentPage = 1
-      this.fetchAssetPrices()
-    }
-  },
-  mounted() {
-    this.fetchData()
   }
 }
 </script>

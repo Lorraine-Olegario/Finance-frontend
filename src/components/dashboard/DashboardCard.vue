@@ -1,12 +1,15 @@
 <template>
   <div class="card">
-    <div v-if="title" class="card-header">
+    <div
+      v-if="title"
+      class="card-header"
+    >
       <h3>
-        <slot name="icon"></slot>
+        <slot name="icon" />
         {{ title }}
       </h3>
     </div>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

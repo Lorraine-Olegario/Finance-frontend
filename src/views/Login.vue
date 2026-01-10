@@ -7,7 +7,10 @@
           <p>Sistema de Gerenciamento de Ativos</p>
         </div>
 
-        <form @submit.prevent="handleLogin" class="login-form">
+        <form
+          class="login-form"
+          @submit.prevent="handleLogin"
+        >
           <div class="form-group">
             <label for="email">Email</label>
             <input
@@ -17,7 +20,7 @@
               required
               placeholder="seu@email.com"
               :disabled="loading"
-            />
+            >
           </div>
 
           <div class="form-group">
@@ -29,14 +32,21 @@
               required
               placeholder="••••••••"
               :disabled="loading"
-            />
+            >
           </div>
 
-          <div v-if="error" class="error-message">
+          <div
+            v-if="error"
+            class="error-message"
+          >
             {{ error }}
           </div>
 
-          <button type="submit" class="btn-login" :disabled="loading">
+          <button
+            type="submit"
+            class="btn-login"
+            :disabled="loading"
+          >
             {{ loading ? 'Entrando...' : 'Entrar' }}
           </button>
         </form>
@@ -72,6 +82,12 @@ export default {
       error: ''
     }
   },
+  mounted() {
+    // Redirect if already logged in
+    if (this.authStore.isAuthenticated) {
+      this.router.push('/')
+    }
+  },
   methods: {
     async handleLogin() {
       this.loading = true
@@ -86,12 +102,6 @@ export default {
       } finally {
         this.loading = false
       }
-    }
-  },
-  mounted() {
-    // Redirect if already logged in
-    if (this.authStore.isAuthenticated) {
-      this.router.push('/')
     }
   }
 }

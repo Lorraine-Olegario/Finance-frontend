@@ -1,6 +1,9 @@
 <template>
-  <router-link :to="to" class="action-card">
-    <slot name="icon"></slot>
+  <router-link
+    :to="to"
+    class="action-card"
+  >
+    <slot name="icon" />
     <span>{{ label }}</span>
   </router-link>
 </template>

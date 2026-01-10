@@ -3,49 +3,103 @@
     <div class="users-page">
       <div class="page-header">
         <h2>Gerenciar Usuários</h2>
-        <button @click="showCreateForm = true">+ Novo Usuário</button>
+        <button @click="showCreateForm = true">
+          + Novo Usuário
+        </button>
       </div>
 
       <!-- Create/Edit Form Modal -->
-      <div v-if="showCreateForm" class="modal-overlay" @click.self="closeForm">
+      <div
+        v-if="showCreateForm"
+        class="modal-overlay"
+        @click.self="closeForm"
+      >
         <div class="modal card">
           <h3>{{ editingUser ? 'Editar Usuário' : 'Novo Usuário' }}</h3>
           
           <form @submit.prevent="saveUser">
             <div class="form-group">
               <label>Nome</label>
-              <input v-model="formData.name" type="text" required />
+              <input
+                v-model="formData.name"
+                type="text"
+                required
+              >
             </div>
             
             <div class="form-group">
               <label>Email</label>
-              <input v-model="formData.email" type="email" required />
+              <input
+                v-model="formData.email"
+                type="email"
+                required
+              >
             </div>
             
-            <div v-if="!editingUser" class="form-group">
+            <div
+              v-if="!editingUser"
+              class="form-group"
+            >
               <label>Senha</label>
-              <input v-model="formData.password" type="password" required />
+              <input
+                v-model="formData.password"
+                type="password"
+                required
+              >
             </div>
             
-            <div v-if="!editingUser" class="form-group">
+            <div
+              v-if="!editingUser"
+              class="form-group"
+            >
               <label>Confirmar Senha</label>
-              <input v-model="formData.password_confirmation" type="password" required />
+              <input
+                v-model="formData.password_confirmation"
+                type="password"
+                required
+              >
             </div>
             
-            <div v-if="editingUser" class="form-group">
+            <div
+              v-if="editingUser"
+              class="form-group"
+            >
               <label>Status</label>
               <select v-model.number="formData.status">
-                <option :value="1">Ativo</option>
-                <option :value="0">Inativo</option>
+                <option :value="1">
+                  Ativo
+                </option>
+                <option :value="0">
+                  Inativo
+                </option>
               </select>
             </div>
             
-            <div v-if="error" class="error-message">{{ error }}</div>
-            <div v-if="success" class="success-message">{{ success }}</div>
+            <div
+              v-if="error"
+              class="error-message"
+            >
+              {{ error }}
+            </div>
+            <div
+              v-if="success"
+              class="success-message"
+            >
+              {{ success }}
+            </div>
             
             <div class="form-actions">
-              <button type="button" class="secondary" @click="closeForm">Cancelar</button>
-              <button type="submit" :disabled="loading">
+              <button
+                type="button"
+                class="secondary"
+                @click="closeForm"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                :disabled="loading"
+              >
                 {{ loading ? 'Salvando...' : 'Salvar' }}
               </button>
             </div>
@@ -62,11 +116,14 @@
             type="text" 
             placeholder="Buscar por nome ou email..."
             class="search-input"
-          />
+          >
         </div>
         
-        <div v-if="loading && !users.length" class="loading">
-          <div class="spinner"></div>
+        <div
+          v-if="loading && !users.length"
+          class="loading"
+        >
+          <div class="spinner" />
         </div>
         
         <table v-else-if="filteredUsers.length">
@@ -79,7 +136,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in filteredUsers" :key="user.id">
+            <tr
+              v-for="user in filteredUsers"
+              :key="user.id"
+            >
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
               <td>
@@ -88,13 +148,21 @@
                 </span>
               </td>
               <td>
-                <button class="btn-small secondary" @click="editUser(user)">Editar</button>
+                <button
+                  class="btn-small secondary"
+                  @click="editUser(user)"
+                >
+                  Editar
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
         
-        <div v-else class="empty-state">
+        <div
+          v-else
+          class="empty-state"
+        >
           <p>{{ searchQuery ? 'Nenhum usuário encontrado' : 'Nenhum usuário cadastrado' }}</p>
         </div>
       </div>
@@ -141,6 +209,9 @@ export default {
         user.email.toLowerCase().includes(query)
       )
     }
+  },
+  mounted() {
+    this.fetchUsers()
   },
   methods: {
     async fetchUsers() {
@@ -202,9 +273,6 @@ export default {
       this.error = ''
       this.success = ''
     }
-  },
-  mounted() {
-    this.fetchUsers()
   }
 }
 </script>

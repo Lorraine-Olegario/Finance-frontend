@@ -1,68 +1,186 @@
 <template>
-  <aside class="sidebar" :class="{ collapsed: isCollapsed }">
+  <aside
+    class="sidebar"
+    :class="{ collapsed: isCollapsed }"
+  >
     <div class="sidebar-header">
-      <h2 class="logo">Finance</h2>
-      <button class="toggle-btn" @click="toggleSidebar" aria-label="Toggle sidebar">
+      <h2 class="logo">
+        Finance
+      </h2>
+      <button
+        class="toggle-btn"
+        aria-label="Toggle sidebar"
+        @click="toggleSidebar"
+      >
         <span>☰</span>
       </button>
     </div>
     
     <nav class="sidebar-nav">
-      <router-link to="/" class="nav-item" exact-active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
+      <router-link
+        to="/"
+        class="nav-item"
+        exact-active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect
+            x="3"
+            y="3"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="14"
+            y="3"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="14"
+            y="14"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="3"
+            y="14"
+            width="7"
+            height="7"
+          />
         </svg>
         <span class="label">Dashboard</span>
       </router-link>
       
-      <router-link v-if="authStore.isAdmin" to="/users" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      <router-link
+        v-if="authStore.isAdmin"
+        to="/users"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle
+            cx="9"
+            cy="7"
+            r="4"
+          />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
         <span class="label">Usuários</span>
       </router-link>
       
-      <router-link to="/my-assets" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      <router-link
+        to="/my-assets"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line
+            x1="12"
+            y1="1"
+            x2="12"
+            y2="23"
+          />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
         <span class="label">Ativos</span>
       </router-link>
       
-      <router-link to="/observed" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
+      <router-link
+        to="/observed"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+          />
         </svg>
         <span class="label">Ativos Observados</span>
       </router-link>
       
-      <router-link to="/quotes" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+      <router-link
+        to="/quotes"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
         </svg>
         <span class="label">Cotações</span>
       </router-link>
       
-      <router-link to="/history" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
+      <router-link
+        to="/history"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <polyline points="12 6 12 12 16 14" />
         </svg>
         <span class="label">Histórico</span>
       </router-link>
       
-      <router-link v-if="authStore.isAdmin" to="/categories" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 3v18h18"></path>
-          <path d="m19 9-5 5-4-4-3 3"></path>
+      <router-link
+        v-if="authStore.isAdmin"
+        to="/categories"
+        class="nav-item"
+        active-class="active"
+      >
+        <svg
+          class="nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M3 3v18h18" />
+          <path d="m19 9-5 5-4-4-3 3" />
         </svg>
         <span class="label">Categorias</span>
       </router-link>
@@ -112,12 +230,6 @@ export default {
       isCollapsed: false
     }
   },
-  methods: {
-    toggleSidebar() {
-      this.isCollapsed = !this.isCollapsed
-      this.$emit('toggle', this.isCollapsed)
-    }
-  },
   mounted() {
     // Auto-collapse on mobile
     if (window.innerWidth <= 768) {
@@ -129,6 +241,12 @@ export default {
         this.isCollapsed = true
       }
     })
+  },
+  methods: {
+    toggleSidebar() {
+      this.isCollapsed = !this.isCollapsed
+      this.$emit('toggle', this.isCollapsed)
+    }
   }
 }
 </script>

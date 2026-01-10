@@ -1,33 +1,76 @@
 <template>
-  <div v-show="isOpen" class="filter-overlay" @click="$emit('close')">
-    <div class="filter-sidebar" @click.stop>
+  <div
+    v-show="isOpen"
+    class="filter-overlay"
+    @click="$emit('close')"
+  >
+    <div
+      class="filter-sidebar"
+      @click.stop
+    >
       <div class="filter-header">
         <h2>{{ title }}</h2>
-        <button @click="$emit('close')" class="close-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+        <button
+          class="close-btn"
+          @click="$emit('close')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line
+              x1="18"
+              y1="6"
+              x2="6"
+              y2="18"
+            />
+            <line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            />
           </svg>
         </button>
       </div>
       
       <div class="filter-content">
-        <slot></slot>
+        <slot />
       </div>
       
       <div class="filter-footer">
-        <button @click="$emit('reset')" class="btn-reset">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="1 4 1 10 7 10"></polyline>
-            <polyline points="23 20 23 14 17 14"></polyline>
-            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+        <button
+          class="btn-reset"
+          @click="$emit('reset')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="1 4 1 10 7 10" />
+            <polyline points="23 20 23 14 17 14" />
+            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
           </svg>
           Limpar Filtros
         </button>
-        <slot name="footer-extra"></slot>
-        <button @click="$emit('apply')" class="btn-apply">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
+        <slot name="footer-extra" />
+        <button
+          class="btn-apply"
+          @click="$emit('apply')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="20 6 9 17 4 12" />
           </svg>
           Aplicar
         </button>

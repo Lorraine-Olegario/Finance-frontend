@@ -5,26 +5,72 @@
       <div class="page-header">
         <div class="header-left">
           <h2>
-            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            <svg
+              class="header-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect
+                x="2"
+                y="7"
+                width="20"
+                height="14"
+                rx="2"
+                ry="2"
+              />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             </svg>
             Meus Ativos
           </h2>
-          <p class="subtitle">Gerencie sua carteira de investimentos</p>
+          <p class="subtitle">
+            Gerencie sua carteira de investimentos
+          </p>
         </div>
         <div class="header-actions">
-          <button @click="filterOpen = !filterOpen" class="btn-filter">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          <button
+            class="btn-filter"
+            @click="filterOpen = !filterOpen"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
             </svg>
             Filtros
-            <span class="badge-count" v-if="activeFiltersCount > 0">{{ activeFiltersCount }}</span>
+            <span
+              v-if="activeFiltersCount > 0"
+              class="badge-count"
+            >{{ activeFiltersCount }}</span>
           </button>
-          <button @click="openAddModal" class="btn btn-primary">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
+          <button
+            class="btn btn-primary"
+            @click="openAddModal"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="12"
+                y1="5"
+                x2="12"
+                y2="19"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="19"
+                y2="12"
+              />
             </svg>
             Adicionar Ativos
           </button>
@@ -42,443 +88,894 @@
 
       <!-- Content -->
       <div class="assets-content">
-        <div v-if="loading" class="loading">
-          <div class="spinner"></div>
+        <div
+          v-if="loading"
+          class="loading"
+        >
+          <div class="spinner" />
           <p>Carregando ativos...</p>
         </div>
 
-          <div v-else-if="filteredAssets.length === 0" class="empty-state">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+        <div
+          v-else-if="filteredAssets.length === 0"
+          class="empty-state"
+        >
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+          <h3>Nenhum ativo encontrado</h3>
+          <p>Adicione ativos à sua carteira ou ajuste os filtros</p>
+          <button
+            class="btn btn-primary"
+            @click="openAddModal"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="12"
+                y1="5"
+                x2="12"
+                y2="19"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="19"
+                y2="12"
+              />
             </svg>
-            <h3>Nenhum ativo encontrado</h3>
-            <p>Adicione ativos à sua carteira ou ajuste os filtros</p>
-            <button @click="openAddModal" class="btn btn-primary">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              Adicionar Primeiro Ativo
-            </button>
-          </div>
-
-          <div v-else class="assets-table-container">
-            <table class="assets-table">
-              <thead>
-                <tr>
-                  <th class="th-code">Código</th>
-                  <th class="th-name">Nome</th>
-                  <th class="th-category">Categoria</th>
-                  <th class="th-status">Status</th>
-                  <th class="th-actions">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="asset in filteredAssets" :key="asset.id" class="asset-row">
-                  <td class="td-code">
-                    <div class="code-cell">
-                      <svg class="icon-asset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                      </svg>
-                      <span class="asset-code">{{ asset.codigo }}</span>
-                    </div>
-                  </td>
-                  <td class="td-name">{{ asset.nome || '-' }}</td>
-                  <td class="td-category">
-                    <span 
-                      class="badge-categoria" 
-                      :style="{ 
-                        backgroundColor: getCategoryColor(asset.categoria) + '15',
-                        color: getCategoryColor(asset.categoria),
-                        borderColor: getCategoryColor(asset.categoria) + '40'
-                      }"
-                    >
-                      {{ asset.categoria }}
-                    </span>
-                  </td>
-                  <td class="td-status">
-                    <span class="badge-status" :class="`status-${asset.status}`">
-                      <svg class="status-icon" viewBox="0 0 8 8" fill="currentColor">
-                        <circle cx="4" cy="4" r="3"></circle>
-                      </svg>
-                      {{ asset.status }}
-                    </span>
-                  </td>
-                  <td class="td-actions">
-                    <div class="action-buttons">
-                      <button 
-                        @click="openEditModal(asset)" 
-                        class="action-btn edit-btn"
-                        title="Editar ativo"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                      </button>
-                      
-                      <button 
-                        v-if="asset.status === 'ativo'"
-                        @click="openDeactivateModal(asset)" 
-                        class="action-btn pause-btn"
-                        title="Pausar ativo"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="6" y="4" width="4" height="16"></rect>
-                          <rect x="14" y="4" width="4" height="16"></rect>
-                        </svg>
-                      </button>
-                      
-                      <button 
-                        v-else
-                        @click="openActivateModal(asset)" 
-                        class="action-btn play-btn"
-                        title="Ativar ativo"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                        </svg>
-                      </button>
-                      
-                      <button 
-                        @click="openObserveModal(asset)" 
-                        class="action-btn observe-btn"
-                        title="Observar ativo"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                      </button>
-                      
-                      <button 
-                        @click="openDeleteModal(asset)" 
-                        class="action-btn delete-btn"
-                        title="Deletar ativo"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-
-            </table>
-          </div>
-      <!-- Modal: Add Assets -->
-      <div v-if="modals.add" class="modal-overlay" @click.self="closeModal('add')">
-        <div class="modal card">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              Adicionar Ativos
-            </h3>
-            <button class="close-btn" @click="closeModal('add')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          
-          <div v-if="error" class="alert alert-error">{{ error }}</div>
-          <div v-if="success" class="alert alert-success">{{ success }}</div>
-
-          <form @submit.prevent="addAssets">
-            <div class="form-group">
-              <label>Ações (separadas por vírgula)</label>
-              <input 
-                v-model="formData.acoes" 
-                type="text" 
-                placeholder="Ex: PETR4, VALE3, ITUB4"
-                class="form-control"
-              />
-              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
-                <select v-model="formData.acaoCategoria" class="form-control" style="max-width:220px;">
-                  <option>Ações</option>
-                  <option>FIIs</option>
-                  <option v-for="c in categorias" :key="c">{{ c }}</option>
-                  <option>Outra</option>
-                </select>
-                <input v-if="formData.acaoCategoria === 'Outra'" v-model="formData.acaoCategoriaOther" type="text" placeholder="Nome da categoria" class="form-control" style="max-width:220px;" />
-                <small class="form-hint">Selecione a categoria que será atribuída às ações inseridas acima.</small>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>FIIs (separados por vírgula)</label>
-              <input 
-                v-model="formData.fiis" 
-                type="text" 
-                placeholder="Ex: HGLG11, MXRF11"
-                class="form-control"
-              />
-              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
-                <select v-model="formData.fiiCategoria" class="form-control" style="max-width:220px;">
-                  <option>FIIs</option>
-                  <option>Ações</option>
-                  <option v-for="c in categorias" :key="'f-'+c">{{ c }}</option>
-                  <option>Outra</option>
-                </select>
-                <input v-if="formData.fiiCategoria === 'Outra'" v-model="formData.fiiCategoriaOther" type="text" placeholder="Nome da categoria" class="form-control" style="max-width:220px;" />
-                <small class="form-hint">Selecione a categoria que será atribuída aos FIIs inseridos acima.</small>
-              </div>
-            </div>
-
-            <div class="modal-actions">
-              <button type="button" class="btn btn-secondary" @click="closeModal('add')">
-                Cancelar
-              </button>
-              <button type="submit" class="btn btn-primary" :disabled="saving">
-                {{ saving ? 'Salvando...' : 'Adicionar' }}
-              </button>
-            </div>
-          </form>
+            Adicionar Primeiro Ativo
+          </button>
         </div>
-      </div>
 
-      <!-- Modal: Edit Asset -->
-      <div v-if="modals.edit" class="modal-overlay" @click.self="closeModal('edit')">
-        <div class="modal card">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-              Editar Ativo
-            </h3>
-            <button class="close-btn" @click="closeModal('edit')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          
-          <div v-if="error" class="alert alert-error">{{ error }}</div>
-          <div v-if="success" class="alert alert-success">{{ success }}</div>
-
-          <form @submit.prevent="updateAsset">
-            <div class="form-group">
-              <label>Código</label>
-              <input 
-                v-model="selectedAsset.codigo" 
-                type="text" 
-                class="form-control"
-                readonly
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Nome</label>
-              <input 
-                v-model="selectedAsset.nome" 
-                type="text" 
-                placeholder="Nome do ativo"
-                class="form-control"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Status</label>
-              <select v-model="selectedAsset.status" class="form-control">
-                <option value="ativo">Ativo</option>
-                <option value="observando">Observando</option>
-                <option value="inativo">Inativo</option>
-              </select>
-            </div>
-
-            <!-- Personalização de Cor da Categoria -->
-            <div class="form-group">
-              <label class="category-color-label">
-                <svg class="icon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <circle cx="12" cy="12" r="4"></circle>
-                  <line x1="21.17" y1="8" x2="12" y2="8"></line>
-                  <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
-                  <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
-                </svg>
-                Cor da Categoria: {{ selectedAsset.categoria }}
-              </label>
-              <div class="color-picker-wrapper">
-                <input 
-                  v-model="editCategoryColor" 
-                  type="color" 
-                  class="color-input"
-                  :disabled="!selectedAsset.categoria"
-                />
-                <div class="color-preview" :style="{ backgroundColor: editCategoryColor }">
-                  <span class="color-value">{{ editCategoryColor }}</span>
-                </div>
-                <button 
-                  type="button" 
-                  @click="resetCategoryColor" 
-                  class="btn-reset-color"
-                  :disabled="!selectedAsset.categoria"
-                  title="Restaurar cor padrão"
+        <div
+          v-else
+          class="assets-table-container"
+        >
+          <table class="assets-table">
+            <thead>
+              <tr>
+                <th class="th-code">
+                  Código
+                </th>
+                <th class="th-name">
+                  Nome
+                </th>
+                <th class="th-category">
+                  Categoria
+                </th>
+                <th class="th-status">
+                  Status
+                </th>
+                <th class="th-actions">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="asset in filteredAssets"
+                :key="asset.id"
+                class="asset-row"
+              >
+                <td class="td-code">
+                  <div class="code-cell">
+                    <svg
+                      class="icon-asset"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                      <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                    <span class="asset-code">{{ asset.codigo }}</span>
+                  </div>
+                </td>
+                <td class="td-name">
+                  {{ asset.nome || '-' }}
+                </td>
+                <td class="td-category">
+                  <span 
+                    class="badge-categoria" 
+                    :style="{ 
+                      backgroundColor: getCategoryColor(asset.categoria) + '15',
+                      color: getCategoryColor(asset.categoria),
+                      borderColor: getCategoryColor(asset.categoria) + '40'
+                    }"
+                  >
+                    {{ asset.categoria }}
+                  </span>
+                </td>
+                <td class="td-status">
+                  <span
+                    class="badge-status"
+                    :class="`status-${asset.status}`"
+                  >
+                    <svg
+                      class="status-icon"
+                      viewBox="0 0 8 8"
+                      fill="currentColor"
+                    >
+                      <circle
+                        cx="4"
+                        cy="4"
+                        r="3"
+                      />
+                    </svg>
+                    {{ asset.status }}
+                  </span>
+                </td>
+                <td class="td-actions">
+                  <div class="action-buttons">
+                    <button 
+                      class="action-btn edit-btn" 
+                      title="Editar ativo"
+                      @click="openEditModal(asset)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg>
+                    </button>
+                      
+                    <button 
+                      v-if="asset.status === 'ativo'"
+                      class="action-btn pause-btn" 
+                      title="Pausar ativo"
+                      @click="openDeactivateModal(asset)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <rect
+                          x="6"
+                          y="4"
+                          width="4"
+                          height="16"
+                        />
+                        <rect
+                          x="14"
+                          y="4"
+                          width="4"
+                          height="16"
+                        />
+                      </svg>
+                    </button>
+                      
+                    <button 
+                      v-else
+                      class="action-btn play-btn" 
+                      title="Ativar ativo"
+                      @click="openActivateModal(asset)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
+                    </button>
+                      
+                    <button 
+                      class="action-btn observe-btn" 
+                      title="Observar ativo"
+                      @click="openObserveModal(asset)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3"
+                        />
+                      </svg>
+                    </button>
+                      
+                    <button 
+                      class="action-btn delete-btn" 
+                      title="Deletar ativo"
+                      @click="openDeleteModal(asset)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Modal: Add Assets -->
+        <div
+          v-if="modals.add"
+          class="modal-overlay"
+          @click.self="closeModal('add')"
+        >
+          <div class="modal card">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="1 4 1 10 7 10"></polyline>
-                    <polyline points="23 20 23 14 17 14"></polyline>
-                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
-                  </svg>
+                  <line
+                    x1="12"
+                    y1="5"
+                    x2="12"
+                    y2="19"
+                  />
+                  <line
+                    x1="5"
+                    y1="12"
+                    x2="19"
+                    y2="12"
+                  />
+                </svg>
+                Adicionar Ativos
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('add')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
+          
+            <div
+              v-if="error"
+              class="alert alert-error"
+            >
+              {{ error }}
+            </div>
+            <div
+              v-if="success"
+              class="alert alert-success"
+            >
+              {{ success }}
+            </div>
+
+            <form @submit.prevent="addAssets">
+              <div class="form-group">
+                <label>Ações (separadas por vírgula)</label>
+                <input 
+                  v-model="formData.acoes" 
+                  type="text" 
+                  placeholder="Ex: PETR4, VALE3, ITUB4"
+                  class="form-control"
+                >
+                <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
+                  <select
+                    v-model="formData.acaoCategoria"
+                    class="form-control"
+                    style="max-width:220px;"
+                  >
+                    <option>Ações</option>
+                    <option>FIIs</option>
+                    <option
+                      v-for="c in categorias"
+                      :key="c"
+                    >
+                      {{ c }}
+                    </option>
+                    <option>Outra</option>
+                  </select>
+                  <input
+                    v-if="formData.acaoCategoria === 'Outra'"
+                    v-model="formData.acaoCategoriaOther"
+                    type="text"
+                    placeholder="Nome da categoria"
+                    class="form-control"
+                    style="max-width:220px;"
+                  >
+                  <small class="form-hint">Selecione a categoria que será atribuída às ações inseridas acima.</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>FIIs (separados por vírgula)</label>
+                <input 
+                  v-model="formData.fiis" 
+                  type="text" 
+                  placeholder="Ex: HGLG11, MXRF11"
+                  class="form-control"
+                >
+                <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
+                  <select
+                    v-model="formData.fiiCategoria"
+                    class="form-control"
+                    style="max-width:220px;"
+                  >
+                    <option>FIIs</option>
+                    <option>Ações</option>
+                    <option
+                      v-for="c in categorias"
+                      :key="'f-'+c"
+                    >
+                      {{ c }}
+                    </option>
+                    <option>Outra</option>
+                  </select>
+                  <input
+                    v-if="formData.fiiCategoria === 'Outra'"
+                    v-model="formData.fiiCategoriaOther"
+                    type="text"
+                    placeholder="Nome da categoria"
+                    class="form-control"
+                    style="max-width:220px;"
+                  >
+                  <small class="form-hint">Selecione a categoria que será atribuída aos FIIs inseridos acima.</small>
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="closeModal('add')"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="saving"
+                >
+                  {{ saving ? 'Salvando...' : 'Adicionar' }}
                 </button>
               </div>
-              <small class="form-hint">Esta cor será aplicada a todos os ativos desta categoria</small>
+            </form>
+          </div>
+        </div>
+
+        <!-- Modal: Edit Asset -->
+        <div
+          v-if="modals.edit"
+          class="modal-overlay"
+          @click.self="closeModal('edit')"
+        >
+          <div class="modal card">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Editar Ativo
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('edit')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
+          
+            <div
+              v-if="error"
+              class="alert alert-error"
+            >
+              {{ error }}
+            </div>
+            <div
+              v-if="success"
+              class="alert alert-success"
+            >
+              {{ success }}
             </div>
 
+            <form @submit.prevent="updateAsset">
+              <div class="form-group">
+                <label>Código</label>
+                <input 
+                  v-model="selectedAsset.codigo" 
+                  type="text" 
+                  class="form-control"
+                  readonly
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Nome</label>
+                <input 
+                  v-model="selectedAsset.nome" 
+                  type="text" 
+                  placeholder="Nome do ativo"
+                  class="form-control"
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Status</label>
+                <select
+                  v-model="selectedAsset.status"
+                  class="form-control"
+                >
+                  <option value="ativo">
+                    Ativo
+                  </option>
+                  <option value="observando">
+                    Observando
+                  </option>
+                  <option value="inativo">
+                    Inativo
+                  </option>
+                </select>
+              </div>
+
+              <!-- Personalização de Cor da Categoria -->
+              <div class="form-group">
+                <label class="category-color-label">
+                  <svg
+                    class="icon-label"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                    />
+                    <line
+                      x1="21.17"
+                      y1="8"
+                      x2="12"
+                      y2="8"
+                    />
+                    <line
+                      x1="3.95"
+                      y1="6.06"
+                      x2="8.54"
+                      y2="14"
+                    />
+                    <line
+                      x1="10.88"
+                      y1="21.94"
+                      x2="15.46"
+                      y2="14"
+                    />
+                  </svg>
+                  Cor da Categoria: {{ selectedAsset.categoria }}
+                </label>
+                <div class="color-picker-wrapper">
+                  <input 
+                    v-model="editCategoryColor" 
+                    type="color" 
+                    class="color-input"
+                    :disabled="!selectedAsset.categoria"
+                  >
+                  <div
+                    class="color-preview"
+                    :style="{ backgroundColor: editCategoryColor }"
+                  >
+                    <span class="color-value">{{ editCategoryColor }}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    class="btn-reset-color" 
+                    :disabled="!selectedAsset.categoria"
+                    title="Restaurar cor padrão"
+                    @click="resetCategoryColor"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="1 4 1 10 7 10" />
+                      <polyline points="23 20 23 14 17 14" />
+                      <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+                    </svg>
+                  </button>
+                </div>
+                <small class="form-hint">Esta cor será aplicada a todos os ativos desta categoria</small>
+              </div>
+
+              <div class="modal-actions">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="closeModal('edit')"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="saving"
+                >
+                  {{ saving ? 'Salvando...' : 'Salvar Alterações' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Modal: Activate Confirmation -->
+        <div
+          v-if="modals.activate"
+          class="modal-overlay"
+          @click.self="closeModal('activate')"
+        >
+          <div class="modal card modal-sm">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+                Ativar Ativo
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('activate')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
+          
+            <p>Deseja ativar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
+            <p class="text-muted">
+              O ativo será marcado como ativo em sua carteira.
+            </p>
+          
             <div class="modal-actions">
-              <button type="button" class="btn btn-secondary" @click="closeModal('edit')">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeModal('activate')"
+              >
                 Cancelar
               </button>
-              <button type="submit" class="btn btn-primary" :disabled="saving">
-                {{ saving ? 'Salvando...' : 'Salvar Alterações' }}
+              <button
+                class="btn btn-success"
+                :disabled="saving"
+                @click="activateAsset"
+              >
+                {{ saving ? 'Ativando...' : 'Ativar' }}
               </button>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
 
-      <!-- Modal: Activate Confirmation -->
-      <div v-if="modals.activate" class="modal-overlay" @click.self="closeModal('activate')">
-        <div class="modal card modal-sm">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              Ativar Ativo
-            </h3>
-            <button class="close-btn" @click="closeModal('activate')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
+        <!-- Modal: Deactivate Confirmation -->
+        <div
+          v-if="modals.deactivate"
+          class="modal-overlay"
+          @click.self="closeModal('deactivate')"
+        >
+          <div class="modal card modal-sm">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect
+                    x="6"
+                    y="4"
+                    width="4"
+                    height="16"
+                  />
+                  <rect
+                    x="14"
+                    y="4"
+                    width="4"
+                    height="16"
+                  />
+                </svg>
+                Pausar Ativo
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('deactivate')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
           
-          <p>Deseja ativar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
-          <p class="text-muted">O ativo será marcado como ativo em sua carteira.</p>
+            <p>Deseja pausar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
+            <p class="text-muted">
+              O ativo será marcado como inativo.
+            </p>
           
-          <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal('activate')">
-              Cancelar
-            </button>
-            <button @click="activateAsset" class="btn btn-success" :disabled="saving">
-              {{ saving ? 'Ativando...' : 'Ativar' }}
-            </button>
+            <div class="modal-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeModal('deactivate')"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-warning"
+                :disabled="saving"
+                @click="deactivateAsset"
+              >
+                {{ saving ? 'Pausando...' : 'Pausar' }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Modal: Deactivate Confirmation -->
-      <div v-if="modals.deactivate" class="modal-overlay" @click.self="closeModal('deactivate')">
-        <div class="modal card modal-sm">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
-              Pausar Ativo
-            </h3>
-            <button class="close-btn" @click="closeModal('deactivate')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
+        <!-- Modal: Observe Asset -->
+        <div
+          v-if="modals.observe"
+          class="modal-overlay"
+          @click.self="closeModal('observe')"
+        >
+          <div class="modal card modal-sm">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                </svg>
+                Observar Ativo
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('observe')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
           
-          <p>Deseja pausar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
-          <p class="text-muted">O ativo será marcado como inativo.</p>
+            <p>Deseja marcar o ativo <strong>{{ selectedAsset.codigo }}</strong> como observando?</p>
+            <p class="text-muted">
+              Você receberá notificações sobre este ativo.
+            </p>
           
-          <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal('deactivate')">
-              Cancelar
-            </button>
-            <button @click="deactivateAsset" class="btn btn-warning" :disabled="saving">
-              {{ saving ? 'Pausando...' : 'Pausar' }}
-            </button>
+            <div class="modal-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeModal('observe')"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-info"
+                :disabled="saving"
+                @click="observeAsset"
+              >
+                {{ saving ? 'Salvando...' : 'Observar' }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Modal: Observe Asset -->
-      <div v-if="modals.observe" class="modal-overlay" @click.self="closeModal('observe')">
-        <div class="modal card modal-sm">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              Observar Ativo
-            </h3>
-            <button class="close-btn" @click="closeModal('observe')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
+        <!-- Modal: Delete Confirmation -->
+        <div
+          v-if="modals.delete"
+          class="modal-overlay"
+          @click.self="closeModal('delete')"
+        >
+          <div class="modal card modal-sm">
+            <div class="modal-header">
+              <h3>
+                <svg
+                  class="modal-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Deletar Ativo
+              </h3>
+              <button
+                class="close-btn"
+                @click="closeModal('delete')"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </svg>
+              </button>
+            </div>
           
-          <p>Deseja marcar o ativo <strong>{{ selectedAsset.codigo }}</strong> como observando?</p>
-          <p class="text-muted">Você receberá notificações sobre este ativo.</p>
+            <p>Deseja realmente deletar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
+            <p class="text-danger">
+              <strong>Atenção:</strong> Esta ação não pode ser desfeita.
+            </p>
           
-          <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal('observe')">
-              Cancelar
-            </button>
-            <button @click="observeAsset" class="btn btn-info" :disabled="saving">
-              {{ saving ? 'Salvando...' : 'Observar' }}
-            </button>
+            <div class="modal-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="closeModal('delete')"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-danger"
+                :disabled="saving"
+                @click="deleteAsset"
+              >
+                {{ saving ? 'Deletando...' : 'Deletar' }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Modal: Delete Confirmation -->
-      <div v-if="modals.delete" class="modal-overlay" @click.self="closeModal('delete')">
-        <div class="modal card modal-sm">
-          <div class="modal-header">
-            <h3>
-              <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              Deletar Ativo
-            </h3>
-            <button class="close-btn" @click="closeModal('delete')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          
-          <p>Deseja realmente deletar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
-          <p class="text-danger"><strong>Atenção:</strong> Esta ação não pode ser desfeita.</p>
-          
-          <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal('delete')">
-              Cancelar
-            </button>
-            <button @click="deleteAsset" class="btn btn-danger" :disabled="saving">
-              {{ saving ? 'Deletando...' : 'Deletar' }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div> <!-- End assets-page -->
-      </div> <!-- End assets-content -->
+      </div> <!-- End assets-page -->
+    </div> <!-- End assets-content -->
   </MainLayout>
 </template>
 
@@ -562,6 +1059,12 @@ export default {
       if (this.filters.status) count++
       return count
     }
+  },
+  mounted() {
+    console.log('Assets component mounted')
+    console.log('Auth store user:', this.authStore.user)
+    console.log('Is authenticated:', this.authStore.isAuthenticated)
+    this.fetchAssets()
   },
   methods: {
     async fetchAssets() {
@@ -848,12 +1351,6 @@ export default {
         status: ''
       }
     }
-  },
-  mounted() {
-    console.log('Assets component mounted')
-    console.log('Auth store user:', this.authStore.user)
-    console.log('Is authenticated:', this.authStore.isAuthenticated)
-    this.fetchAssets()
   }
 }
 </script>

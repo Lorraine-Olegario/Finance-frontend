@@ -5,73 +5,165 @@
       <div class="page-header">
         <div class="header-content">
           <h2>Categorias de Ativos</h2>
-          <p class="subtitle">Gerencie os tipos de ativos do sistema</p>
+          <p class="subtitle">
+            Gerencie os tipos de ativos do sistema
+          </p>
         </div>
-        <button @click="openAddModal" class="btn btn-add">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
+        <button
+          class="btn btn-add"
+          @click="openAddModal"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line
+              x1="12"
+              y1="5"
+              x2="12"
+              y2="19"
+            />
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+            />
           </svg>
           Nova Categoria
         </button>
       </div>
 
       <!-- Loading -->
-      <div v-if="loading" class="loading-container">
-        <div class="spinner"></div>
+      <div
+        v-if="loading"
+        class="loading-container"
+      >
+        <div class="spinner" />
         <p>Carregando categorias...</p>
       </div>
 
       <!-- Error -->
-      <div v-else-if="error" class="error-message">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      <div
+        v-else-if="error"
+        class="error-message"
+      >
+        <svg
+          class="icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"
+          />
         </svg>
         <p>{{ error }}</p>
-        <button @click="fetchCategories" class="btn">Tentar Novamente</button>
+        <button
+          class="btn"
+          @click="fetchCategories"
+        >
+          Tentar Novamente
+        </button>
       </div>
 
       <!-- Success Message -->
-      <div v-if="success" class="success-message">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"></polyline>
+      <div
+        v-if="success"
+        class="success-message"
+      >
+        <svg
+          class="icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="20 6 9 17 4 12" />
         </svg>
         <p>{{ success }}</p>
       </div>
 
       <!-- Categories Grid -->
-      <div v-else-if="categories.length > 0" class="categories-grid">
-        <div v-for="category in categories" :key="category.id" class="category-card">
+      <div
+        v-else-if="categories.length > 0"
+        class="categories-grid"
+      >
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="category-card"
+        >
           <div class="category-header">
-            <div class="category-color" :style="{ backgroundColor: category.color || '#6200EE' }">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <path d="M3 3v18h18"></path>
-                <path d="m19 9-5 5-4-4-3 3"></path>
+            <div
+              class="category-color"
+              :style="{ backgroundColor: category.color || '#6200EE' }"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="2"
+              >
+                <path d="M3 3v18h18" />
+                <path d="m19 9-5 5-4-4-3 3" />
               </svg>
             </div>
             <div class="category-info">
               <h3>{{ category.nome }}</h3>
-              <p class="category-count">{{ category.ativos_count || 0 }} ativo(s)</p>
+              <p class="category-count">
+                {{ category.ativos_count || 0 }} ativo(s)
+              </p>
             </div>
           </div>
           <div class="category-actions">
-            <button @click="openEditModal(category)" class="btn-icon" title="Editar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            <button
+              class="btn-icon"
+              title="Editar"
+              @click="openEditModal(category)"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
             </button>
             <button 
-              @click="openDeleteModal(category)" 
-              class="btn-icon btn-danger"
+              class="btn-icon btn-danger" 
               :disabled="category.ativos_count > 0"
               :title="category.ativos_count > 0 ? 'Não é possível excluir categoria com ativos' : 'Excluir'"
+              @click="openDeleteModal(category)"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
               </svg>
             </button>
           </div>
@@ -79,33 +171,86 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="empty-state">
+      <div
+        v-else
+        class="empty-state"
+      >
         <div class="empty-icon-wrapper">
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 3v18h18"></path>
-            <path d="m19 9-5 5-4-4-3 3"></path>
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 3v18h18" />
+            <path d="m19 9-5 5-4-4-3 3" />
           </svg>
         </div>
         <h3>Nenhuma categoria cadastrada</h3>
         <p>Adicione categorias para organizar seus ativos</p>
-        <button @click="openAddModal" class="btn">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
+        <button
+          class="btn"
+          @click="openAddModal"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line
+              x1="12"
+              y1="5"
+              x2="12"
+              y2="19"
+            />
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+            />
           </svg>
           Criar Primeira Categoria
         </button>
       </div>
 
       <!-- Add/Edit Modal -->
-      <div v-if="showModal" class="modal-overlay" @click="closeModal">
-        <div class="modal" @click.stop>
+      <div
+        v-if="showModal"
+        class="modal-overlay"
+        @click="closeModal"
+      >
+        <div
+          class="modal"
+          @click.stop
+        >
           <div class="modal-header">
             <h3>{{ isEditing ? 'Editar Categoria' : 'Nova Categoria' }}</h3>
-            <button @click="closeModal" class="btn-close">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
+            <button
+              class="btn-close"
+              @click="closeModal"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line
+                  x1="18"
+                  y1="6"
+                  x2="6"
+                  y2="18"
+                />
+                <line
+                  x1="6"
+                  y1="6"
+                  x2="18"
+                  y2="18"
+                />
               </svg>
             </button>
           </div>
@@ -118,7 +263,7 @@
                 placeholder="Ex: Ações, FIIs, Criptomoedas"
                 class="form-input"
                 @keyup.enter="saveCategory"
-              />
+              >
             </div>
             <div class="form-group">
               <label>Cor</label>
@@ -127,23 +272,35 @@
                   v-model="formData.color" 
                   type="color" 
                   class="color-input"
-                />
+                >
                 <input 
                   v-model="formData.color" 
                   type="text" 
                   placeholder="#6200EE"
                   class="form-input"
                   maxlength="7"
-                />
+                >
               </div>
             </div>
-            <div v-if="error" class="modal-error">
+            <div
+              v-if="error"
+              class="modal-error"
+            >
               {{ error }}
             </div>
           </div>
           <div class="modal-footer">
-            <button @click="closeModal" class="btn secondary">Cancelar</button>
-            <button @click="saveCategory" class="btn" :disabled="saving || !formData.nome">
+            <button
+              class="btn secondary"
+              @click="closeModal"
+            >
+              Cancelar
+            </button>
+            <button
+              class="btn"
+              :disabled="saving || !formData.nome"
+              @click="saveCategory"
+            >
               {{ saving ? 'Salvando...' : 'Salvar' }}
             </button>
           </div>
@@ -151,24 +308,60 @@
       </div>
 
       <!-- Delete Modal -->
-      <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
-        <div class="modal modal-small" @click.stop>
+      <div
+        v-if="showDeleteModal"
+        class="modal-overlay"
+        @click="closeDeleteModal"
+      >
+        <div
+          class="modal modal-small"
+          @click.stop
+        >
           <div class="modal-header">
             <h3>Confirmar Exclusão</h3>
-            <button @click="closeDeleteModal" class="btn-close">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
+            <button
+              class="btn-close"
+              @click="closeDeleteModal"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line
+                  x1="18"
+                  y1="6"
+                  x2="6"
+                  y2="18"
+                />
+                <line
+                  x1="6"
+                  y1="6"
+                  x2="18"
+                  y2="18"
+                />
               </svg>
             </button>
           </div>
           <div class="modal-body">
             <p>Tem certeza que deseja excluir a categoria <strong>{{ selectedCategory?.nome }}</strong>?</p>
-            <p class="warning-text">Esta ação não pode ser desfeita.</p>
+            <p class="warning-text">
+              Esta ação não pode ser desfeita.
+            </p>
           </div>
           <div class="modal-footer">
-            <button @click="closeDeleteModal" class="btn secondary">Cancelar</button>
-            <button @click="deleteCategory" class="btn danger" :disabled="saving">
+            <button
+              class="btn secondary"
+              @click="closeDeleteModal"
+            >
+              Cancelar
+            </button>
+            <button
+              class="btn danger"
+              :disabled="saving"
+              @click="deleteCategory"
+            >
               {{ saving ? 'Excluindo...' : 'Excluir' }}
             </button>
           </div>
@@ -203,6 +396,9 @@ export default {
         color: '#6200EE'
       }
     }
+  },
+  mounted() {
+    this.fetchCategories()
   },
   methods: {
     async fetchCategories() {
@@ -304,9 +500,6 @@ export default {
         this.saving = false
       }
     }
-  },
-  mounted() {
-    this.fetchCategories()
   }
 }
 </script>

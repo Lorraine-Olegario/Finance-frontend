@@ -1,43 +1,116 @@
 <template>
-  <div class="alert" :class="`alert-${type}`">
-    <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <div
+    class="alert"
+    :class="`alert-${type}`"
+  >
+    <svg
+      class="alert-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
       <!-- Error Icon -->
       <template v-if="type === 'error'">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="8" x2="12" y2="12"></line>
-        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          y1="8"
+          x2="12"
+          y2="12"
+        />
+        <line
+          x1="12"
+          y1="16"
+          x2="12.01"
+          y2="16"
+        />
       </template>
       
       <!-- Warning Icon -->
       <template v-else-if="type === 'warning'">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-        <line x1="12" y1="9" x2="12" y2="13"></line>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+        <line
+          x1="12"
+          y1="9"
+          x2="12"
+          y2="13"
+        />
+        <line
+          x1="12"
+          y1="17"
+          x2="12.01"
+          y2="17"
+        />
       </template>
       
       <!-- Success Icon -->
       <template v-else-if="type === 'success'">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
       </template>
       
       <!-- Info Icon -->
       <template v-else>
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          y1="16"
+          x2="12"
+          y2="12"
+        />
+        <line
+          x1="12"
+          y1="8"
+          x2="12.01"
+          y2="8"
+        />
       </template>
     </svg>
     
     <div class="alert-content">
-      <h4 v-if="title" class="alert-title">{{ title }}</h4>
-      <p class="alert-message">{{ message }}</p>
+      <h4
+        v-if="title"
+        class="alert-title"
+      >
+        {{ title }}
+      </h4>
+      <p class="alert-message">
+        {{ message }}
+      </p>
     </div>
     
-    <button v-if="dismissible" @click="$emit('dismiss')" class="alert-close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
+    <button
+      v-if="dismissible"
+      class="alert-close"
+      @click="$emit('dismiss')"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line
+          x1="18"
+          y1="6"
+          x2="6"
+          y2="18"
+        />
+        <line
+          x1="6"
+          y1="6"
+          x2="18"
+          y2="18"
+        />
       </svg>
     </button>
   </div>

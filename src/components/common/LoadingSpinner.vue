@@ -1,7 +1,18 @@
 <template>
-  <div class="loading-container" :class="{ 'fullscreen': fullscreen }">
-    <div class="spinner" :style="{ width: size, height: size }"></div>
-    <p v-if="message" class="loading-message">{{ message }}</p>
+  <div
+    class="loading-container"
+    :class="{ 'fullscreen': fullscreen }"
+  >
+    <div
+      class="spinner"
+      :style="{ width: size, height: size }"
+    />
+    <p
+      v-if="message"
+      class="loading-message"
+    >
+      {{ message }}
+    </p>
   </div>
 </template>
 

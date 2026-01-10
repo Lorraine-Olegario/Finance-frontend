@@ -1,10 +1,10 @@
 <template>
   <div class="filter-section">
     <label class="filter-label">
-      <slot name="icon"></slot>
+      <slot name="icon" />
       {{ label }}
     </label>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

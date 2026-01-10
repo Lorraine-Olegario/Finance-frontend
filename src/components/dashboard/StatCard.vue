@@ -1,13 +1,20 @@
 <template>
   <div :class="['stat-card', variant]">
     <div class="stat-icon">
-      <slot name="icon"></slot>
+      <slot name="icon" />
     </div>
     <div class="stat-content">
-      <p class="stat-label">{{ label }}</p>
-      <p class="stat-value">{{ value }}</p>
-      <p v-if="subtitle" :class="['stat-change', { positive: isPositive }]">
-        <slot name="subtitle-icon"></slot>
+      <p class="stat-label">
+        {{ label }}
+      </p>
+      <p class="stat-value">
+        {{ value }}
+      </p>
+      <p
+        v-if="subtitle"
+        :class="['stat-change', { positive: isPositive }]"
+      >
+        <slot name="subtitle-icon" />
         {{ subtitle }}
       </p>
     </div>

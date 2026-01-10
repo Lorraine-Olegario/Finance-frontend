@@ -15,8 +15,11 @@
               type="text" 
               placeholder="Digite o código do ativo (ex: PETR4)"
               @keyup.enter="searchHistory"
-            />
-            <button @click="searchHistory" :disabled="!searchCode || loading">
+            >
+            <button
+              :disabled="!searchCode || loading"
+              @click="searchHistory"
+            >
               Buscar
             </button>
           </div>
@@ -24,17 +27,28 @@
       </div>
 
       <!-- Loading -->
-      <div v-if="loading" class="loading">
-        <div class="spinner"></div>
+      <div
+        v-if="loading"
+        class="loading"
+      >
+        <div class="spinner" />
       </div>
 
       <!-- Error -->
-      <div v-if="error" class="card error-card">
-        <p class="error-message">{{ error }}</p>
+      <div
+        v-if="error"
+        class="card error-card"
+      >
+        <p class="error-message">
+          {{ error }}
+        </p>
       </div>
 
       <!-- History Results -->
-      <div v-if="historyData.length" class="card">
+      <div
+        v-if="historyData.length"
+        class="card"
+      >
         <h3>Histórico de {{ searchCode }}</h3>
         
         <div class="history-table-wrapper">
@@ -49,7 +63,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(record, index) in historyData" :key="index">
+              <tr
+                v-for="(record, index) in historyData"
+                :key="index"
+              >
                 <td>{{ formatDate(record.created_at || record.timestamp) }}</td>
                 <td>{{ record.symbol }}</td>
                 <td>{{ record.shortName || record.name }}</td>
@@ -63,7 +80,10 @@
         </div>
       </div>
       
-      <div v-else-if="!loading && !error" class="card empty-state">
+      <div
+        v-else-if="!loading && !error"
+        class="card empty-state"
+      >
         <p>Digite um código de ativo para ver seu histórico</p>
       </div>
     </div>

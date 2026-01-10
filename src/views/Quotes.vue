@@ -5,26 +5,58 @@
       <div class="page-header">
         <div class="header-left">
           <h2>
-            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            <svg
+              class="header-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="12"
+                y1="1"
+                x2="12"
+                y2="23"
+              />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
             Cotações dos Meus Ativos
           </h2>
-          <p class="subtitle">{{ filteredQuotes.length }} ativo{{ filteredQuotes.length !== 1 ? 's' : '' }} em tempo real</p>
+          <p class="subtitle">
+            {{ filteredQuotes.length }} ativo{{ filteredQuotes.length !== 1 ? 's' : '' }} em tempo real
+          </p>
         </div>
         <div class="header-actions">
-          <button @click="openFilters" class="btn-filter">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          <button
+            class="btn-filter"
+            @click="openFilters"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
             </svg>
             Filtros
           </button>
-          <button @click="fetchAllQuotes" class="btn-refresh" :disabled="loading">
-            <svg class="icon" :class="{ 'spinning': loading }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="1 4 1 10 7 10"></polyline>
-              <polyline points="23 20 23 14 17 14"></polyline>
-              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+          <button
+            class="btn-refresh"
+            :disabled="loading"
+            @click="fetchAllQuotes"
+          >
+            <svg
+              class="icon"
+              :class="{ 'spinning': loading }"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="1 4 1 10 7 10" />
+              <polyline points="23 20 23 14 17 14" />
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
             </svg>
             Atualizar
           </button>
@@ -32,7 +64,10 @@
       </div>
 
       <!-- Loading -->
-      <LoadingSpinner v-if="loading" message="Carregando cotações..." />
+      <LoadingSpinner
+        v-if="loading"
+        message="Carregando cotações..."
+      />
 
       <!-- Error -->
       <ErrorAlert 
@@ -44,7 +79,10 @@
       />
 
       <!-- Quotes Grid -->
-      <div v-if="!loading && filteredQuotes.length" class="quotes-grid">
+      <div
+        v-if="!loading && filteredQuotes.length"
+        class="quotes-grid"
+      >
         <QuoteCard 
           v-for="quote in filteredQuotes" 
           :key="quote.symbol" 
@@ -59,15 +97,40 @@
         description="Você ainda não tem ativos observados. Adicione ativos para acompanhar suas cotações."
       >
         <template #icon>
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
           </svg>
         </template>
         <template #action>
-          <router-link to="/my-assets" class="btn">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
+          <router-link
+            to="/my-assets"
+            class="btn"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="12"
+                y1="5"
+                x2="12"
+                y2="19"
+              />
+              <line
+                x1="5"
+                y1="12"
+                x2="19"
+                y2="12"
+              />
             </svg>
             Adicionar Ativos
           </router-link>
@@ -81,18 +144,43 @@
         description="Não foi possível carregar as cotações dos seus ativos no momento."
       >
         <template #icon>
-          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-            <line x1="12" y1="9" x2="12" y2="13"></line>
-            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line
+              x1="12"
+              y1="9"
+              x2="12"
+              y2="13"
+            />
+            <line
+              x1="12"
+              y1="17"
+              x2="12.01"
+              y2="17"
+            />
           </svg>
         </template>
         <template #action>
-          <button @click="fetchAllQuotes" class="btn">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="1 4 1 10 7 10"></polyline>
-              <polyline points="23 20 23 14 17 14"></polyline>
-              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+          <button
+            class="btn"
+            @click="fetchAllQuotes"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="1 4 1 10 7 10" />
+              <polyline points="23 20 23 14 17 14" />
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
             </svg>
             Tentar Novamente
           </button>
@@ -202,6 +290,9 @@ export default {
       return result
     }
   },
+  mounted() {
+    this.fetchAllQuotes()
+  },
   methods: {
     async fetchAllQuotes() {
       this.loading = true
@@ -304,9 +395,6 @@ export default {
     applyFilters(newFilters) {
       this.filters = { ...newFilters }
     }
-  },
-  mounted() {
-    this.fetchAllQuotes()
   }
 }
 </script>

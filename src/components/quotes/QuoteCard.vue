@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isValidQuote" class="quote-card">
+  <div
+    v-if="isValidQuote"
+    class="quote-card"
+  >
     <!-- Header -->
     <div class="quote-header">
       <div class="quote-logo-wrapper">
@@ -9,22 +12,38 @@
           :alt="quote.symbol"
           class="quote-logo"
           @error="handleImageError"
-        />
-        <div v-else class="quote-logo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        >
+        <div
+          v-else
+          class="quote-logo-placeholder"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
           </svg>
         </div>
       </div>
       <div class="quote-info">
         <div class="symbol-row">
-          <h3 class="quote-symbol">{{ quote.symbol }}</h3>
-          <span v-if="quote.status" class="status-badge" :class="`status-${quote.status}`">
+          <h3 class="quote-symbol">
+            {{ quote.symbol }}
+          </h3>
+          <span
+            v-if="quote.status"
+            class="status-badge"
+            :class="`status-${quote.status}`"
+          >
             {{ getStatusLabel(quote.status) }}
           </span>
         </div>
-        <p class="quote-name">{{ quote.shortName || quote.longName || 'N/A' }}</p>
+        <p class="quote-name">
+          {{ quote.shortName || quote.longName || 'N/A' }}
+        </p>
       </div>
     </div>
     
@@ -36,10 +55,23 @@
           <span class="price-value">{{ formatPrice(currentPrice) }}</span>
         </div>
         
-        <div class="change-section" :class="changeClass">
-          <svg class="change-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path v-if="isPositive" d="M7 14l5-5 5 5H7z"/>
-            <path v-else d="M7 10l5 5 5-5H7z"/>
+        <div
+          class="change-section"
+          :class="changeClass"
+        >
+          <svg
+            class="change-icon"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              v-if="isPositive"
+              d="M7 14l5-5 5 5H7z"
+            />
+            <path
+              v-else
+              d="M7 10l5 5 5-5H7z"
+            />
           </svg>
           <span class="change-value">{{ formattedChange }}</span>
           <span class="change-percent">{{ formattedChangePercent }}</span>
@@ -54,12 +86,18 @@
         <span class="detail-value">{{ formatLargeNumber(quote.regularMarketVolume || quote.volume) }}</span>
       </div>
       
-      <div v-if="quote.marketCap" class="detail-item">
+      <div
+        v-if="quote.marketCap"
+        class="detail-item"
+      >
         <span class="detail-label">Cap</span>
         <span class="detail-value">{{ formatLargeNumber(quote.marketCap) }}</span>
       </div>
       
-      <div v-if="quote.regularMarketDayHigh && quote.regularMarketDayLow" class="detail-item">
+      <div
+        v-if="quote.regularMarketDayHigh && quote.regularMarketDayLow"
+        class="detail-item"
+      >
         <span class="detail-label">Min/Max</span>
         <span class="detail-value">{{ formatPrice(quote.regularMarketDayLow) }}/{{ formatPrice(quote.regularMarketDayHigh) }}</span>
       </div>

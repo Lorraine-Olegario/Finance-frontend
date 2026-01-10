@@ -3,20 +3,47 @@
     <div class="empty-icon-wrapper">
       <!-- Custom Icon Slot -->
       <slot name="icon">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        <svg
+          class="empty-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12.01"
+            y2="8"
+          />
         </svg>
       </slot>
     </div>
     
-    <h3 class="empty-title">{{ title }}</h3>
-    <p class="empty-description">{{ description }}</p>
+    <h3 class="empty-title">
+      {{ title }}
+    </h3>
+    <p class="empty-description">
+      {{ description }}
+    </p>
     
     <!-- Action Slot -->
-    <div v-if="$slots.action" class="empty-action">
-      <slot name="action"></slot>
+    <div
+      v-if="$slots.action"
+      class="empty-action"
+    >
+      <slot name="action" />
     </div>
   </div>
 </template>

@@ -1,7 +1,10 @@
 <template>
   <div class="category-item">
     <div class="category-info">
-      <div class="category-color" :style="{ backgroundColor: color }"></div>
+      <div
+        class="category-color"
+        :style="{ backgroundColor: color }"
+      />
       <span class="category-name">{{ name }}</span>
     </div>
     <div class="category-stats">
