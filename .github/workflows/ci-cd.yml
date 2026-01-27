@@ -106,7 +106,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "docker-compose.prod.yml"
-          target: "/var/www/projetos/finance/frontend"
+          target: "/var/www/projetos/finance/Finance-frontend"
           strip_components: 0
 
       - name: Deploy via SSH
@@ -116,7 +116,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            cd /var/www/projetos/finance/frontend
+            cd /var/www/projetos/finance/Finance-frontend
 
             # Login no GitHub Container Registry
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
