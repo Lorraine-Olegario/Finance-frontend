@@ -128,8 +128,8 @@ jobs:
             docker compose -f docker-compose.prod.yml pull
 
             # Restart dos containers
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
             # Limpeza de imagens antigas
             docker image prune -f
