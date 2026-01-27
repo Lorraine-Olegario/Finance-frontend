@@ -96,6 +96,19 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Copiar arquivos para VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "docker-compose.prod.yml"
+          target: "/var/www/projetos/finance/frontend"
+          strip_components: 0
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -104,6 +117,22 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd /var/www/projetos/finance/frontend
-            docker compose pull
-            docker compose up -d
+
+            # Login no GitHub Container Registry
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Define variável de ambiente com o nome do repositório
+            export GITHUB_REPOSITORY=${{ github.repository }}
+
+            # Pull da imagem mais recente usando arquivo de produção
+            docker compose -f docker-compose.prod.yml pull
+
+            # Restart dos containers
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml up -d
+
+            # Limpeza de imagens antigas
             docker image prune -f
+
+            # Logout do registry
+            docker logout ghcr.io

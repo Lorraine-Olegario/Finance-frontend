@@ -1,8 +1,6 @@
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: infra/Dockerfile
+    image: ghcr.io/${GITHUB_REPOSITORY:-lorraineolegario/finance-frontend}:latest
     container_name: finance-frontend
     ports:
       - "80:80"
