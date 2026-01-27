@@ -102,7 +102,7 @@ jobs:
       - name: Copiar arquivos para VPS
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
+          host: "72.61.27.84"
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "docker-compose.prod.yml"
@@ -112,18 +112,8 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
+          host: "72.61.27.84"
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd /var/www/projetos/finance/Finance-frontend
-
-            # Pull da imagem mais recente usando arquivo de produção
-            docker compose -f docker-compose.prod.yml pull
-
-            # Restart dos containers
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
-
-            # Limpeza de imagens antigas
-            docker image prune -f
