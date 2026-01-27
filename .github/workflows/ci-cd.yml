@@ -17,7 +17,7 @@ jobs:
   test:
     name: Lint e Testes
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -89,28 +89,21 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
 
-  # Job 3: Deploy (opcional - descomente e configure conforme necessário)
-  # deploy:
-  #   name: Deploy para Produção
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push
-  #   if: github.ref == 'refs/heads/main'
-  #   environment:
-  #     name: production
-  #     url: https://seu-dominio.com
-  #   
-  #   steps:
-  #     - name: Checkout código
-  #       uses: actions/checkout@v4
-  #
-  #     - name: Deploy via SSH
-  #       uses: appleboy/ssh-action@v1.0.0
-  #       with:
-  #         host: ${{ secrets.DEPLOY_HOST }}
-  #         username: ${{ secrets.DEPLOY_USER }}
-  #         key: ${{ secrets.DEPLOY_SSH_KEY }}
-  #         script: |
-  #           cd /path/to/app
-  #           docker compose pull
-  #           docker compose up -d
-  #           docker image prune -f
+  deploy:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /var/www/projetos/finance/frontend
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
