@@ -117,6 +117,12 @@ jobs:
             key: ${{ secrets.DEPLOY_SSH_KEY }}
             script: |
               cd /var/www/projetos/finance/Finance-frontend
-              docker compose down
-              docker compose up -d --build
-              chmod -R 777 .
+
+              # Pull e restart
+              docker compose -f docker-compose.prod.yml pull
+              docker compose -f docker-compose.prod.yml down
+              docker compose -f docker-compose.prod.yml up -d
+
+              # Limpeza
+              docker image prune -f
+              docker logout ghcr.io
