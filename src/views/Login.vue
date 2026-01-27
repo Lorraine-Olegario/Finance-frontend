@@ -50,11 +50,6 @@
             {{ loading ? 'Entrando...' : 'Entrar' }}
           </button>
         </form>
-
-        <div class="login-footer">
-          <p>Usuário teste: <strong>user@finance.com</strong> / Senha: <strong>user123</strong></p>
-          <p>Admin: <strong>admin@finance.com</strong> / Senha: <strong>admin123</strong></p>
-        </div>
       </div>
     </div>
   </div>
