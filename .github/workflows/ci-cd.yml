@@ -89,7 +89,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
 
-  job:
+  jobs:
     build_dploy:
       name: Deploy Frontend
       runs-on: ubuntu-latest
@@ -120,8 +120,7 @@ jobs:
 
               # Pull e restart
               docker compose -f docker-compose.prod.yml pull
-              docker compose -f docker-compose.prod.yml down
-              docker compose -f docker-compose.prod.yml up -d
+              docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
               # Limpeza
               docker image prune -f
