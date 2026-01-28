@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: infra/Dockerfile
+      args:
+        - VITE_API_BASE_URL=http://72.61.27.84:8020/api/v1
     container_name: finance-frontend
     ports:
       - "8080:80"
