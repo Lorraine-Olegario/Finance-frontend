@@ -233,25 +233,7 @@
               class="btn-close"
               @click="closeModal"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line
-                  x1="18"
-                  y1="6"
-                  x2="6"
-                  y2="18"
-                />
-                <line
-                  x1="6"
-                  y1="6"
-                  x2="18"
-                  y2="18"
-                />
-              </svg>
+              ×
             </button>
           </div>
           <div class="modal-body">
@@ -323,25 +305,7 @@
               class="btn-close"
               @click="closeDeleteModal"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line
-                  x1="18"
-                  y1="6"
-                  x2="6"
-                  y2="18"
-                />
-                <line
-                  x1="6"
-                  y1="6"
-                  x2="18"
-                  y2="18"
-                />
-              </svg>
+              ×
             </button>
           </div>
           <div class="modal-body">
@@ -406,7 +370,23 @@ export default {
       this.error = ''
       try {
         const response = await categoryService.getAll()
-        this.categories = response.data.data || response.data || []
+        
+        if (response.data?.data?.data && Array.isArray(response.data.data.data)) {
+          this.categories = response.data.data.data
+          return
+        }
+        
+        if (response.data?.data && Array.isArray(response.data.data)) {
+          this.categories = response.data.data
+          return
+        }
+        
+        if (Array.isArray(response.data)) {
+          this.categories = response.data
+          return
+        }
+        
+        this.categories = []
       } catch (err) {
         this.error = err.response?.data?.message || 'Erro ao carregar categorias'
       } finally {
@@ -420,6 +400,7 @@ export default {
         nome: '',
         color: '#6200EE'
       }
+      this.error = ''
       this.showModal = true
     },
     openEditModal(category) {
@@ -429,6 +410,7 @@ export default {
         nome: category.nome,
         color: category.color || '#6200EE'
       }
+      this.error = ''
       this.showModal = true
     },
     openDeleteModal(category) {
@@ -454,26 +436,26 @@ export default {
       this.success = ''
       try {
         if (this.isEditing) {
-          const response = await categoryService.update(this.selectedCategory.id, this.formData)
-          this.closeModal()
+          await categoryService.update(this.selectedCategory.id, this.formData)
           this.success = 'Categoria atualizada com sucesso!'
-        } else {
-          const response = await categoryService.create(this.formData)
-          this.closeModal()
+        }
+        
+        if (!this.isEditing) {
+          await categoryService.create(this.formData)
           this.success = 'Categoria criada com sucesso!'
         }
+        
+        this.closeModal()
         await this.fetchCategories()
         setTimeout(() => { this.success = '' }, 5000)
       } catch (err) {
-        console.error('Error saving category:', err) // Debug
-        console.error('Error response:', err.response) // Debug
         if (err.response?.data?.errors) {
-          // Erros de validação do Laravel
           const errors = Object.values(err.response.data.errors).flat()
           this.error = errors.join(', ')
-        } else {
-          this.error = err.response?.data?.message || 'Erro ao salvar categoria'
+          return
         }
+        
+        this.error = err.response?.data?.message || 'Erro ao salvar categoria'
       } finally {
         this.saving = false
       }
@@ -751,15 +733,42 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 100000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal {
-  background: var(--surface);
+  background: #ffffff !important;
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 100001;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-small {
@@ -768,10 +777,11 @@ export default {
 
 .modal-header {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border, #E0E0E0);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--surface, #ffffff);
 }
 
 .modal-header h3 {
@@ -808,6 +818,8 @@ export default {
 
 .modal-body {
   padding: 1.5rem;
+  background: var(--surface, #ffffff);
+  display: block;
 }
 
 .modal-body p {

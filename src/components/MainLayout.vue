@@ -377,6 +377,8 @@ export default {
   flex: 1;
   padding: 2rem;
   background-color: var(--bg-secondary);
+  overflow: visible;
+  position: relative;
 }
 
 @media (max-width: 768px) {
