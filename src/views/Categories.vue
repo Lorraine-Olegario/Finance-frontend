@@ -406,10 +406,8 @@ export default {
       this.error = ''
       try {
         const response = await categoryService.getAll()
-        console.log('Response:', response.data) // Debug
         this.categories = response.data.data || response.data || []
       } catch (err) {
-        console.error('Error fetching categories:', err) // Debug
         this.error = err.response?.data?.message || 'Erro ao carregar categorias'
       } finally {
         this.loading = false
@@ -455,15 +453,12 @@ export default {
       this.error = ''
       this.success = ''
       try {
-        console.log('Saving category:', this.formData) // Debug
         if (this.isEditing) {
           const response = await categoryService.update(this.selectedCategory.id, this.formData)
-          console.log('Update response:', response.data) // Debug
           this.closeModal()
           this.success = 'Categoria atualizada com sucesso!'
         } else {
           const response = await categoryService.create(this.formData)
-          console.log('Create response:', response.data) // Debug
           this.closeModal()
           this.success = 'Categoria criada com sucesso!'
         }

@@ -1,6 +1,9 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
 
+# Argumentos de build para variáveis de ambiente
+ARG VITE_API_BASE_URL
+
 WORKDIR /app
 
 # Copiar arquivos de dependências
@@ -9,8 +12,11 @@ COPY package*.json ./
 # Instalar dependências
 RUN npm ci
 
-# Copiar código fonte
+# Copiar código fonte (incluindo .env)
 COPY . .
+
+# Definir variáveis de ambiente para o build
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 # Build da aplicação
 RUN npm run build

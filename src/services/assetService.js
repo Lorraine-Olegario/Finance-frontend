@@ -87,5 +87,10 @@ export default {
     return apiClient.put(`/user/ativos/status?user_id=${userId}`, {
       ativos: [{ ativo_id: ativoId, status: 'inativo' }]
     })
+  },
+
+  // Delete asset
+  deleteAsset(ativoId) {
+    return apiClient.delete(`/user/ativos/${ativoId}`)
   }
 }

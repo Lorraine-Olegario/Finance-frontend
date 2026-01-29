@@ -10,12 +10,12 @@
           <div class="modal-dialog">
             <div class="modal-header">
               <h3 class="modal-title">
-                <svg 
+                <svg
                   class="modal-icon"
                   :class="`icon-${type}`"
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   stroke-width="2"
                 >
                   <path
@@ -82,7 +82,7 @@
                 </svg>
               </button>
             </div>
-            
+
             <div class="modal-body">
               <p class="modal-message">
                 {{ message }}
@@ -104,8 +104,8 @@
               >
                 Cancelar
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 class="btn btn-confirm"
                 :class="`btn-${type}`"
                 :disabled="loading"
@@ -186,22 +186,22 @@ export default {
     },
     async handleConfirm() {
       this.loading = true
-      
+
       try {
         // Cria uma promise que será resolvida quando o handler do pai completar
         await new Promise((resolve, reject) => {
           // Emite o evento com callbacks
           this.$emit('confirm', { resolve, reject })
-          
+
           // Fallback: se não receber resposta em 5 segundos, resolve automaticamente
           setTimeout(() => {
             resolve()
           }, 5000)
         })
-        
+
         // Aguarda um pequeno delay para feedback visual
         await new Promise(resolve => setTimeout(resolve, 300))
-        
+
         // Fecha o modal após sucesso
         this.loading = false
         this.$emit('close')
@@ -231,6 +231,7 @@ export default {
   padding: 1rem;
   z-index: 9999;
   overflow-y: auto;
+  pointer-events: auto;
 }
 
 /* Modal Container */
@@ -238,6 +239,7 @@ export default {
   width: 100%;
   max-width: 480px;
   margin: auto;
+  pointer-events: auto;
 }
 
 .modal-dialog {
@@ -246,6 +248,9 @@ export default {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   border: 1px solid var(--border, #e0e0e0);
+  pointer-events: auto;
+  position: relative;
+  z-index: 10000;
 }
 
 /* Modal Header */

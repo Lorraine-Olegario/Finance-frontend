@@ -39,7 +39,7 @@
             @click="close"
           />
         </div>
-        
+
         <div class="modal-body">
           <div
             v-if="error"
@@ -74,9 +74,9 @@
                 for="categoria"
                 class="form-label fw-semibold"
               >Categoria</label>
-              <select 
-                id="categoria" 
-                v-model="formData.categoria" 
+              <select
+                id="categoria"
+                v-model="formData.categoria"
                 class="form-select"
                 required
               >
@@ -104,13 +104,13 @@
                 for="codigos"
                 class="form-label fw-semibold"
               >
-                Códigos dos Ativos 
+                Códigos dos Ativos
                 <small class="text-muted fw-normal">(separados por vírgula)</small>
               </label>
-              <input 
+              <input
                 id="codigos"
-                v-model="formData.codigos" 
-                type="text" 
+                v-model="formData.codigos"
+                type="text"
                 class="form-control"
                 placeholder="Ex: PETR4, VALE3, ITUB4"
                 required
@@ -186,7 +186,7 @@ export default {
     },
     categorias: {
       handler(newVal) {
-        console.log('Categorias disponíveis no modal:', newVal)
+        // Categorias atualizadas
       },
       immediate: true
     }
@@ -208,7 +208,7 @@ export default {
     async handleSubmit() {
       this.error = ''
       this.success = ''
-      
+
       if (!this.formData.categoria) {
         this.error = 'Selecione uma categoria'
         return
@@ -230,15 +230,15 @@ export default {
       }
 
       this.saving = true
-      
+
       try {
         await this.$emit('submit', {
           categoria: this.formData.categoria,
           codigos
         })
-        
+
         this.success = 'Ativos adicionados com sucesso!'
-        
+
         setTimeout(() => {
           this.close()
         }, 1500)

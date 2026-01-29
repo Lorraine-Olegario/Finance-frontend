@@ -79,9 +79,9 @@
       </div>
 
       <!-- Filters -->
-      <AssetsFilter 
-        :is-open="filterOpen" 
-        :filters="filters" 
+      <AssetsFilter
+        :is-open="filterOpen"
+        :filters="filters"
         :categorias="categorias"
         @close="closeFilters"
         @apply="applyFilters"
@@ -377,7 +377,7 @@
         :is-open="modals.activate"
         type="success"
         title="Ativar Ativo"
-        :message="`Deseja ativar o ativo ${selectedAsset.codigo}?`"
+        :message="`Deseja ativar o ativo ${selectedAsset?.codigo || ''}?`"
         warning-message="O ativo será marcado como ativo em sua carteira."
         confirm-text="Ativar"
         loading-text="Ativando..."
@@ -389,7 +389,7 @@
         :is-open="modals.deactivate"
         type="warning"
         title="Pausar Ativo"
-        :message="`Deseja pausar o ativo ${selectedAsset.codigo}?`"
+        :message="`Deseja pausar o ativo ${selectedAsset?.codigo || ''}?`"
         warning-message="O ativo será marcado como inativo."
         confirm-text="Pausar"
         loading-text="Pausando..."
@@ -401,7 +401,7 @@
         :is-open="modals.observe"
         type="info"
         title="Observar Ativo"
-        :message="`Deseja marcar o ativo ${selectedAsset.codigo} como observando?`"
+        :message="`Deseja marcar o ativo ${selectedAsset?.codigo || ''} como observando?`"
         warning-message="O ativo será destacado e você poderá configurar alertas na página de Ativos Observados."
         confirm-text="Observar"
         loading-text="Salvando..."
@@ -413,7 +413,7 @@
         :is-open="modals.delete"
         type="danger"
         title="Deletar Ativo"
-        :message="`Deseja realmente deletar o ativo ${selectedAsset.codigo}?`"
+        :message="`Deseja realmente deletar o ativo ${selectedAsset?.codigo || ''}?`"
         warning-message="Esta ação não pode ser desfeita."
         confirm-text="Deletar"
         loading-text="Deletando..."
@@ -515,7 +515,7 @@ export default {
                 }
 
                 const response = await assetService.getAssets(userId)
-                const ativosPorCategoria = response.data?.ativos_por_categoria || {}
+                const ativosPorCategoria = response.data?.ativos_por_categoria?.data || {}
 
                 this.assets = []
                 const categoriasSet = new Set()
@@ -582,19 +582,19 @@ export default {
             this.modals.edit = true
         },
         openDeleteModal(asset) {
-            this.selectedAsset = asset
+            this.selectedAsset = { ...asset }
             this.modals.delete = true
         },
         openActivateModal(asset) {
-            this.selectedAsset = asset
+            this.selectedAsset = { ...asset }
             this.modals.activate = true
         },
         openDeactivateModal(asset) {
-            this.selectedAsset = asset
+            this.selectedAsset = { ...asset }
             this.modals.deactivate = true
         },
         openObserveModal(asset) {
-            this.selectedAsset = asset
+            this.selectedAsset = { ...asset }
             this.modals.observe = true
         },
         closeModal(modalName) {
@@ -671,11 +671,14 @@ export default {
                     throw new Error('Usuário não autenticado')
                 }
 
-                // Chama o backend para atualizar o status
-                await assetService.updateAssetStatus(userId, [{
+                const payload = [{
                     ativo_id: this.selectedAsset.id,
                     status: 'inativo'
-                }])
+                }]
+
+                // Chama o backend para atualizar o status
+                const response = await assetService.updateAssetStatus(userId, payload)
+
 
                 // Atualiza o estado local
                 const index = this.assets.findIndex(a => a.id === this.selectedAsset.id)
@@ -686,7 +689,8 @@ export default {
                 resolve()
             } catch (error) {
                 console.error('Erro ao desativar ativo:', error)
-                reject(error)
+                const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Erro desconhecido ao desativar o ativo'
+                reject(new Error(errorMsg))
             }
         },
         async handleObserveAsset({ resolve, reject }) {
@@ -696,11 +700,12 @@ export default {
                     throw new Error('Usuário não autenticado')
                 }
 
-                // Chama o backend para atualizar o status
-                await assetService.updateAssetStatus(userId, [{
+                const payload = [{
                     ativo_id: this.selectedAsset.id,
                     status: 'observando'
-                }])
+                }]
+                // Chama o backend para atualizar o status
+                const response = await assetService.updateAssetStatus(userId, payload)
 
                 // Atualiza o estado local
                 const index = this.assets.findIndex(a => a.id === this.selectedAsset.id)
@@ -711,7 +716,8 @@ export default {
                 resolve()
             } catch (error) {
                 console.error('Erro ao marcar ativo como observando:', error)
-                reject(error)
+                const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Erro desconhecido ao marcar ativo como observando'
+                reject(new Error(errorMsg))
             }
         },
         async handleDeleteAsset({ resolve, reject }) {
@@ -721,12 +727,8 @@ export default {
                     throw new Error('Usuário não autenticado')
                 }
 
-                // Chama o backend para deletar o ativo
-                // Nota: você pode precisar ajustar isso se houver um endpoint específico de delete
-                await assetService.updateAssetStatus(userId, [{
-                    ativo_id: this.selectedAsset.id,
-                    status: 'deletado'
-                }])
+                // Chama o backend para deletar o ativo usando DELETE
+                const response = await assetService.deleteAsset(this.selectedAsset.id)
 
                 // Remove do estado local
                 this.assets = this.assets.filter(a => a.id !== this.selectedAsset.id)
@@ -734,7 +736,9 @@ export default {
                 resolve()
             } catch (error) {
                 console.error('Erro ao deletar ativo:', error)
-                reject(error)
+                console.error('Erro completo:', error.response?.data || error.message)
+                const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Erro desconhecido ao deletar o ativo'
+                reject(new Error(errorMsg))
             }
         },
         applyFilters(newFilters) {

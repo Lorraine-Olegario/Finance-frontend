@@ -1,0 +1,19 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.dev
+    container_name: finance-frontend-dev
+    ports:
+      - "8080:5173"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - finance-network
+networks:
+  finance-network:
+    driver: bridge

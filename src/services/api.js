@@ -2,14 +2,12 @@ import axios from 'axios'
 import router from '../router'
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://72.61.27.84:8020/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
 })
-
-console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
 
 // Request interceptor - Add token to requests
 apiClient.interceptors.request.use(

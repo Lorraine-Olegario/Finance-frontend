@@ -140,7 +140,7 @@
       </div>
 
       <!-- Filters Component -->
-      <ObservedAssetsFilter 
+      <ObservedAssetsFilter
         :is-open="filterOpen"
         :filters="filters"
         :categories="categories"
@@ -188,10 +188,9 @@
             y2="16"
           />
         </svg>
-        <h3>Erro ao carregar ativos</h3>
-        <p>{{ error }}</p>
+        <h3>Erro ao carregar ativos observados</h3>
         <button
-          class="btn btn-primary"
+          class="btn btn-primary mt-2"
           @click="fetchData"
         >
           Tentar novamente
@@ -430,8 +429,8 @@
           v-if="totalPages > 1"
           class="pagination"
         >
-          <button 
-            :disabled="currentPage === 1" 
+          <button
+            :disabled="currentPage === 1"
             class="pagination-btn"
             @click="previousPage"
           >
@@ -457,8 +456,8 @@
             </button>
           </div>
 
-          <button 
-            :disabled="currentPage === totalPages" 
+          <button
+            :disabled="currentPage === totalPages"
             class="pagination-btn"
             @click="nextPage"
           >
@@ -475,8 +474,8 @@
         </div>
 
         <div class="pagination-info">
-          Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - 
-          {{ Math.min(currentPage * itemsPerPage, filteredAssets.length) }} 
+          Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} -
+          {{ Math.min(currentPage * itemsPerPage, filteredAssets.length) }}
           de {{ filteredAssets.length }} ativos
         </div>
       </div>
@@ -536,13 +535,13 @@
               </svg>
             </button>
           </div>
-        
+
           <div class="modal-body">
             <p>Tem certeza que deseja parar de observar o ativo <strong>{{ selectedAsset.codigo }}</strong>?</p>
             <p class="text-muted">
               Esta ação irá desativar todos os alertas configurados para este ativo.
             </p>
-          
+
             <div class="modal-actions">
               <button
                 type="button"
@@ -625,7 +624,7 @@ export default {
         }
         return acc
       }, [])
-      
+
       return uniqueAssets.map(asset => {
         const alert = this.alerts.find(a => a.ativo_id === asset.id)
         return {
@@ -640,14 +639,14 @@ export default {
 
       if (this.filters.search) {
         const search = this.filters.search.toLowerCase()
-        result = result.filter(asset => 
+        result = result.filter(asset =>
           asset.codigo.toLowerCase().includes(search) ||
           (asset.nome && asset.nome.toLowerCase().includes(search))
         )
       }
 
       if (this.filters.categoria) {
-        result = result.filter(asset => 
+        result = result.filter(asset =>
           (asset.tipo || asset.categoria) === this.filters.categoria
         )
       }
@@ -673,13 +672,13 @@ export default {
       const delta = 2
       const left = this.currentPage - delta
       const right = this.currentPage + delta + 1
-      
+
       for (let i = 1; i <= this.totalPages; i++) {
         if (i === 1 || i === this.totalPages || (i >= left && i < right)) {
           range.push(i)
         }
       }
-      
+
       return range
     },
     assetsWithAlerts() {
@@ -717,7 +716,7 @@ export default {
     async fetchData() {
       this.loading = true
       this.error = null
-      
+
       try {
         const userId = this.authStore.user?.id
         if (!userId) {
@@ -735,16 +734,25 @@ export default {
         // Validate that assets belong to logged user and remove duplicates
         const rawAssets = assetsResponse.data.observados || []
         const uniqueAssetsMap = new Map()
-        
+
         rawAssets.forEach(asset => {
           if (!uniqueAssetsMap.has(asset.id)) {
             uniqueAssetsMap.set(asset.id, asset)
           }
         })
-        
+
         this.observedAssets = Array.from(uniqueAssetsMap.values())
-        this.alerts = alertsResponse.data || []
-        
+
+        // Handle alerts response - can be array or object with observados property
+        const alertsData = alertsResponse.data
+        this.alerts = []
+
+        if (Array.isArray(alertsData)) {
+          this.alerts = alertsData
+        } else if (alertsData && Array.isArray(alertsData.observados)) {
+          this.alerts = alertsData.observados
+        }
+
         // Fetch current prices only for paginated assets
         await this.fetchAssetPrices()
       } catch (err) {
@@ -756,15 +764,15 @@ export default {
     },
     async fetchAssetPrices() {
       if (this.paginatedAssets.length === 0) return
-      
+
       try {
         // Get only the codes for current page assets
         const codigos = this.paginatedAssets.map(a => a.codigo)
-        
+
         // Fetch quotes only for current page
         const response = await assetService.getAssetQuotes(codigos)
         const quotes = response.data || []
-        
+
         // Update only the displayed assets with their current price
         this.paginatedAssets.forEach(asset => {
           const quote = quotes.find(q => q.symbol === asset.codigo)
@@ -787,7 +795,7 @@ export default {
     },
     async handleSaveAlert(alertData) {
       this.saving = true
-      
+
       try {
         const userId = this.authStore.user?.id
         if (!userId) {
@@ -822,7 +830,7 @@ export default {
     },
     async handleStopObserving() {
       this.saving = true
-      
+
       try {
         const userId = this.authStore.user?.id
         if (!userId) {
@@ -830,7 +838,7 @@ export default {
         }
 
         await assetService.stopObservingAsset(userId, this.selectedAsset.id)
-        
+
         // Remove from list
         this.observedAssets = this.observedAssets.filter(a => a.id !== this.selectedAsset.id)
         this.closeStopObservingModal()

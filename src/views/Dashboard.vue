@@ -52,8 +52,8 @@
       <div class="stats-grid">
         <StatCard
           label="Meus Ativos"
-          :value="userAssetsCount"
-          variant="primary" 
+          :value="userAssetsCount || 0"
+          variant="primary"
           :subtitle="userAssetsCount > 0 ? 'Ativos observados' : ''"
           :is-positive="userAssetsCount > 0"
         >
@@ -86,7 +86,7 @@
 
         <StatCard
           label="Alertas Configurados"
-          :value="alertsCount"
+          :value="alertsCount || 0"
           variant="success"
           subtitle="Monitorando preços"
         >
@@ -240,7 +240,7 @@
               v-for="category in topCategories"
               :key="category.name"
               :name="category.name"
-              :count="category.count" 
+              :count="category.count"
               :percentage="category.percentage"
               :color="category.color"
             />
@@ -409,11 +409,11 @@ export default {
     },
     topCategories() {
       const categories = Object.entries(this.assetsByType).map(([name, count]) => {
-        const percentage = ((count / this.userAssetsCount) * 100).toFixed(1)
+        const percentage = this.userAssetsCount > 0 ? ((count / this.userAssetsCount) * 100).toFixed(1) : '0.0'
         const color = this.getCategoryColor(name)
         return { name, count, percentage, color }
       })
-      
+
       return categories.sort((a, b) => b.count - a.count).slice(0, 5)
     }
   },
@@ -430,24 +430,30 @@ export default {
       this.loading = true
       try {
         const userId = this.authStore.user?.id
-        
+
         if (!userId) {
           console.error('Usuário não identificado')
           return
         }
-        
+
         // Buscar ativos do usuário agrupados por categoria
         const response = await assetService.getAssets(userId)
-        const ativosPorCategoria = response.data?.ativos_por_categoria || {}
         
+        // Verificar se ativos_por_categoria existe e é um objeto válido
+        const ativosPorCategoria = response.data?.ativos_por_categoria || {}
+
         // Contar total de ativos e preparar dados para o gráfico
         this.userAssetsCount = 0
         this.assetsByType = {}
-        
+
+        // Garantir que estamos iterando apenas sobre categorias válidas
         Object.keys(ativosPorCategoria).forEach(categoria => {
           const ativos = ativosPorCategoria[categoria]
-          this.assetsByType[categoria] = ativos.length
-          this.userAssetsCount += ativos.length
+          // Verificar se 'ativos' é um array antes de usar .length
+          if (Array.isArray(ativos)) {
+            this.assetsByType[categoria] = ativos.length
+            this.userAssetsCount += ativos.length
+          }
         })
 
         // Buscar cores personalizadas do usuário
@@ -465,16 +471,16 @@ export default {
         } catch (err) {
           this.alertsCount = 0
         }
-        
+
         // Se for admin, buscar dados adicionais
         if (this.authStore.isAdmin) {
           const usersResponse = await userService.getUsers()
           this.userCount = usersResponse.data?.length || 0
-          
+
           const userAssetsResponse = await assetService.getUserAssets()
           this.totalAssetsCount = userAssetsResponse.data?.length || 0
         }
-        
+
         // Criar gráfico após carregar os dados
         this.$nextTick(() => {
           this.createChart()
@@ -485,23 +491,23 @@ export default {
         this.loading = false
       }
     },
-    
+
     createChart() {
       if (this.chart) {
         this.chart.destroy()
       }
-      
+
       if (!this.$refs.assetTypeChart || Object.keys(this.assetsByType).length === 0) {
         return
       }
-      
+
       const ctx = this.$refs.assetTypeChart.getContext('2d')
       const labels = Object.keys(this.assetsByType)
       const data = Object.values(this.assetsByType)
-      
+
       // Usar cores personalizadas ou padrão
       const colors = labels.map(label => this.getCategoryColor(label))
-      
+
       this.chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -541,7 +547,7 @@ export default {
         }
       })
     },
-    
+
     getCategoryColor(category) {
       // Cores padrão por categoria
       const defaultColors = {
@@ -560,7 +566,7 @@ export default {
         'ETFs': '#06b6d4',
         'ETF': '#06b6d4'
       }
-      
+
       return this.categoryColors[category] || defaultColors[category] || '#6b7280'
     }
   }
