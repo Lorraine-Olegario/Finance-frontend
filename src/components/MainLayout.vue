@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Sidebar @toggle="handleSidebarToggle" />
-    
+
     <div
       class="main-wrapper"
       :class="{ 'sidebar-collapsed': sidebarCollapsed }"
@@ -18,7 +18,7 @@
             {{ pageTitle }}
           </h1>
         </div>
-        
+
         <div
           v-if="authStore.user"
           class="header-user"
@@ -29,14 +29,17 @@
           <div
             ref="userMenu"
             class="user-menu"
-            @click="toggleUserMenu"
           >
-            <div class="user-avatar">
+            <div
+              class="user-avatar"
+              @click.stop="toggleUserMenu"
+            >
               {{ userInitials }}
             </div>
             <div
               v-if="userMenuOpen"
               class="dropdown-menu"
+              @click.stop
             >
               <div class="dropdown-header">
                 <div class="dropdown-user-info">
@@ -48,7 +51,7 @@
               <router-link
                 to="/profile"
                 class="dropdown-item"
-                @click="userMenuOpen = false"
+                @click="closeUserMenu"
               >
                 <svg
                   class="icon"
@@ -92,7 +95,7 @@
           </div>
         </div>
       </header>
-      
+
       <main class="main-content">
         <slot />
       </main>
@@ -120,7 +123,7 @@ export default {
   setup() {
     const authStore = useAuthStore()
     const router = useRouter()
-    
+
     const userInitials = computed(() => {
       if (!authStore.user?.name) return '?'
       return authStore.user.name
@@ -130,7 +133,7 @@ export default {
         .toUpperCase()
         .substring(0, 2)
     })
-    
+
     return {
       authStore,
       userInitials,
@@ -163,6 +166,9 @@ export default {
     },
     toggleUserMenu() {
       this.userMenuOpen = !this.userMenuOpen
+    },
+    closeUserMenu() {
+      this.userMenuOpen = false
     },
     handleClickOutside(event) {
       const userMenu = this.$refs.userMenu
@@ -208,7 +214,8 @@ export default {
   gap: 1rem;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
+  overflow: visible;
 }
 
 .header-left {
@@ -238,6 +245,8 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
+  z-index: 100;
 }
 
 .user-info {
@@ -252,7 +261,6 @@ export default {
 
 .user-menu {
   position: relative;
-  cursor: pointer;
 }
 
 .user-avatar {
@@ -267,9 +275,11 @@ export default {
   font-weight: 600;
   font-size: 0.875rem;
   transition: all 0.2s;
+  cursor: pointer;
+  user-select: none;
 }
 
-.user-menu:hover .user-avatar {
+.user-avatar:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -278,14 +288,15 @@ export default {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: var(--surface);
-  border: 1px solid var(--border-color);
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   min-width: 240px;
-  z-index: 1000;
-  overflow: hidden;
+  z-index: 99999;
+  overflow: visible;
   animation: dropdownFadeIn 0.2s ease;
+  display: block;
 }
 
 @keyframes dropdownFadeIn {
@@ -372,11 +383,11 @@ export default {
   .main-wrapper {
     margin-left: 0;
   }
-  
+
   .mobile-menu-btn {
     display: block;
   }
-  
+
   .main-content {
     padding: 1rem;
   }
