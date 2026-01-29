@@ -370,22 +370,22 @@ export default {
       this.error = ''
       try {
         const response = await categoryService.getAll()
-        
+
         if (response.data?.data?.data && Array.isArray(response.data.data.data)) {
           this.categories = response.data.data.data
           return
         }
-        
+
         if (response.data?.data && Array.isArray(response.data.data)) {
           this.categories = response.data.data
           return
         }
-        
+
         if (Array.isArray(response.data)) {
           this.categories = response.data
           return
         }
-        
+
         this.categories = []
       } catch (err) {
         this.error = err.response?.data?.message || 'Erro ao carregar categorias'
@@ -439,12 +439,12 @@ export default {
           await categoryService.update(this.selectedCategory.id, this.formData)
           this.success = 'Categoria atualizada com sucesso!'
         }
-        
+
         if (!this.isEditing) {
           await categoryService.create(this.formData)
           this.success = 'Categoria criada com sucesso!'
         }
-        
+
         this.closeModal()
         await this.fetchCategories()
         setTimeout(() => { this.success = '' }, 5000)
@@ -454,7 +454,7 @@ export default {
           this.error = errors.join(', ')
           return
         }
-        
+
         this.error = err.response?.data?.message || 'Erro ao salvar categoria'
       } finally {
         this.saving = false
