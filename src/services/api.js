@@ -9,6 +9,8 @@ const apiClient = axios.create({
   }
 })
 
+console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
+
 // Request interceptor - Add token to requests
 apiClient.interceptors.request.use(
   config => {
