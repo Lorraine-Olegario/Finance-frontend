@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '../router'
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://72.61.27.84:8020/api/v1',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
