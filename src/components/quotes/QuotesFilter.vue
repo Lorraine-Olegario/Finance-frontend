@@ -116,7 +116,6 @@
 <script>
 import FilterSidebar from '../common/FilterSidebar.vue'
 import FilterSection from '../common/FilterSection.vue'
-
 export default {
   name: 'QuotesFilter',
   components: {
