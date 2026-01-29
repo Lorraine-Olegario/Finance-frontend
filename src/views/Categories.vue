@@ -150,8 +150,8 @@
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
             </button>
-            <button 
-              class="btn-icon btn-danger" 
+            <button
+              class="btn-icon btn-danger"
               :disabled="category.ativos_count > 0"
               :title="category.ativos_count > 0 ? 'Não é possível excluir categoria com ativos' : 'Excluir'"
               @click="openDeleteModal(category)"
@@ -257,9 +257,9 @@
           <div class="modal-body">
             <div class="form-group">
               <label>Nome da Categoria *</label>
-              <input 
-                v-model="formData.nome" 
-                type="text" 
+              <input
+                v-model="formData.nome"
+                type="text"
                 placeholder="Ex: Ações, FIIs, Criptomoedas"
                 class="form-input"
                 @keyup.enter="saveCategory"
@@ -268,14 +268,14 @@
             <div class="form-group">
               <label>Cor</label>
               <div class="color-picker-group">
-                <input 
-                  v-model="formData.color" 
-                  type="color" 
+                <input
+                  v-model="formData.color"
+                  type="color"
                   class="color-input"
                 >
-                <input 
-                  v-model="formData.color" 
-                  type="text" 
+                <input
+                  v-model="formData.color"
+                  type="text"
                   placeholder="#6200EE"
                   class="form-input"
                   maxlength="7"

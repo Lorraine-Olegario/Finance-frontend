@@ -30,7 +30,7 @@ export default {
   getAssetHistory(codigo) {
     return apiClient.get('/ativos/historico', { params: { codigo } })
   },
-  
+
   // Get users ativos
   getUserAssets() {
     return apiClient.get('/users/listagem/ativos')
