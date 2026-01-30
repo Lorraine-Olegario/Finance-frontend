@@ -165,6 +165,11 @@ export default {
       type: Array,
       default: () => []
     }
+    ,
+    submitHandler: {
+      type: Function,
+      required: false
+    }
   },
   emits: ['close', 'submit'],
   data() {
@@ -232,18 +237,25 @@ export default {
       this.saving = true
 
       try {
-        await this.$emit('submit', {
-          categoria: this.formData.categoria,
-          codigos
-        })
+        if (this.submitHandler && typeof this.submitHandler === 'function') {
+          await this.submitHandler({
+            categoria: this.formData.categoria,
+            codigos
+          })
+        } else {
+          this.$emit('submit', {
+            categoria: this.formData.categoria,
+            codigos
+          })
+        }
 
         this.success = 'Ativos adicionados com sucesso!'
 
         setTimeout(() => {
           this.close()
-        }, 1500)
+        }, 1000)
       } catch (err) {
-        this.error = err.response?.data?.message || 'Erro ao adicionar ativos'
+        this.error = 'Erro ao adicionar ativos, tente novamente.'
       } finally {
         this.saving = false
       }

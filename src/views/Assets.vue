@@ -361,8 +361,8 @@
       <AddAssetModal
         :is-open="modals.add"
         :categorias="categorias"
+        :submit-handler="handleAddAssets"
         @close="closeModal('add')"
-        @submit="handleAddAssets"
       />
 
       <EditAssetModal
@@ -544,25 +544,22 @@ export default {
                 this.loading = false
             }
         },
+
         async fetchCategorias() {
             try {
                 const response = await categoryService.getAll()
+
                 if (response.data) {
-                    if (Array.isArray(response.data)) {
-                        this.categorias = response.data.map(cat => cat.nome || cat.name || cat)
-                    } else if (response.data.data && Array.isArray(response.data.data)) {
+                    if (Array.isArray(response.data.data)) {
                         this.categorias = response.data.data.map(cat => cat.nome || cat.name || cat)
                     }
                 }
 
-                const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria).filter(Boolean))]
-                this.categorias = [...new Set([...this.categorias, ...categoriasFromAssets])]
-
             } catch (error) {
-                const categoriasFromAssets = [...new Set(this.assets.map(a => a.categoria).filter(Boolean))]
-                this.categorias = categoriasFromAssets.length > 0 ? categoriasFromAssets : ['Ações', 'FIIs', 'Criptomoedas']
+              // swall error
             }
         },
+
         getCategoryColor(categoria) {
             if (this.categoryColors[categoria]) {
                 return this.categoryColors[categoria]
@@ -601,18 +598,18 @@ export default {
             this.modals[modalName] = false
         },
         async handleAddAssets({ categoria, codigos }) {
-            const userId = this.authStore.user?.id
-            if (!userId) {
-                throw new Error('Usuário não autenticado')
+          try {
+            const payload = {
+              [categoria]: codigos
             }
 
-            const ativosPayload = codigos.map(codigo => ({
-                codigo,
-                categoria
-            }))
-
-            await assetService.createUserAssets(userId, ativosPayload)
+            await assetService.createUserAssets(payload)
             await this.fetchAssets()
+          } catch (error) {
+
+            console.log('Deu erro')
+            throw error
+          }
         },
         async handleUpdateAsset(assetData) {
             const userId = this.authStore.user?.id

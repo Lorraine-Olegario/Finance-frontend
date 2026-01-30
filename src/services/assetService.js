@@ -2,18 +2,18 @@ import apiClient from './api'
 
 export default {
   // Create user assets
-  createUserAssets(userId, ativos) {
-    return apiClient.post(`/user/ativos?user_id=${userId}`, { ativos })
+  createUserAssets(ativos) {
+    return apiClient.post(`/user/ativos`, { ativos })
   },
 
   // Update asset status
   updateAssetStatus(userId, ativos) {
-    return apiClient.put(`/user/ativos/status?user_id=${userId}`, { ativos })
+    return apiClient.put(`/user/ativos/status`, { ativos })
   },
 
   // Get observed assets
   getObservedAssets(userId) {
-    return apiClient.get(`/user/ativos/observados?user_id=${userId}`)
+    return apiClient.get(`/user/ativos/observados`)
   },
 
   // Get asset quote
@@ -58,18 +58,18 @@ export default {
 
   // Update category colors
   updateCategoryColors(userId, colors) {
-    return apiClient.put(`/user/category-colors?user_id=${userId}`, { colors })
+    return apiClient.put(`/user/category-colors`, { colors })
   },
 
   // Asset Alerts
   // Get all alerts for a user
   getAssetAlerts(userId) {
-    return apiClient.get(`/user/alertas?user_id=${userId}`)
+    return apiClient.get(`/user/alertas`)
   },
 
   // Create or update asset alert
   saveAssetAlert(userId, alertData) {
-    return apiClient.post(`/user/alertas?user_id=${userId}`, alertData)
+    return apiClient.post(`/user/alertas`, alertData)
   },
 
   // Update asset alert
@@ -84,7 +84,7 @@ export default {
 
   // Stop observing asset (change status to inactive)
   stopObservingAsset(userId, ativoId) {
-    return apiClient.put(`/user/ativos/status?user_id=${userId}`, {
+    return apiClient.put(`/user/ativos/status`, {
       ativos: [{ ativo_id: ativoId, status: 'inativo' }]
     })
   },
