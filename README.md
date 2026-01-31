@@ -86,3 +86,13 @@ npm run build
 # Preview do build de produção
 npm run preview
 ```
+
+
+### Comandos
+
+```bash
+
+npm run minify:inline-svgs
+npm run format
+
+```

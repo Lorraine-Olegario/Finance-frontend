@@ -1,96 +1,96 @@
-import apiClient from './api'
+import apiClient from "./api";
 
 export default {
   // Create user assets
   createUserAssets(ativos) {
-    return apiClient.post(`/user/ativos`, { ativos })
+    return apiClient.post(`/user/ativos`, { ativos });
   },
 
   // Update asset status
   updateAssetStatus(userId, ativos) {
-    return apiClient.put(`/user/ativos/status`, { ativos })
+    return apiClient.put(`/user/ativos/status`, { ativos });
   },
 
   // Get observed assets
   getObservedAssets(userId) {
-    return apiClient.get(`/user/ativos/observados`)
+    return apiClient.get(`/user/ativos/observados`);
   },
 
   // Get asset quote
   getAssetQuote(codigo) {
-    return apiClient.get('/ativos/cotacao', { params: { codigos: [codigo] } })
+    return apiClient.get("/ativos/cotacao", { params: { codigos: [codigo] } });
   },
 
   // Get asset quotes (multiple)
   getAssetQuotes(codigos) {
-    return apiClient.get('/ativos/cotacao', { params: { codigos } })
+    return apiClient.get("/ativos/cotacao", { params: { codigos } });
   },
 
   // Get asset history
   getAssetHistory(codigo) {
-    return apiClient.get('/ativos/historico', { params: { codigo } })
+    return apiClient.get("/ativos/historico", { params: { codigo } });
   },
 
   // Get users ativos
   getUserAssets() {
-    return apiClient.get('/users/listagem/ativos')
+    return apiClient.get("/users/listagem/ativos");
   },
 
   // Get all assets
   getAssets(userId) {
-    return apiClient.get('user/ativos/categoria', { params: { user_id: userId }})
+    return apiClient.get("user/ativos/categoria", { params: { user_id: userId } });
   },
 
   // Get all user assets (flat list with status)
   getAllUserAssets(userId) {
-    return apiClient.get('/user/ativos/todos', { params: { user_id: userId }})
+    return apiClient.get("/user/ativos/todos", { params: { user_id: userId } });
   },
 
   // Get assets for quotes (flattened list of observed assets)
   getAssetsForQuotes(userId) {
-    return apiClient.get('/user/ativos/observados', { params: { user_id: userId }})
+    return apiClient.get("/user/ativos/observados", { params: { user_id: userId } });
   },
 
   // Get category colors
   getCategoryColors(userId) {
-    return apiClient.get('/user/category-colors', { params: { user_id: userId }})
+    return apiClient.get("/user/category-colors", { params: { user_id: userId } });
   },
 
   // Update category colors
   updateCategoryColors(userId, colors) {
-    return apiClient.put(`/user/category-colors`, { colors })
+    return apiClient.put(`/user/category-colors`, { colors });
   },
 
   // Asset Alerts
   // Get all alerts for a user
   getAssetAlerts(userId) {
-    return apiClient.get(`/user/alertas`)
+    return apiClient.get(`/user/alertas`);
   },
 
   // Create or update asset alert
   saveAssetAlert(userId, alertData) {
-    return apiClient.post(`/user/alertas`, alertData)
+    return apiClient.post(`/user/alertas`, alertData);
   },
 
   // Update asset alert
   updateAssetAlert(alertId, alertData) {
-    return apiClient.put(`/user/alertas/${alertId}`, alertData)
+    return apiClient.put(`/user/alertas/${alertId}`, alertData);
   },
 
   // Delete asset alert
   deleteAssetAlert(alertId) {
-    return apiClient.delete(`/user/alertas/${alertId}`)
+    return apiClient.delete(`/user/alertas/${alertId}`);
   },
 
   // Stop observing asset (change status to inactive)
   stopObservingAsset(userId, ativoId) {
     return apiClient.put(`/user/ativos/status`, {
-      ativos: [{ ativo_id: ativoId, status: 'inativo' }]
-    })
+      ativos: [{ ativo_id: ativoId, status: "inativo" }],
+    });
   },
 
   // Delete asset
   deleteAsset(ativoId) {
-    return apiClient.delete(`/user/ativos/${ativoId}`)
-  }
-}
+    return apiClient.delete(`/user/ativos/${ativoId}`);
+  },
+};

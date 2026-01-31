@@ -1,36 +1,36 @@
 :root {
-  --primary: #6200EE;
-  --primary-dark: #5000D0;
-  --secondary: #3700B3;
-  --accent: #BB86FC;
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F5F5F5;
-  --bg-hover: #EEEEEE;
+  --primary: #6200ee;
+  --primary-dark: #5000d0;
+  --secondary: #3700b3;
+  --accent: #bb86fc;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-hover: #eeeeee;
   --text-primary: #212121;
   --text-secondary: #757575;
-  --border: #E0E0E0;
-  --border-color: #E0E0E0;
-  --error: #B00020;
-  --success: #00C853;
+  --border: #e0e0e0;
+  --border-color: #e0e0e0;
+  --error: #b00020;
+  --success: #00c853;
   --danger: #dc2626;
   --sidebar-width: 260px;
   --header-height: 64px;
-  
+
   /* Additional colors for consistency */
   --accent-blue: #3b82f6;
   --accent-blue-dark: #2563eb;
   --accent-green: #10b981;
   --accent-yellow: #f59e0b;
-  --surface: #FFFFFF;
-  --background: #F5F5F5;
-  
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --surface: #ffffff;
+  --background: #f5f5f5;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-  
+
   color: var(--text-primary);
   background-color: var(--bg-secondary);
-  
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -54,16 +54,29 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.75rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
 
 p {
   margin-bottom: 1rem;
@@ -80,7 +93,8 @@ a:hover {
   color: var(--secondary);
 }
 
-button, .btn {
+button,
+.btn {
   border-radius: 4px;
   border: none;
   padding: 10px 20px;
@@ -97,41 +111,50 @@ button, .btn {
   gap: 8px;
 }
 
-button:hover, .btn:hover {
+button:hover,
+.btn:hover {
   background-color: var(--secondary);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
 }
 
-button:active, .btn:active {
+button:active,
+.btn:active {
   transform: translateY(0);
 }
 
-button:disabled, .btn:disabled {
+button:disabled,
+.btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
-button.secondary, .btn.secondary {
+button.secondary,
+.btn.secondary {
   background-color: var(--bg-secondary);
   color: var(--primary);
   border: 1px solid var(--border);
 }
 
-button.secondary:hover, .btn.secondary:hover {
+button.secondary:hover,
+.btn.secondary:hover {
   background-color: var(--border);
 }
 
-button.danger, .btn.danger {
+button.danger,
+.btn.danger {
   background-color: var(--error);
 }
 
-button.danger:hover, .btn.danger:hover {
-  background-color: #8B0016;
+button.danger:hover,
+.btn.danger:hover {
+  background-color: #8b0016;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -143,7 +166,9 @@ input, textarea, select {
   transition: border-color 0.2s;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.1);
@@ -231,8 +256,12 @@ tr:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive */
@@ -240,16 +269,23 @@ tr:hover {
   :root {
     --sidebar-width: 0px;
   }
-  
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.35rem; }
-  h3 { font-size: 1.2rem; }
-  
+
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+  }
+
   table {
     font-size: 0.85rem;
   }
-  
-  th, td {
+
+  th,
+  td {
     padding: 0.75rem 0.5rem;
   }
 }
