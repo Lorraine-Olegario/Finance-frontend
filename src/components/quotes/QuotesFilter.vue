@@ -8,19 +8,7 @@
   >
     <FilterSection label="Buscar Ativo">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <circle
-            cx="11"
-            cy="11"
-            r="8"
-          />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.35-4.35" /> </svg>
       </template>
       <input 
         v-model="localFilters.search" 
@@ -32,14 +20,7 @@
     
     <FilterSection label="Variação">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /> </svg>
       </template>
       <select
         v-model="localFilters.variation"
@@ -59,14 +40,7 @@
     
     <FilterSection label="Ordenar Por">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4m4-4v16" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4m4-4v16" /> </svg>
       </template>
       <select
         v-model="localFilters.sortBy"
@@ -89,14 +63,7 @@
     
     <FilterSection label="Ordem">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M12 5v14M5 12l7 7 7-7" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M12 5v14M5 12l7 7 7-7" /> </svg>
       </template>
       <select
         v-model="localFilters.sortOrder"

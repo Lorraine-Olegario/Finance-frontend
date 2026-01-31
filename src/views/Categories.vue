@@ -13,26 +13,7 @@
           class="btn btn-add"
           @click="openAddModal"
         >
-          <svg
-            class="icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line
-              x1="12"
-              y1="5"
-              x2="12"
-              y2="19"
-            />
-            <line
-              x1="5"
-              y1="12"
-              x2="19"
-              y2="12"
-            />
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="12" y1="5" x2="12" y2="19" /> <line x1="5" y1="12" x2="19" y2="12" /> </svg>
           Nova Categoria
         </button>
       </div>
@@ -51,31 +32,7 @@
         v-else-if="error"
         class="error-message"
       >
-        <svg
-          class="icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-          />
-          <line
-            x1="12"
-            y1="8"
-            x2="12"
-            y2="12"
-          />
-          <line
-            x1="12"
-            y1="16"
-            x2="12.01"
-            y2="16"
-          />
-        </svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <line x1="12" y1="8" x2="12" y2="12" /> <line x1="12" y1="16" x2="12.01" y2="16" /> </svg>
         <p>{{ error }}</p>
         <button
           class="btn"
@@ -90,15 +47,7 @@
         v-if="success"
         class="success-message"
       >
-        <svg
-          class="icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="20 6 9 17 4 12" /> </svg>
         <p>{{ success }}</p>
       </div>
 
@@ -117,15 +66,7 @@
               class="category-color"
               :style="{ backgroundColor: category.color || '#6200EE' }"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                stroke-width="2"
-              >
-                <path d="M3 3v18h18" />
-                <path d="m19 9-5 5-4-4-3 3" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" > <path d="M3 3v18h18" /> <path d="m19 9-5 5-4-4-3 3" /> </svg>
             </div>
             <div class="category-info">
               <h3>{{ category.nome }}</h3>
@@ -140,15 +81,7 @@
               title="Editar"
               @click="openEditModal(category)"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /> </svg>
             </button>
             <button
               class="btn-icon btn-danger"
@@ -156,15 +89,7 @@
               :title="category.ativos_count > 0 ? 'Não é possível excluir categoria com ativos' : 'Excluir'"
               @click="openDeleteModal(category)"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="3 6 5 6 21 6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </svg>
             </button>
           </div>
         </div>
@@ -176,16 +101,7 @@
         class="empty-state"
       >
         <div class="empty-icon-wrapper">
-          <svg
-            class="empty-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M3 3v18h18" />
-            <path d="m19 9-5 5-4-4-3 3" />
-          </svg>
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M3 3v18h18" /> <path d="m19 9-5 5-4-4-3 3" /> </svg>
         </div>
         <h3>Nenhuma categoria cadastrada</h3>
         <p>Adicione categorias para organizar seus ativos</p>
@@ -193,26 +109,7 @@
           class="btn"
           @click="openAddModal"
         >
-          <svg
-            class="icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line
-              x1="12"
-              y1="5"
-              x2="12"
-              y2="19"
-            />
-            <line
-              x1="5"
-              y1="12"
-              x2="19"
-              y2="12"
-            />
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="12" y1="5" x2="12" y2="19" /> <line x1="5" y1="12" x2="19" y2="12" /> </svg>
           Criar Primeira Categoria
         </button>
       </div>

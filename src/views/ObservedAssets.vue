@@ -5,20 +5,7 @@
       <div class="page-header">
         <div class="header-left">
           <h2>
-            <svg
-              class="header-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle
-                cx="12"
-                cy="12"
-                r="3"
-              />
-            </svg>
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
             Ativos Observados
           </h2>
           <p class="subtitle">
@@ -30,15 +17,7 @@
             class="btn-filter"
             @click="filterOpen = !filterOpen"
           >
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /> </svg>
             Filtros
             <span
               v-if="activeFiltersCount > 0"
@@ -55,19 +34,7 @@
       >
         <div class="stat-card">
           <div class="stat-icon total">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle
-                cx="12"
-                cy="12"
-                r="3"
-              />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
           </div>
           <div class="stat-content">
             <div class="stat-value">
@@ -81,15 +48,7 @@
 
         <div class="stat-card">
           <div class="stat-icon success">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /> <polyline points="22 4 12 14.01 9 11.01" /> </svg>
           </div>
           <div class="stat-content">
             <div class="stat-value">
@@ -103,30 +62,7 @@
 
         <div class="stat-card">
           <div class="stat-icon warning">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle
-                cx="12"
-                cy="12"
-                r="10"
-              />
-              <line
-                x1="12"
-                y1="8"
-                x2="12"
-                y2="12"
-              />
-              <line
-                x1="12"
-                y1="16"
-                x2="12.01"
-                y2="16"
-              />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <line x1="12" y1="8" x2="12" y2="12" /> <line x1="12" y1="16" x2="12.01" y2="16" /> </svg>
           </div>
           <div class="stat-content">
             <div class="stat-value">
@@ -163,31 +99,7 @@
         v-else-if="error"
         class="error-container"
       >
-        <svg
-          class="error-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-          />
-          <line
-            x1="12"
-            y1="8"
-            x2="12"
-            y2="12"
-          />
-          <line
-            x1="12"
-            y1="16"
-            x2="12.01"
-            y2="16"
-          />
-        </svg>
+        <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <line x1="12" y1="8" x2="12" y2="12" /> <line x1="12" y1="16" x2="12.01" y2="16" /> </svg>
         <h3>Erro ao carregar ativos observados</h3>
         <button
           class="btn btn-primary mt-2"
@@ -202,20 +114,7 @@
         v-else-if="filteredAssets.length === 0 && !loading"
         class="empty-state"
       >
-        <svg
-          class="empty-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-          <circle
-            cx="12"
-            cy="12"
-            r="3"
-          />
-        </svg>
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
         <h3>Nenhum ativo observado</h3>
         <p v-if="activeFiltersCount > 0">
           Ajuste os filtros de busca ou adicione novos ativos
@@ -227,26 +126,7 @@
           to="/my-assets"
           class="btn"
         >
-          <svg
-            class="icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line
-              x1="12"
-              y1="5"
-              x2="12"
-              y2="19"
-            />
-            <line
-              x1="5"
-              y1="12"
-              x2="19"
-              y2="12"
-            />
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="12" y1="5" x2="12" y2="19" /> <line x1="5" y1="12" x2="19" y2="12" /> </svg>
           Ir para Meus Ativos
         </router-link>
       </div>
@@ -287,28 +167,7 @@
             >
               <td>
                 <div class="asset-code">
-                  <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <line
-                      x1="16.5"
-                      y1="9.4"
-                      x2="7.5"
-                      y2="4.21"
-                    />
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                    <line
-                      x1="12"
-                      y1="22.08"
-                      x2="12"
-                      y2="12"
-                    />
-                  </svg>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" /> <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /> <polyline points="3.27 6.96 12 12.01 20.73 6.96" /> <line x1="12" y1="22.08" x2="12" y2="12" /> </svg>
                   <strong>{{ asset.codigo }}</strong>
                 </div>
               </td>
@@ -382,41 +241,14 @@
                     :title="asset.alert ? 'Editar alerta' : 'Configurar alerta'"
                     @click="openEditModal(asset)"
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                      <line
-                        x1="12"
-                        y1="9"
-                        x2="12"
-                        y2="13"
-                      />
-                      <line
-                        x1="12"
-                        y1="17"
-                        x2="12.01"
-                        y2="17"
-                      />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /> <line x1="12" y1="9" x2="12" y2="13" /> <line x1="12" y1="17" x2="12.01" y2="17" /> </svg>
                   </button>
                   <button
                     class="action-btn delete-btn"
                     title="Parar de observar"
                     @click="openStopObservingModal(asset)"
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <path d="m1 1 22 22" />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <path d="m1 1 22 22" /> </svg>
                   </button>
                 </div>
               </td>
@@ -434,14 +266,7 @@
             class="pagination-btn"
             @click="previousPage"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="15 18 9 12 15 6" /> </svg>
             Anterior
           </button>
 
@@ -462,14 +287,7 @@
             @click="nextPage"
           >
             Próxima
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="9 18 15 12 9 6" /> </svg>
           </button>
         </div>
 
@@ -498,41 +316,14 @@
         <div class="modal-content small">
           <div class="modal-header">
             <h3>
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <path d="m1 1 22 22" />
-              </svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <path d="m1 1 22 22" /> </svg>
               Parar de observar ativo
             </h3>
             <button
               class="close-btn"
               @click="closeStopObservingModal"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line
-                  x1="18"
-                  y1="6"
-                  x2="6"
-                  y2="18"
-                />
-                <line
-                  x1="6"
-                  y1="6"
-                  x2="18"
-                  y2="18"
-                />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" /> </svg>
             </button>
           </div>
 
@@ -555,17 +346,7 @@
                 :disabled="saving"
                 @click="handleStopObserving"
               >
-                <svg
-                  v-if="!saving"
-                  class="icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                </svg>
+                <svg v-if="!saving" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="3 6 5 6 21 6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </svg>
                 {{ saving ? 'Processando...' : 'Parar de observar' }}
               </button>
             </div>

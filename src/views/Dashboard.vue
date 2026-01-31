@@ -10,40 +10,7 @@
           </p>
         </div>
         <div class="date-info">
-          <svg
-            class="icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect
-              x="3"
-              y="4"
-              width="18"
-              height="18"
-              rx="2"
-              ry="2"
-            />
-            <line
-              x1="16"
-              y1="2"
-              x2="16"
-              y2="6"
-            />
-            <line
-              x1="8"
-              y1="2"
-              x2="8"
-              y2="6"
-            />
-            <line
-              x1="3"
-              y1="10"
-              x2="21"
-              y2="10"
-            />
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /> <line x1="16" y1="2" x2="16" y2="6" /> <line x1="8" y1="2" x2="8" y2="6" /> <line x1="3" y1="10" x2="21" y2="10" /> </svg>
           <span>{{ currentDate }}</span>
         </div>
       </div>
@@ -58,29 +25,13 @@
           :is-positive="userAssetsCount > 0"
         >
           <template #icon>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M3 3v18h18" />
-              <path d="m19 9-5 5-4-4-3 3" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M3 3v18h18" /> <path d="m19 9-5 5-4-4-3 3" /> </svg>
           </template>
           <template
             v-if="userAssetsCount > 0"
             #subtitle-icon
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-              <polyline points="17 6 23 6 23 12" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /> <polyline points="17 6 23 6 23 12" /> </svg>
           </template>
         </StatCard>
 
@@ -91,26 +42,7 @@
           subtitle="Monitorando preços"
         >
           <template #icon>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line
-                x1="12"
-                y1="9"
-                x2="12"
-                y2="13"
-              />
-              <line
-                x1="12"
-                y1="17"
-                x2="12.01"
-                y2="17"
-              />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /> <line x1="12" y1="9" x2="12" y2="13" /> <line x1="12" y1="17" x2="12.01" y2="17" /> </svg>
           </template>
         </StatCard>
 
@@ -121,37 +53,7 @@
           subtitle="Tipos de ativos"
         >
           <template #icon>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect
-                x="3"
-                y="3"
-                width="7"
-                height="7"
-              />
-              <rect
-                x="14"
-                y="3"
-                width="7"
-                height="7"
-              />
-              <rect
-                x="14"
-                y="14"
-                width="7"
-                height="7"
-              />
-              <rect
-                x="3"
-                y="14"
-                width="7"
-                height="7"
-              />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" /> </svg>
           </template>
         </StatCard>
 
@@ -163,21 +65,7 @@
           subtitle="Cadastrados no sistema"
         >
           <template #icon>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle
-                cx="9"
-                cy="7"
-                r="4"
-              />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /> </svg>
           </template>
         </StatCard>
       </div>
@@ -186,16 +74,7 @@
       <div class="charts-section">
         <DashboardCard title="Distribuição por Categoria">
           <template #icon>
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-              <path d="M22 12A10 10 0 0 0 12 2v10z" />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M21.21 15.89A10 10 0 1 1 8 2.83" /> <path d="M22 12A10 10 0 0 0 12 2v10z" /> </svg>
           </template>
           <div
             v-if="userAssetsCount > 0"
@@ -221,16 +100,7 @@
 
         <DashboardCard title="Categorias Principais">
           <template #icon>
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-              <polyline points="17 6 23 6 23 12" />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /> <polyline points="17 6 23 6 23 12" /> </svg>
           </template>
           <div
             v-if="topCategories.length > 0"
@@ -262,30 +132,7 @@
             label="Adicionar Ativo"
           >
             <template #icon>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                />
-                <line
-                  x1="12"
-                  y1="8"
-                  x2="12"
-                  y2="16"
-                />
-                <line
-                  x1="8"
-                  y1="12"
-                  x2="16"
-                  y2="12"
-                />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <line x1="12" y1="8" x2="12" y2="16" /> <line x1="8" y1="12" x2="16" y2="12" /> </svg>
             </template>
           </QuickActionCard>
 
@@ -294,14 +141,7 @@
             label="Ver Cotações"
           >
             <template #icon>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /> </svg>
             </template>
           </QuickActionCard>
 
@@ -310,19 +150,7 @@
             label="Ativos Observados"
           >
             <template #icon>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="3"
-                />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
             </template>
           </QuickActionCard>
 
@@ -331,19 +159,7 @@
             label="Histórico"
           >
             <template #icon>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" /> </svg>
             </template>
           </QuickActionCard>
         </div>

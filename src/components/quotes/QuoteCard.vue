@@ -17,15 +17,7 @@
           v-else
           class="quote-logo-placeholder"
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-            <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M12 2L2 7l10 5 10-5-10-5z" /> <path d="M2 17l10 5 10-5M2 12l10 5 10-5" /> </svg>
         </div>
       </div>
       <div class="quote-info">
@@ -59,20 +51,7 @@
           class="change-section"
           :class="changeClass"
         >
-          <svg
-            class="change-icon"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path
-              v-if="isPositive"
-              d="M7 14l5-5 5 5H7z"
-            />
-            <path
-              v-else
-              d="M7 10l5 5 5-5H7z"
-            />
-          </svg>
+          <svg class="change-icon" viewBox="0 0 24 24" fill="currentColor" > <path v-if="isPositive" d="M7 14l5-5 5 5H7z" /> <path v-else d="M7 10l5 5 5-5H7z" /> </svg>
           <span class="change-value">{{ formattedChange }}</span>
           <span class="change-percent">{{ formattedChangePercent }}</span>
         </div>

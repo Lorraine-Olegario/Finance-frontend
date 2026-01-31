@@ -6,52 +6,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3>
-          <svg
-            class="icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-            <line
-              x1="12"
-              y1="9"
-              x2="12"
-              y2="13"
-            />
-            <line
-              x1="12"
-              y1="17"
-              x2="12.01"
-              y2="17"
-            />
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /> <line x1="12" y1="9" x2="12" y2="13" /> <line x1="12" y1="17" x2="12.01" y2="17" /> </svg>
           Configurar Alerta - {{ asset.codigo }}
         </h3>
         <button
           class="close-btn"
           @click="$emit('close')"
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line
-              x1="18"
-              y1="6"
-              x2="6"
-              y2="18"
-            />
-            <line
-              x1="6"
-              y1="6"
-              x2="18"
-              y2="18"
-            />
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" /> </svg>
         </button>
       </div>
       
@@ -84,16 +46,7 @@
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="valor_min">
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                <polyline points="17 6 23 6 23 12" />
-              </svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /> <polyline points="17 6 23 6 23 12" /> </svg>
               Valor Mínimo (R$)
             </label>
             <input
@@ -109,16 +62,7 @@
 
           <div class="form-group">
             <label for="valor_max">
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
-                <polyline points="17 18 23 18 23 12" />
-              </svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" /> <polyline points="17 18 23 18 23 12" /> </svg>
               Valor Máximo (R$)
             </label>
             <input
@@ -154,20 +98,7 @@
 
           <div class="form-group">
             <label for="frequencia">
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" /> </svg>
               Frequência de Notificação
             </label>
             <select
@@ -188,15 +119,7 @@
 
           <div class="form-group">
             <label for="status">
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="20 6 9 17 4 12" /> </svg>
               Status do Alerta
             </label>
             <select
@@ -225,18 +148,7 @@
               class="btn btn-primary"
               :disabled="saving"
             >
-              <svg
-                v-if="!saving"
-                class="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                <polyline points="17 21 17 13 7 13 7 21" />
-                <polyline points="7 3 7 8 15 8" />
-              </svg>
+              <svg v-if="!saving" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /> <polyline points="17 21 17 13 7 13 7 21" /> <polyline points="7 3 7 8 15 8" /> </svg>
               {{ saving ? 'Salvando...' : 'Salvar Alerta' }}
             </button>
           </div>

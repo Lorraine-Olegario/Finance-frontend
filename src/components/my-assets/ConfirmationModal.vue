@@ -10,49 +10,7 @@
           <div class="modal-dialog">
             <div class="modal-header">
               <h3 class="modal-title">
-                <svg
-                  class="modal-icon"
-                  :class="`icon-${type}`"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    v-if="type === 'success'"
-                    d="M5 3 L19 12 L5 21 Z"
-                  />
-                  <g v-else-if="type === 'danger'">
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  </g>
-                  <g v-else-if="type === 'warning'">
-                    <rect
-                      x="6"
-                      y="4"
-                      width="4"
-                      height="16"
-                    />
-                    <rect
-                      x="14"
-                      y="4"
-                      width="4"
-                      height="16"
-                    />
-                  </g>
-                  <g v-else-if="type === 'info'">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="3"
-                    />
-                  </g>
-                  <polyline
-                    v-else
-                    points="20 6 9 17 4 12"
-                  />
-                </svg>
+                <svg class="modal-icon" :class="`icon-${type}`" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path v-if="type === 'success'" d="M5 3 L19 12 L5 21 Z" /> <g v-else-if="type === 'danger'"> <polyline points="3 6 5 6 21 6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </g> <g v-else-if="type === 'warning'"> <rect x="6" y="4" width="4" height="16" /> <rect x="14" y="4" width="4" height="16" /> </g> <g v-else-if="type === 'info'"> <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </g> <polyline v-else points="20 6 9 17 4 12" /> </svg>
                 {{ title }}
               </h3>
               <button
@@ -61,25 +19,7 @@
                 aria-label="Close"
                 @click="close"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line
-                    x1="18"
-                    y1="6"
-                    x2="6"
-                    y2="18"
-                  />
-                  <line
-                    x1="6"
-                    y1="6"
-                    x2="18"
-                    y2="18"
-                  />
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" /> </svg>
               </button>
             </div>
 

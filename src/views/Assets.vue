@@ -5,23 +5,7 @@
       <div class="page-header">
         <div class="header-left">
           <h2>
-            <svg
-              class="header-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect
-                x="2"
-                y="7"
-                width="20"
-                height="14"
-                rx="2"
-                ry="2"
-              />
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-            </svg>
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <rect x="2" y="7" width="20" height="14" rx="2" ry="2" /> <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> </svg>
             Meus Ativos
           </h2>
           <p class="subtitle">
@@ -34,15 +18,7 @@
             class="btn-filter"
             @click="filterOpen = !filterOpen"
           >
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /> </svg>
             Filtros
             <span
               v-if="activeFiltersCount > 0"
@@ -53,26 +29,7 @@
             class="btn btn-primary"
             @click="openAddModal"
           >
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <line
-                x1="12"
-                y1="5"
-                x2="12"
-                y2="19"
-              />
-              <line
-                x1="5"
-                y1="12"
-                x2="19"
-                y2="12"
-              />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="12" y1="5" x2="12" y2="19" /> <line x1="5" y1="12" x2="19" y2="12" /> </svg>
             Adicionar Ativos
           </button>
         </div>
@@ -101,41 +58,14 @@
           v-else-if="filteredAssets.length === 0"
           class="empty-state"
         >
-          <svg
-            class="empty-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M22 12h-4l-3 9L9 3l-3 9H2" /> </svg>
           <h3>Nenhum ativo encontrado</h3>
           <p>Adicione ativos à sua carteira ou ajuste os filtros</p>
           <button
             class="btn btn-primary"
             @click="openAddModal"
           >
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <line
-                x1="12"
-                y1="5"
-                x2="12"
-                y2="19"
-              />
-              <line
-                x1="5"
-                y1="12"
-                x2="19"
-                y2="12"
-              />
-            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <line x1="12" y1="5" x2="12" y2="19" /> <line x1="5" y1="12" x2="19" y2="12" /> </svg>
             Adicionar Primeiro Ativo
           </button>
         </div>
@@ -174,16 +104,7 @@
               >
                 <td class="td-code">
                   <div class="code-cell">
-                    <svg
-                      class="icon-asset"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                      <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-                    </svg>
+                    <svg class="icon-asset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M12 2L2 7l10 5 10-5-10-5z" /> <path d="M2 17l10 5 10-5M2 12l10 5 10-5" /> </svg>
                     <div class="asset-code-wrapper">
                       <span class="asset-code">{{ asset.codigo }}</span>
                       <!-- Badge de Observando - TESTE VISUAL -->
@@ -192,19 +113,7 @@
                         class="observing-badge"
                         title="Ativo está sendo observado"
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="3"
-                          />
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
                       </span>
                       <!-- Badge de TESTE - aparece para todos os ativos (REMOVER DEPOIS) -->
                       <span
@@ -237,17 +146,7 @@
                     class="badge badge-status"
                     :class="`status-${asset.status}`"
                   >
-                    <svg
-                      class="status-icon"
-                      viewBox="0 0 8 8"
-                      fill="currentColor"
-                    >
-                      <circle
-                        cx="4"
-                        cy="4"
-                        r="3"
-                      />
-                    </svg>
+                    <svg class="status-icon" viewBox="0 0 8 8" fill="currentColor" > <circle cx="4" cy="4" r="3" /> </svg>
                     {{ asset.status }}
                   </span>
                 </td>
@@ -258,15 +157,7 @@
                       title="Editar ativo"
                       @click="openEditModal(asset)"
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /> </svg>
                     </button>
 
                     <button
@@ -275,25 +166,7 @@
                       title="Pausar ativo"
                       @click="openDeactivateModal(asset)"
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <rect
-                          x="6"
-                          y="4"
-                          width="4"
-                          height="16"
-                        />
-                        <rect
-                          x="14"
-                          y="4"
-                          width="4"
-                          height="16"
-                        />
-                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <rect x="6" y="4" width="4" height="16" /> <rect x="14" y="4" width="4" height="16" /> </svg>
                     </button>
 
                     <button
@@ -302,14 +175,7 @@
                       title="Ativar ativo"
                       @click="openActivateModal(asset)"
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <polygon points="5 3 19 12 5 21 5 3" />
-                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polygon points="5 3 19 12 5 21 5 3" /> </svg>
                     </button>
 
                     <button
@@ -317,19 +183,7 @@
                       title="Observar ativo"
                       @click="openObserveModal(asset)"
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="3"
-                        />
-                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /> <circle cx="12" cy="12" r="3" /> </svg>
                     </button>
 
                     <button
@@ -337,17 +191,7 @@
                       title="Deletar ativo"
                       @click="openDeleteModal(asset)"
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <polyline points="3 6 5 6 21 6" />
-                        <path
-                          d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                        />
-                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="3 6 5 6 21 6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /> </svg>
                     </button>
                   </div>
                 </td>
@@ -1134,7 +978,6 @@ export default {
 
 /* Buttons */
 .btn {
-    padding: 0.875rem 1.5rem;
     border: none;
     border-radius: 10px;
     font-size: 1rem;

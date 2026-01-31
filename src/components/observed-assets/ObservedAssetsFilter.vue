@@ -8,19 +8,7 @@
   >
     <FilterSection label="Buscar por código">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <circle
-            cx="11"
-            cy="11"
-            r="8"
-          />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.35-4.35" /> </svg>
       </template>
       <input 
         v-model="localFilters.search" 
@@ -32,15 +20,7 @@
 
     <FilterSection label="Categoria">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M3 3v18h18" />
-          <path d="m19 9-5 5-4-4-3 3" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <path d="M3 3v18h18" /> <path d="m19 9-5 5-4-4-3 3" /> </svg>
       </template>
       <select
         v-model="localFilters.categoria"
@@ -61,14 +41,7 @@
 
     <FilterSection label="Status do Alerta">
       <template #icon>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" > <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /> </svg>
       </template>
       <select
         v-model="localFilters.hasAlert"
