@@ -436,11 +436,8 @@ export default {
           return
         }
 
-        // Buscar ativos do usuário agrupados por categoria
         const response = await assetService.getAssets(userId)
-
-        // Verificar se ativos_por_categoria existe e é um objeto válido
-        const ativosPorCategoria = response.data?.ativos_por_categoria || {}
+        const ativosPorCategoria = response.data?.ativos_por_categoria?.data || {}
 
         // Contar total de ativos e preparar dados para o gráfico
         this.userAssetsCount = 0

@@ -217,132 +217,72 @@
         </button>
       </div>
 
-      <!-- Add/Edit Modal -->
-      <div
-        v-if="showModal"
-        class="modal-overlay"
-        @click="closeModal"
+      <ConfirmationModal
+        :is-open="showModal"
+        :title="isEditing ? 'Editar Categoria' : 'Nova Categoria'"
+        :message="''"
+        :confirm-text="isEditing ? 'Salvar' : 'Criar'"
+        :loading-text="isEditing ? 'Salvando...' : 'Criando...'"
+        @close="closeModal"
+        @confirm="saveCategory"
       >
-        <div
-          class="modal"
-          @click.stop
-        >
-          <div class="modal-header">
-            <h3>{{ isEditing ? 'Editar Categoria' : 'Nova Categoria' }}</h3>
-            <button
-              class="btn-close"
-              @click="closeModal"
+        <!-- body slot: form -->
+        <div>
+          <div class="form-group">
+            <label>Nome da Categoria *</label>
+            <input
+              v-model="formData.nome"
+              type="text"
+              placeholder="Ex: Ações, FIIs, Criptomoedas"
+              class="form-input"
             >
-              ×
-            </button>
           </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Nome da Categoria *</label>
+          <div class="form-group">
+            <label>Cor</label>
+            <div class="color-picker-group">
               <input
-                v-model="formData.nome"
+                v-model="formData.color"
+                type="color"
+                class="color-input"
+              >
+              <input
+                v-model="formData.color"
                 type="text"
-                placeholder="Ex: Ações, FIIs, Criptomoedas"
+                placeholder="#6200EE"
                 class="form-input"
-                @keyup.enter="saveCategory"
+                maxlength="7"
               >
             </div>
-            <div class="form-group">
-              <label>Cor</label>
-              <div class="color-picker-group">
-                <input
-                  v-model="formData.color"
-                  type="color"
-                  class="color-input"
-                >
-                <input
-                  v-model="formData.color"
-                  type="text"
-                  placeholder="#6200EE"
-                  class="form-input"
-                  maxlength="7"
-                >
-              </div>
-            </div>
-            <div
-              v-if="error"
-              class="modal-error"
-            >
-              {{ error }}
-            </div>
           </div>
-          <div class="modal-footer">
-            <button
-              class="btn secondary"
-              @click="closeModal"
-            >
-              Cancelar
-            </button>
-            <button
-              class="btn"
-              :disabled="saving || !formData.nome"
-              @click="saveCategory"
-            >
-              {{ saving ? 'Salvando...' : 'Salvar' }}
-            </button>
-          </div>
+          <div v-if="error" class="modal-error">{{ error }}</div>
         </div>
-      </div>
+      </ConfirmationModal>
 
-      <!-- Delete Modal -->
-      <div
-        v-if="showDeleteModal"
-        class="modal-overlay"
-        @click="closeDeleteModal"
-      >
-        <div
-          class="modal modal-small"
-          @click.stop
-        >
-          <div class="modal-header">
-            <h3>Confirmar Exclusão</h3>
-            <button
-              class="btn-close"
-              @click="closeDeleteModal"
-            >
-              ×
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Tem certeza que deseja excluir a categoria <strong>{{ selectedCategory?.nome }}</strong>?</p>
-            <p class="warning-text">
-              Esta ação não pode ser desfeita.
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn secondary"
-              @click="closeDeleteModal"
-            >
-              Cancelar
-            </button>
-            <button
-              class="btn danger"
-              :disabled="saving"
-              @click="deleteCategory"
-            >
-              {{ saving ? 'Excluindo...' : 'Excluir' }}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ConfirmationModal
+        :is-open="showDeleteModal"
+        type="danger"
+        title="Confirmar Exclusão"
+        :message="`Tem certeza que deseja excluir a categoria ${selectedCategory?.nome || ''}?`"
+        warning-message="Esta ação não pode ser desfeita."
+        confirm-text="Excluir"
+        loading-text="Excluindo..."
+        @close="closeDeleteModal"
+        @confirm="deleteCategory"
+      />
     </div>
   </MainLayout>
 </template>
 
 <script>
 import MainLayout from '../components/MainLayout.vue'
+import ConfirmationModal from '../components/my-assets/ConfirmationModal.vue'
 import categoryService from '../services/categoryService'
 
 export default {
   name: 'Categories',
   components: {
-    MainLayout
+    MainLayout,
+    ConfirmationModal
   },
   data() {
     return {
@@ -425,9 +365,10 @@ export default {
       this.showDeleteModal = false
       this.selectedCategory = null
     },
-    async saveCategory() {
+    async saveCategory({ resolve, reject }) {
       if (!this.formData.nome.trim()) {
         this.error = 'O nome da categoria é obrigatório'
+        if (typeof reject === 'function') reject(new Error(this.error))
         return
       }
 
@@ -445,22 +386,25 @@ export default {
           this.success = 'Categoria criada com sucesso!'
         }
 
-        this.closeModal()
         await this.fetchCategories()
-        setTimeout(() => { this.success = '' }, 5000)
+        setTimeout(() => { this.success = '' }, 500)
+        this.saving = false
+        if (typeof resolve === 'function') resolve()
       } catch (err) {
+        this.saving = false
         if (err.response?.data?.errors) {
           const errors = Object.values(err.response.data.errors).flat()
           this.error = errors.join(', ')
+          if (typeof reject === 'function') reject(new Error(this.error))
           return
         }
 
-        this.error = err.response?.data?.message || 'Erro ao salvar categoria'
-      } finally {
-        this.saving = false
+        const msg = err.response?.data?.message || 'Erro ao salvar categoria'
+        this.error = msg
+        if (typeof reject === 'function') reject(new Error(msg))
       }
     },
-    async deleteCategory() {
+    async deleteCategory({ resolve, reject }) {
       this.saving = true
       this.error = ''
       this.success = ''
@@ -470,11 +414,14 @@ export default {
         this.success = 'Categoria excluída com sucesso!'
         await this.fetchCategories()
         setTimeout(() => { this.success = '' }, 5000)
-      } catch (err) {
-        this.error = err.response?.data?.message || 'Erro ao excluir categoria'
-        this.closeDeleteModal()
-      } finally {
         this.saving = false
+        if (typeof resolve === 'function') resolve()
+      } catch (err) {
+        this.saving = false
+        const errorMsg = err.response?.data?.message || 'Erro ao excluir categoria'
+        this.error = errorMsg
+        this.closeDeleteModal()
+        if (typeof reject === 'function') reject(new Error(errorMsg))
       }
     }
   }
@@ -494,45 +441,6 @@ export default {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 2px solid var(--border);
-}
-
-.header-content h2 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.subtitle {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-.btn-add {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-add:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
-}
-
-.btn-add .icon {
-  width: 18px;
-  height: 18px;
 }
 
 /* ===== MESSAGES ===== */

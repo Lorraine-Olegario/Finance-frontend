@@ -93,30 +93,35 @@
               >
                 <strong>⚠️ Atenção:</strong> {{ warningMessage }}
               </p>
+              <!-- Slot para conteúdo customizado (formulários, inputs, etc.) -->
+              <slot />
             </div>
 
+            <!-- Se for fornecido um slot footer, renderiza-o; caso contrário usa os botões padrão -->
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                :disabled="loading"
-                @click="close"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                class="btn btn-confirm"
-                :class="`btn-${type}`"
-                :disabled="loading"
-                @click="handleConfirm"
-              >
-                <span
-                  v-if="loading"
-                  class="spinner"
-                />
-                {{ loading ? loadingText : confirmText }}
-              </button>
+              <slot name="footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  :disabled="loading"
+                  @click="close"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-confirm"
+                  :class="`btn-${type}`"
+                  :disabled="loading"
+                  @click="handleConfirm"
+                >
+                  <span
+                    v-if="loading"
+                    class="spinner"
+                  />
+                  {{ loading ? loadingText : confirmText }}
+                </button>
+              </slot>
             </div>
           </div>
         </div>

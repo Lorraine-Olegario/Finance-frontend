@@ -9,58 +9,54 @@
       </div>
 
       <!-- Create/Edit Form Modal -->
-      <div
-        v-if="showCreateForm"
-        class="modal-overlay"
-        @click.self="closeForm"
+      <ConfirmationModal
+        :is-open="showCreateForm"
+        :title="editingUser ? 'Editar Usuário' : 'Novo Usuário'"
+        :message="''"
+        :confirm-text="editingUser ? 'Salvar' : 'Criar'"
+        :loading-text="editingUser ? 'Salvando...' : 'Criando...'"
+        @close="closeForm"
+        @confirm="saveUser"
       >
-        <div class="modal card">
-          <h3>{{ editingUser ? 'Editar Usuário' : 'Novo Usuário' }}</h3>
-          
-          <form @submit.prevent="saveUser">
-            <div class="form-group">
-              <label>Nome</label>
-              <input
-                v-model="formData.name"
-                type="text"
-                required
-              >
-            </div>
-            
-            <div class="form-group">
-              <label>Email</label>
-              <input
-                v-model="formData.email"
-                type="email"
-                required
-              >
-            </div>
-            
-            <div
-              v-if="!editingUser"
-              class="form-group"
+        <!-- body slot: form -->
+        <div>
+          <div class="form-group">
+            <label>Nome do Usuário *</label>
+            <input
+              v-model="formData.name"
+              type="text"
+              placeholder="Ex: João Silva"
+              class="form-input"
             >
-              <label>Senha</label>
-              <input
-                v-model="formData.password"
-                type="password"
-                required
-              >
-            </div>
-            
-            <div
-              v-if="!editingUser"
-              class="form-group"
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input
+              v-model="formData.email"
+              type="email"
+              placeholder="Ex: joao.silva@example.com"
+              class="form-input"
             >
-              <label>Confirmar Senha</label>
-              <input
-                v-model="formData.password_confirmation"
-                type="password"
-                required
-              >
-            </div>
-            
-            <div
+          </div>
+          <div class="form-group">
+            <label>Senha *</label>
+            <input
+              v-model="formData.password"
+              type="password"
+              placeholder="Digite a senha"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label>Confirmar Senha *</label>
+            <input
+              v-model="formData.password_confirmation"
+              type="password"
+              placeholder="Digite a senha"
+              class="form-input"
+            >
+          </div>
+          <div
               v-if="editingUser"
               class="form-group"
             >
@@ -74,58 +70,30 @@
                 </option>
               </select>
             </div>
-            
-            <div
-              v-if="error"
-              class="error-message"
-            >
-              {{ error }}
-            </div>
-            <div
-              v-if="success"
-              class="success-message"
-            >
-              {{ success }}
-            </div>
-            
-            <div class="form-actions">
-              <button
-                type="button"
-                class="secondary"
-                @click="closeForm"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                :disabled="loading"
-              >
-                {{ loading ? 'Salvando...' : 'Salvar' }}
-              </button>
-            </div>
-          </form>
+
+          <div v-if="error" class="modal-error">{{ error }}</div>
         </div>
-      </div>
+      </ConfirmationModal>
 
       <!-- Users List -->
       <div class="card">
         <!-- Search Bar -->
         <div class="search-bar">
-          <input 
-            v-model="searchQuery" 
-            type="text" 
+          <input
+            v-model="searchQuery"
+            type="text"
             placeholder="Buscar por nome ou email..."
             class="search-input"
           >
         </div>
-        
+
         <div
           v-if="loading && !users.length"
           class="loading"
         >
           <div class="spinner" />
         </div>
-        
+
         <table v-else-if="filteredUsers.length">
           <thead>
             <tr>
@@ -158,7 +126,7 @@
             </tr>
           </tbody>
         </table>
-        
+
         <div
           v-else
           class="empty-state"
@@ -172,12 +140,14 @@
 
 <script>
 import MainLayout from '../components/MainLayout.vue'
+import ConfirmationModal from '../components/my-assets/ConfirmationModal.vue'
 import userService from '../services/userService'
 
 export default {
   name: 'Users',
   components: {
-    MainLayout
+    MainLayout,
+    ConfirmationModal
   },
   data() {
     return {
@@ -202,10 +172,10 @@ export default {
       if (!this.searchQuery) {
         return this.users
       }
-      
+
       const query = this.searchQuery.toLowerCase()
-      return this.users.filter(user => 
-        user.name.toLowerCase().includes(query) || 
+      return this.users.filter(user =>
+        user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query)
       )
     }
@@ -226,7 +196,7 @@ export default {
         this.loading = false
       }
     },
-    
+
     editUser(user) {
       this.editingUser = user
       this.formData = {
@@ -236,12 +206,12 @@ export default {
       }
       this.showCreateForm = true
     },
-    
+
     async saveUser() {
       this.loading = true
       this.error = ''
       this.success = ''
-      
+
       try {
         if (this.editingUser) {
           await userService.updateUser(this.editingUser.id, { status: this.formData.status })
@@ -250,7 +220,7 @@ export default {
           await userService.createUser(this.formData)
           this.success = 'Usuário criado com sucesso'
         }
-        
+
         await this.fetchUsers()
         setTimeout(() => this.closeForm(), 1500)
       } catch (err) {
@@ -259,7 +229,7 @@ export default {
         this.loading = false
       }
     },
-    
+
     closeForm() {
       this.showCreateForm = false
       this.editingUser = null
@@ -380,7 +350,7 @@ export default {
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   table {
     font-size: 0.85rem;
   }
