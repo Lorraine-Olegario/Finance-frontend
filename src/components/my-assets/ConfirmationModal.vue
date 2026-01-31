@@ -1,8 +1,8 @@
 <template>
-  <Teleport to="body">
+    <Teleport to="body">
     <Transition name="modal">
       <div v-if="isOpen" class="modal-overlay" @click.self="close">
-        <div class="modal-container">
+        <div :class="['modal-container', `modal-${size}`]">
           <div class="modal-dialog">
             <div class="modal-header">
               <h3 class="modal-title">
@@ -68,6 +68,11 @@
       isOpen: {
         type: Boolean,
         required: true,
+      },
+      size: {
+        type: String,
+        default: "medium",
+        validator: (value) => ["small", "medium", "large"].includes(value),
       },
       type: {
         type: String,
@@ -173,20 +178,34 @@
   /* Modal Container */
   .modal-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 600px;
     margin: auto;
     pointer-events: auto;
+  }
+
+  .modal-container.modal-small {
+    max-width: 420px;
+  }
+
+  .modal-container.modal-medium {
+    max-width: 600px;
+  }
+
+  .modal-container.modal-large {
+    max-width: 900px;
   }
 
   .modal-dialog {
     background: var(--surface, #ffffff);
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
     border: 1px solid var(--border, #e0e0e0);
     pointer-events: auto;
     position: relative;
     z-index: 10000;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 
   /* Modal Header */

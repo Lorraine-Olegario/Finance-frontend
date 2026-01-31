@@ -411,17 +411,12 @@
         this.error = null;
 
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            this.error = "Usuário não autenticado. Por favor, faça login.";
-            this.$router.push("/login");
-            return;
-          }
-
           // Fetch observed assets and alerts in parallel
-          const [assetsResponse, alertsResponse] = await Promise.all([assetService.getObservedAssets(userId), assetService.getAssetAlerts(userId)]);
+          const [assetsResponse, alertsResponse] = await Promise.all([
+            assetService.getObservedAssets(),
+            assetService.getAssetAlerts(),
+          ]);
 
-          // Validate that assets belong to logged user and remove duplicates
           const rawAssets = assetsResponse.data.observados || [];
           const uniqueAssetsMap = new Map();
 
@@ -433,8 +428,7 @@
 
           this.observedAssets = Array.from(uniqueAssetsMap.values());
 
-          // Handle alerts response - can be array or object with observados property
-          const alertsData = alertsResponse.data;
+          const alertsData = alertsResponse.data.data;
           this.alerts = [];
 
           if (Array.isArray(alertsData)) {
@@ -445,31 +439,28 @@
 
           // Fetch current prices only for paginated assets
           await this.fetchAssetPrices();
-        } catch (err) {
-          console.error("Erro ao carregar dados:", err);
-          this.error = err.response?.data?.message || err.message || "Erro ao carregar dados";
+        } catch {
+          this.error = "Erro ao carregar dados";
         } finally {
           this.loading = false;
         }
       },
+
       async fetchAssetPrices() {
         if (this.paginatedAssets.length === 0) return;
 
         try {
-          // Get only the codes for current page assets
           const codigos = this.paginatedAssets.map((a) => a.codigo);
-
-          // Fetch quotes only for current page
           const response = await assetService.getAssetQuotes(codigos);
           const quotes = response.data || [];
 
-          // Update only the displayed assets with their current price
           this.paginatedAssets.forEach((asset) => {
             const quote = quotes.find((q) => q.symbol === asset.codigo);
             if (quote) {
-              asset.currentPrice = quote.regularMarketPrice || null;
+              asset.currentPrice = quote.price || null;
             }
           });
+
         } catch (err) {
           console.error("Erro ao buscar cotações:", err);
           // Não mostrar erro para o usuário, apenas log
@@ -493,19 +484,16 @@
           }
 
           if (this.selectedAsset.alert) {
-            // Update existing alert
             await assetService.updateAssetAlert(this.selectedAsset.alert.id, alertData);
           } else {
-            // Create new alert
             await assetService.saveAssetAlert(userId, alertData);
           }
 
-          // Refresh data
           await this.fetchData();
           this.closeEditModal();
-        } catch (err) {
-          console.error("Erro ao salvar alerta:", err);
-          alert("Erro ao salvar alerta: " + (err.response?.data?.message || err.message));
+
+        } catch  {
+          alert("Erro ao salvar alerta, tente novamente.");
         } finally {
           this.saving = false;
         }
@@ -893,13 +881,15 @@
   }
 
   .status-badge.ativo {
-    background: #10b981;
-    color: white;
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
   }
 
   .status-badge.inativo {
-    background: #6b7280;
-    color: white;
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
   }
 
   .action-buttons {

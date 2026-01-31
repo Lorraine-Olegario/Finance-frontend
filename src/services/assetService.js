@@ -12,7 +12,7 @@ export default {
   },
 
   // Get observed assets
-  getObservedAssets(userId) {
+  getObservedAssets() {
     return apiClient.get(`/user/ativos/observados`);
   },
 
@@ -63,7 +63,7 @@ export default {
 
   // Asset Alerts
   // Get all alerts for a user
-  getAssetAlerts(userId) {
+  getAssetAlerts() {
     return apiClient.get(`/user/alertas`);
   },
 
