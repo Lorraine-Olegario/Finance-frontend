@@ -70,8 +70,8 @@
       />
 
       <!-- Error -->
-      <ErrorAlert 
-        v-if="error" 
+      <ErrorAlert
+        v-if="error"
         type="error"
         :message="error"
         dismissible
@@ -83,13 +83,13 @@
         v-if="!loading && filteredQuotes.length"
         class="quotes-grid"
       >
-        <QuoteCard 
-          v-for="quote in filteredQuotes" 
-          :key="quote.symbol" 
-          :quote="quote" 
+        <QuoteCard
+          v-for="quote in filteredQuotes"
+          :key="quote.symbol"
+          :quote="quote"
         />
       </div>
-      
+
       <!-- Empty State: No Assets -->
       <EmptyState
         v-else-if="!loading && !error && userAssets.length === 0"
@@ -136,7 +136,7 @@
           </router-link>
         </template>
       </EmptyState>
-      
+
       <!-- Empty State: No Quotes -->
       <EmptyState
         v-else-if="!loading && !error && quotes.length === 0 && userAssets.length > 0"
@@ -187,7 +187,7 @@
         </template>
       </EmptyState>
     </div>
-    
+
     <!-- Filters Sidebar -->
     <QuotesFilter
       :is-open="isFilterOpen"
@@ -240,28 +240,28 @@ export default {
   computed: {
     filteredQuotes() {
       let result = [...this.quotes]
-      
+
       // Aplicar busca
       if (this.filters.search) {
         const search = this.filters.search.toLowerCase()
-        result = result.filter(q => 
+        result = result.filter(q =>
           q.symbol?.toLowerCase().includes(search) ||
           q.shortName?.toLowerCase().includes(search) ||
           q.longName?.toLowerCase().includes(search)
         )
       }
-      
+
       // Aplicar filtro de variação
       if (this.filters.variation === 'positive') {
         result = result.filter(q => (q.regularMarketChangePercent || 0) >= 0)
       } else if (this.filters.variation === 'negative') {
         result = result.filter(q => (q.regularMarketChangePercent || 0) < 0)
       }
-      
+
       // Aplicar ordenação
       result.sort((a, b) => {
         let aVal, bVal
-        
+
         switch (this.filters.sortBy) {
           case 'price':
             aVal = a.regularMarketPrice || a.price || 0
@@ -279,14 +279,14 @@ export default {
             aVal = a.symbol || ''
             bVal = b.symbol || ''
         }
-        
+
         if (this.filters.sortOrder === 'asc') {
           return aVal > bVal ? 1 : -1
         } else {
           return aVal < bVal ? 1 : -1
         }
       })
-      
+
       return result
     }
   },
@@ -298,7 +298,7 @@ export default {
       this.loading = true
       this.error = ''
       this.quotes = []
-      
+
       try {
         // Verificar se usuário está logado
         const userId = this.authStore.user?.id
@@ -310,32 +310,32 @@ export default {
 
         // 1. Buscar TODOS os ativos do usuário (não apenas observados)
         const assetsResponse = await assetService.getAllUserAssets(userId)
-        
+
         // A resposta vem como { user_id: X, total: Y, ativos: [...] }
-        const responseData = assetsResponse.data
-        this.userAssets = responseData.ativos || responseData.data || responseData || []
-        
-        
+        const responseData = assetsResponse.data.ativos.data
+        this.userAssets = assetsResponse.data.ativos.data
+
+
         if (this.userAssets.length === 0) {
           this.loading = false
           return
         }
-        
+
         // 2. Buscar cotação de cada ativo individualmente (sequencial)
         const quotesArray = []
         let successCount = 0
         let errorCount = 0
-        
+
         for (let i = 0; i < this.userAssets.length; i++) {
           const asset = this.userAssets[i]
-          
+
           try {
-            
+
             const response = await assetService.getAssetQuote(asset.codigo)
-            
+
             if (response?.data) {
               let quoteData = null
-              
+
               // Handle different response formats
               if (Array.isArray(response.data)) {
                 quoteData = response.data[0] // Pega o primeiro item do array
@@ -344,7 +344,7 @@ export default {
               } else {
                 quoteData = response.data
               }
-              
+
               // Combinar dados do ativo com dados da cotação
               if (quoteData && quoteData.symbol) {
                 quotesArray.push({
@@ -368,13 +368,13 @@ export default {
             console.error(`  ❌ ${asset.codigo}: ${err.response?.data?.message || err.message}`)
           }
         }
-        
+
         this.quotes = quotesArray
-        
+
         if (this.quotes.length === 0 && errorCount > 0) {
           this.error = 'Não foi possível carregar nenhuma cotação. Tente novamente.'
         }
-        
+
       } catch (err) {
         this.error = err.response?.data?.error || err.response?.data?.message || 'Erro ao carregar ativos'
         console.error('❌ Erro geral:', err)
@@ -383,15 +383,15 @@ export default {
         this.loading = false
       }
     },
-    
+
     openFilters() {
       this.isFilterOpen = true
     },
-    
+
     closeFilters() {
       this.isFilterOpen = false
     },
-    
+
     applyFilters(newFilters) {
       this.filters = { ...newFilters }
     }
@@ -561,16 +561,16 @@ export default {
   .page-header {
     flex-direction: column;
   }
-  
+
   .header-actions {
     width: 100%;
   }
-  
+
   .btn-filter,
   .btn-refresh {
     flex: 1;
   }
-  
+
   .quotes-grid {
     grid-template-columns: 1fr;
   }
@@ -580,12 +580,12 @@ export default {
   .header-left h2 {
     font-size: 1.5rem;
   }
-  
+
   .header-icon {
     width: 24px;
     height: 24px;
   }
-  
+
   .header-actions {
     flex-direction: column;
   }
