@@ -29,7 +29,7 @@
             @click="close"
           />
         </div>
-        
+
         <div class="modal-body">
           <div
             v-if="error"
@@ -64,10 +64,10 @@
                 for="codigo"
                 class="form-label fw-semibold"
               >Código</label>
-              <input 
+              <input
                 id="codigo"
-                v-model="formData.codigo" 
-                type="text" 
+                v-model="formData.codigo"
+                type="text"
                 class="form-control"
                 readonly
               >
@@ -78,36 +78,17 @@
                 for="nome"
                 class="form-label fw-semibold"
               >Nome</label>
-              <input 
+              <input
                 id="nome"
-                v-model="formData.nome" 
-                type="text" 
+                v-model="formData.nome"
+                type="text"
                 class="form-control"
                 placeholder="Nome do ativo"
+                readonly
               >
             </div>
 
-            <div class="mb-3">
-              <label
-                for="status"
-                class="form-label fw-semibold"
-              >Status</label>
-              <select 
-                id="status"
-                v-model="formData.status" 
-                class="form-select"
-              >
-                <option value="ativo">
-                  Ativo
-                </option>
-                <option value="observando">
-                  Observando
-                </option>
-                <option value="inativo">
-                  Inativo
-                </option>
-              </select>
-            </div>
+            <!-- Status não editável neste modal; permitimos apenas alteração da cor da categoria -->
 
             <div class="mb-3">
               <label class="form-label fw-semibold d-flex align-items-center gap-2">
@@ -151,22 +132,22 @@
                 Cor da Categoria: {{ formData.categoria }}
               </label>
               <div class="d-flex align-items-center gap-2">
-                <input 
-                  v-model="formData.categoryColor" 
-                  type="color" 
+                <input
+                  v-model="formData.categoryColor"
+                  type="color"
                   class="form-control form-control-color"
                   :disabled="!formData.categoria"
                   style="width: 60px; height: 45px;"
                 >
                 <div
-                  class="flex-grow-1 rounded-2 border p-2 text-center fw-semibold" 
+                  class="flex-grow-1 rounded-2 border p-2 text-center fw-semibold"
                   :style="{ backgroundColor: formData.categoryColor, color: 'white', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }"
                 >
                   {{ formData.categoryColor }}
                 </div>
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary" 
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
                   :disabled="!formData.categoria"
                   title="Restaurar cor padrão"
                   style="width: 45px; height: 45px; padding: 0;"
@@ -297,19 +278,21 @@ export default {
       this.error = ''
       this.success = ''
       this.saving = true
-      
+
       try {
-        await this.$emit('submit', {
-          ...this.formData
+        // Emitir apenas os dados necessários para atualizar as cores de categoria
+        this.$emit('submit', {
+          categoria: this.formData.categoria,
+          categoryColor: this.formData.categoryColor
         })
-        
-        this.success = 'Ativo atualizado com sucesso!'
-        
+
+        this.success = 'Cor atualizada com sucesso!'
+
         setTimeout(() => {
           this.close()
         }, 1500)
       } catch (err) {
-        this.error = err.response?.data?.message || 'Erro ao atualizar ativo'
+        this.error = err.response?.data?.message || 'Erro ao atualizar cor'
       } finally {
         this.saving = false
       }

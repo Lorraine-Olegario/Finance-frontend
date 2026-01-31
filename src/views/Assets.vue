@@ -633,7 +633,7 @@ export default {
 
             const index = this.assets.findIndex(a => a.id === assetData.id)
             if (index !== -1) {
-                this.assets[index] = { ...assetData }
+              this.assets[index] = { ...this.assets[index], ...assetData }
             }
         },
         async handleActivateAsset({ resolve, reject }) {
