@@ -37,8 +37,8 @@ export default {
   },
 
   // Get all assets
-  getAssets(userId) {
-    return apiClient.get("user/ativos/categoria", { params: { user_id: userId } });
+  getAssets(userId, page = 1, perPage = 10) {
+    return apiClient.get("user/ativos/categoria", { params: { user_id: userId, page, per_page: perPage } });
   },
 
   // Get all user assets (flat list with status)

@@ -149,6 +149,21 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- Pagination -->
+          <Pagination
+            :current-page="pagination.currentPage"
+            :last-page="pagination.lastPage"
+            :total="pagination.total"
+            :per-page="pagination.perPage"
+            :show-total="true"
+            :show-page-info="false"
+            @page-change="fetchAssets">
+            <template #totalLabel="{ total }">
+              Total de ativos:
+              <strong>{{ total }}</strong>
+            </template>
+          </Pagination>
         </div>
       </div>
 
@@ -215,6 +230,7 @@
   import AddAssetModal from "../components/my-assets/AddAssetModal.vue";
   import EditAssetModal from "../components/my-assets/EditAssetModal.vue";
   import ConfirmationModal from "../components/my-assets/ConfirmationModal.vue";
+  import Pagination from "../components/common/Pagination.vue";
   import { useAuthStore } from "../stores/auth";
   import assetService from "../services/assetService";
   import categoryService from "../services/categoryService";
@@ -227,6 +243,7 @@
       AddAssetModal,
       EditAssetModal,
       ConfirmationModal,
+      Pagination,
     },
     setup() {
       const authStore = useAuthStore();
@@ -254,6 +271,12 @@
         selectedAsset: {},
         editCategoryColor: "",
         loading: false,
+        pagination: {
+          currentPage: 1,
+          perPage: 10,
+          total: 0,
+          lastPage: 1,
+        },
       };
     },
     computed: {
@@ -287,7 +310,7 @@
       this.fetchAssets();
     },
     methods: {
-      async fetchAssets() {
+      async fetchAssets(page = 1) {
         this.loading = true;
         try {
           const userId = this.authStore.user?.id;
@@ -296,8 +319,19 @@
             return;
           }
 
-          const response = await assetService.getAssets(userId);
+          const response = await assetService.getAssets(userId, page, this.pagination.perPage);
           const ativosPorCategoria = response.data?.ativos_por_categoria?.data || {};
+          const paginationData = response.data?.ativos_por_categoria?.pagination || {};
+
+          console.log("Ativos por categoria:", response);
+
+          // Update pagination state
+          this.pagination = {
+            currentPage: paginationData.current_page || 1,
+            perPage: paginationData.per_page || 10,
+            total: paginationData.total || 0,
+            lastPage: paginationData.last_page || 1,
+          };
 
           this.assets = [];
           const categoriasSet = new Set();
