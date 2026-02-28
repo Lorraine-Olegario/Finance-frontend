@@ -83,10 +83,8 @@ export default {
   },
 
   // Stop observing asset (change status to inactive)
-  stopObservingAsset(ativoId) {
-    return apiClient.put(`/user/ativos/status`, {
-      ativos: [{ ativo_id: ativoId, status: "inativo" }],
-    });
+  stopObservingAsset(ativo) {
+    return apiClient.put(`/user/ativos/status`, ativo);
   },
 
   // Delete asset

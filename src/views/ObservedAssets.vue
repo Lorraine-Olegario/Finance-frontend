@@ -500,7 +500,12 @@
         this.saving = true;
 
         try {
-          await assetService.stopObservingAsset(this.selectedAsset.id);
+          const form = {
+              ativo_id: this.selectedAsset.id,
+              status: "ativo",
+          }
+
+          await assetService.stopObservingAsset(form);
 
           // Remove from list
           this.observedAssets = this.observedAssets.filter((a) => a.id !== this.selectedAsset.id);
