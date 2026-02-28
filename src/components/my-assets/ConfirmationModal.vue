@@ -1,5 +1,5 @@
 <template>
-    <Teleport to="body">
+  <Teleport to="body">
     <Transition name="modal">
       <div v-if="isOpen" class="modal-overlay" @click.self="close">
         <div :class="['modal-container', `modal-${size}`]">

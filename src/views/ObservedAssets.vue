@@ -412,10 +412,7 @@
 
         try {
           // Fetch observed assets and alerts in parallel
-          const [assetsResponse, alertsResponse] = await Promise.all([
-            assetService.getObservedAssets(),
-            assetService.getAssetAlerts(),
-          ]);
+          const [assetsResponse, alertsResponse] = await Promise.all([assetService.getObservedAssets(), assetService.getAssetAlerts()]);
 
           const rawAssets = assetsResponse.data.observados || [];
           const uniqueAssetsMap = new Map();
@@ -460,7 +457,6 @@
               asset.currentPrice = quote.price || null;
             }
           });
-
         } catch (err) {
           console.error("Erro ao buscar cotações:", err);
           // Não mostrar erro para o usuário, apenas log
@@ -478,21 +474,15 @@
         this.saving = true;
 
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            throw new Error("Usuário não autenticado");
-          }
-
           if (this.selectedAsset.alert) {
             await assetService.updateAssetAlert(this.selectedAsset.alert.id, alertData);
           } else {
-            await assetService.saveAssetAlert(userId, alertData);
+            await assetService.saveAssetAlert(alertData);
           }
 
           await this.fetchData();
           this.closeEditModal();
-
-        } catch  {
+        } catch {
           alert("Erro ao salvar alerta, tente novamente.");
         } finally {
           this.saving = false;
@@ -510,12 +500,7 @@
         this.saving = true;
 
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            throw new Error("Usuário não autenticado");
-          }
-
-          await assetService.stopObservingAsset(userId, this.selectedAsset.id);
+          await assetService.stopObservingAsset(this.selectedAsset.id);
 
           // Remove from list
           this.observedAssets = this.observedAssets.filter((a) => a.id !== this.selectedAsset.id);

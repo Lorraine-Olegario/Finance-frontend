@@ -7,8 +7,8 @@ export default {
   },
 
   // Update asset status
-  updateAssetStatus(userId, ativos) {
-    return apiClient.put(`/user/ativos/status`, { ativos });
+  updateAssetStatus(ativo) {
+    return apiClient.put(`/user/ativos/status`, ativo);
   },
 
   // Get observed assets
@@ -68,7 +68,7 @@ export default {
   },
 
   // Create or update asset alert
-  saveAssetAlert(userId, alertData) {
+  saveAssetAlert(alertData) {
     return apiClient.post(`/user/alertas`, alertData);
   },
 
@@ -83,7 +83,7 @@ export default {
   },
 
   // Stop observing asset (change status to inactive)
-  stopObservingAsset(userId, ativoId) {
+  stopObservingAsset(ativoId) {
     return apiClient.put(`/user/ativos/status`, {
       ativos: [{ ativo_id: ativoId, status: "inativo" }],
     });

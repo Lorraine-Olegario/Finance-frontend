@@ -418,18 +418,13 @@
       },
       async handleActivateAsset({ resolve, reject }) {
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            throw new Error("Usuário não autenticado");
-          }
+          const form = {
+            ativo_id: this.selectedAsset.id,
+            status: "ativo",
+          };
 
           // Chama o backend para atualizar o status
-          await assetService.updateAssetStatus(userId, [
-            {
-              ativo_id: this.selectedAsset.id,
-              status: "ativo",
-            },
-          ]);
+          await assetService.updateAssetStatus(form);
 
           // Atualiza o estado local
           const index = this.assets.findIndex((a) => a.id === this.selectedAsset.id);
@@ -445,20 +440,13 @@
       },
       async handleDeactivateAsset({ resolve, reject }) {
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            throw new Error("Usuário não autenticado");
-          }
-
-          const payload = [
-            {
-              ativo_id: this.selectedAsset.id,
-              status: "inativo",
-            },
-          ];
+          const payload = {
+            ativo_id: this.selectedAsset.id,
+            status: "inativo",
+          };
 
           // Chama o backend para atualizar o status
-          const response = await assetService.updateAssetStatus(userId, payload);
+          const response = await assetService.updateAssetStatus(payload);
 
           // Atualiza o estado local
           const index = this.assets.findIndex((a) => a.id === this.selectedAsset.id);
@@ -475,19 +463,12 @@
       },
       async handleObserveAsset({ resolve, reject }) {
         try {
-          const userId = this.authStore.user?.id;
-          if (!userId) {
-            throw new Error("Usuário não autenticado");
-          }
+          const payload = {
+            ativo_id: this.selectedAsset.id,
+            status: "observando",
+          };
 
-          const payload = [
-            {
-              ativo_id: this.selectedAsset.id,
-              status: "observando",
-            },
-          ];
-          // Chama o backend para atualizar o status
-          const response = await assetService.updateAssetStatus(userId, payload);
+          const response = await assetService.updateAssetStatus(payload);
 
           // Atualiza o estado local
           const index = this.assets.findIndex((a) => a.id === this.selectedAsset.id);
@@ -499,7 +480,7 @@
         } catch (error) {
           console.error("Erro ao marcar ativo como observando:", error);
           const errorMsg =
-            error.response?.data?.message || error.response?.data?.error || error.message || "Erro desconhecido ao marcar ativo como observando";
+            error.response?.data?.message || error.response?.data?.error || error.message || "Erro ao marcar ativo como observando, tente novamente.";
           reject(new Error(errorMsg));
         }
       },

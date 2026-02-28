@@ -8,8 +8,7 @@
     warning-message=""
     confirm-text="Salvar Alerta"
     loading-text="Salvando..."
-    @close="$emit('close')"
-  >
+    @close="$emit('close')">
     <template #default>
       <div v-if="error" class="error-message" role="alert">
         {{ error }}

@@ -7,8 +7,7 @@
     warning-message=""
     confirm-text="Adicionar"
     loading-text="Salvando..."
-    @close="close"
-  >
+    @close="close">
     <template #default>
       <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ error }}
