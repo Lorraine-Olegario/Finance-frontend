@@ -501,9 +501,9 @@
 
         try {
           const form = {
-              ativo_id: this.selectedAsset.id,
-              status: "ativo",
-          }
+            ativo_id: this.selectedAsset.id,
+            status: "ativo",
+          };
 
           await assetService.stopObservingAsset(form);
 

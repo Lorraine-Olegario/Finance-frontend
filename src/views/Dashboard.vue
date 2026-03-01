@@ -236,22 +236,17 @@
             return;
           }
 
-          const response = await assetService.getAssets(userId);
-          const ativosPorCategoria = response.data?.ativos_por_categoria?.data || {};
-
-          // Contar total de ativos e preparar dados para o gráfico
-          this.userAssetsCount = 0;
+          const data = await assetService.getUserAssetsSummary();
+          const ativosPorCategoria = data.data?.categorias;
+          
           this.assetsByType = {};
+          this.userAssetsCount = data.data?.total || 0;
 
-          // Garantir que estamos iterando apenas sobre categorias válidas
-          Object.keys(ativosPorCategoria).forEach((categoria) => {
-            const ativos = ativosPorCategoria[categoria];
-            // Verificar se 'ativos' é um array antes de usar .length
-            if (Array.isArray(ativos)) {
-              this.assetsByType[categoria] = ativos.length;
-              this.userAssetsCount += ativos.length;
-            }
-          });
+          if (Array.isArray(ativosPorCategoria)) {
+            ativosPorCategoria.forEach((item) => {
+              this.assetsByType[item.categoria] = item.quantidade;
+            });
+          }
 
           // Buscar cores personalizadas do usuário
           try {
@@ -263,8 +258,8 @@
 
           // Buscar alertas do usuário
           try {
-            const alertsResponse = await assetService.getAssetAlerts(userId);
-            this.alertsCount = alertsResponse.data?.length || 0;
+            const alertsResponse = await assetService.getAssetAlerts();
+            this.alertsCount = alertsResponse.data.total || 0;
           } catch (err) {
             this.alertsCount = 0;
           }

@@ -46,7 +46,7 @@
     </div>
 
     <!-- Details -->
-    <div class="quote-details">
+    <!--<div class="quote-details">
       <div class="detail-item">
         <span class="detail-label">Vol</span>
         <span class="detail-value">{{ formatLargeNumber(quote.regularMarketVolume || quote.volume) }}</span>
@@ -61,7 +61,7 @@
         <span class="detail-label">Min/Max</span>
         <span class="detail-value">{{ formatPrice(quote.regularMarketDayLow) }}/{{ formatPrice(quote.regularMarketDayHigh) }}</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

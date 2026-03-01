@@ -42,6 +42,22 @@
         <QuoteCard v-for="quote in filteredQuotes" :key="quote.symbol" :quote="quote" />
       </div>
 
+      <!-- Pagination -->
+      <Pagination
+        v-if="!loading && pagination.total > 0"
+        :current-page="pagination.currentPage"
+        :last-page="pagination.lastPage"
+        :total="pagination.total"
+        :per-page="pagination.perPage"
+        :show-total="true"
+        :show-page-info="false"
+        @page-change="fetchAllQuotes">
+        <template #totalLabel="{ total }">
+          Total de cotações:
+          <strong>{{ total }}</strong>
+        </template>
+      </Pagination>
+
       <!-- Empty State: No Assets -->
       <EmptyState
         v-else-if="!loading && !error && userAssets.length === 0"
@@ -98,6 +114,7 @@
   import LoadingSpinner from "../components/common/LoadingSpinner.vue";
   import ErrorAlert from "../components/common/ErrorAlert.vue";
   import EmptyState from "../components/common/EmptyState.vue";
+  import Pagination from "../components/common/Pagination.vue";
   import assetService from "../services/assetService";
   import { useAuthStore } from "../stores/auth";
 
@@ -110,6 +127,7 @@
       LoadingSpinner,
       ErrorAlert,
       EmptyState,
+      Pagination,
     },
     setup() {
       const authStore = useAuthStore();
@@ -127,6 +145,12 @@
           variation: "",
           sortBy: "symbol",
           sortOrder: "asc",
+        },
+        pagination: {
+          currentPage: 1,
+          perPage: 12,
+          total: 0,
+          lastPage: 1,
         },
       };
     },
@@ -186,7 +210,7 @@
       this.fetchAllQuotes();
     },
     methods: {
-      async fetchAllQuotes() {
+      async fetchAllQuotes(page = 1) {
         this.loading = true;
         this.error = "";
         this.quotes = [];
@@ -200,12 +224,22 @@
             return;
           }
 
-          // 1. Buscar TODOS os ativos do usuário (não apenas observados)
-          const assetsResponse = await assetService.getAllUserAssets(userId);
+          // 1. Buscar ativos do usuário com paginação
+          const assetsResponse = await assetService.getAllUserAssets(userId, page, this.pagination.perPage);
 
-          // A resposta vem como { user_id: X, total: Y, ativos: [...] }
+          // A resposta vem como { user_id: X, total: Y, ativos: { data: [...], pagination: {...} } }
           const responseData = assetsResponse.data.ativos.data;
-          this.userAssets = assetsResponse.data.ativos.data;
+          const paginationData = assetsResponse.data.ativos || {};
+
+          this.userAssets = responseData;
+
+          // Update pagination state
+          this.pagination = {
+            currentPage: paginationData.current_page || 1,
+            perPage: paginationData.per_page || 12,
+            total: paginationData.total || 0,
+            lastPage: paginationData.last_page || 1,
+          };
 
           if (this.userAssets.length === 0) {
             this.loading = false;
@@ -383,6 +417,7 @@
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 1.75rem;
     animation: slideUp 0.4s ease;
+    margin-bottom: 2rem;
   }
 
   /* Button Styles */

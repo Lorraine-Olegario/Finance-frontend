@@ -36,14 +36,19 @@ export default {
     return apiClient.get("/users/listagem/ativos");
   },
 
+  // Get user assets summary
+  getUserAssetsSummary() {
+    return apiClient.get("/user/ativos/resumo");
+  },
+
   // Get all assets
   getAssets(userId, page = 1, perPage = 10) {
     return apiClient.get("user/ativos/categoria", { params: { user_id: userId, page, per_page: perPage } });
   },
 
   // Get all user assets (flat list with status)
-  getAllUserAssets(userId) {
-    return apiClient.get("/user/ativos/todos", { params: { user_id: userId } });
+  getAllUserAssets(userId, page = 1, perPage = 10) {
+    return apiClient.get("/user/ativos/todos", { params: { user_id: userId, page, per_page: perPage } });
   },
 
   // Get assets for quotes (flattened list of observed assets)
