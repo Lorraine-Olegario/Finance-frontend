@@ -266,10 +266,6 @@ tr:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
-  :root {
-    --sidebar-width: 0px;
-  }
-
   h1 {
     font-size: 1.5rem;
   }

@@ -1,6 +1,7 @@
 <template>
   <div class="layout">
-    <Sidebar @toggle="handleSidebarToggle" />
+    <SidebarDesktop />
+    <SidebarMobile ref="sidebarMobile" @toggle="handleSidebarToggle" />
 
     <div class="main-wrapper" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
       <header class="main-header">
@@ -55,7 +56,8 @@
 </template>
 
 <script>
-  import Sidebar from "./Sidebar.vue";
+  import SidebarDesktop from "./SidebarDesktop.vue";
+  import SidebarMobile from "./SidebarMobile.vue";
   import { useAuthStore } from "../stores/auth";
   import { computed } from "vue";
   import { useRouter } from "vue-router";
@@ -63,7 +65,8 @@
   export default {
     name: "MainLayout",
     components: {
-      Sidebar,
+      SidebarDesktop,
+      SidebarMobile,
     },
     props: {
       pageTitle: {
@@ -108,11 +111,9 @@
         this.sidebarCollapsed = collapsed;
       },
       toggleSidebar() {
-        // Trigger sidebar toggle via event bus or refs
-        const sidebar = this.$el.querySelector(".sidebar");
-        if (sidebar) {
-          const toggleBtn = sidebar.querySelector(".toggle-btn");
-          if (toggleBtn) toggleBtn.click();
+        // Chama o método toggleSidebar do componente SidebarMobile via ref
+        if (this.$refs.sidebarMobile) {
+          this.$refs.sidebarMobile.toggleSidebar();
         }
       },
       toggleUserMenu() {
@@ -190,6 +191,12 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      display: none;
+    }
   }
 
   .header-user {
@@ -341,8 +348,17 @@
       display: block;
     }
 
+    .mobile-menu-btn:hover {
+      background-color: var(--bg-secondary);
+      border-radius: 4px;
+    }
+
     .main-content {
       padding: 1rem;
+    }
+
+    .user-info {
+      display: none;
     }
   }
 </style>

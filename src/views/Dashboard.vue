@@ -238,7 +238,7 @@
 
           const data = await assetService.getUserAssetsSummary();
           const ativosPorCategoria = data.data?.categorias;
-          
+
           this.assetsByType = {};
           this.userAssetsCount = data.data?.total || 0;
 

@@ -1,73 +1,73 @@
 <template>
-  <aside class="sidebar" :class="{ collapsed: isCollapsed }">
-    <div class="sidebar-header">
-      <h2 class="logo">Finance</h2>
-      <button class="toggle-btn" aria-label="Toggle sidebar" @click="toggleSidebar">
-        <span>☰</span>
-      </button>
-    </div>
+  <div class="sidebar-wrapper">
+    <div class="sidebar-overlay" :class="{ active: !isCollapsed }" @click="closeSidebar"></div>
+    <aside class="sidebar" :class="{ collapsed: isCollapsed }">
+      <div class="sidebar-header">
+        <h2 class="logo">Finance</h2>
+      </div>
 
-    <nav class="sidebar-nav">
-      <router-link to="/" class="nav-item" exact-active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7" />
-          <rect x="14" y="3" width="7" height="7" />
-          <rect x="14" y="14" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" />
-        </svg>
-        <span class="label">Dashboard</span>
-      </router-link>
+      <nav class="sidebar-nav">
+        <router-link to="/" class="nav-item" exact-active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          <span class="label">Dashboard</span>
+        </router-link>
 
-      <router-link v-if="authStore.isAdmin" to="/users" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-        <span class="label">Usuários</span>
-      </router-link>
+        <router-link v-if="authStore.isAdmin" to="/users" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span class="label">Usuários</span>
+        </router-link>
 
-      <router-link to="/my-assets" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-        <span class="label">Ativos</span>
-      </router-link>
+        <router-link to="/my-assets" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+          <span class="label">Ativos</span>
+        </router-link>
 
-      <router-link to="/observed" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
-        <span class="label">Ativos Observados</span>
-      </router-link>
+        <router-link to="/observed" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span class="label">Ativos Observados</span>
+        </router-link>
 
-      <router-link to="/quotes" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        </svg>
-        <span class="label">Cotações</span>
-      </router-link>
+        <router-link to="/quotes" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+          <span class="label">Cotações</span>
+        </router-link>
 
-      <router-link to="/history" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-        <span class="label">Histórico</span>
-      </router-link>
+        <router-link to="/history" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span class="label">Histórico</span>
+        </router-link>
 
-      <router-link v-if="authStore.isAdmin" to="/categories" class="nav-item" active-class="active">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 3v18h18" />
-          <path d="m19 9-5 5-4-4-3 3" />
-        </svg>
-        <span class="label">Categorias</span>
-      </router-link>
-    </nav>
-  </aside>
+        <router-link v-if="authStore.isAdmin" to="/categories" class="nav-item" active-class="active" @click="handleNavClick">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18" />
+            <path d="m19 9-5 5-4-4-3 3" />
+          </svg>
+          <span class="label">Categorias</span>
+        </router-link>
+      </nav>
+    </aside>
+  </div>
 </template>
 
 <script>
@@ -109,7 +109,7 @@
     },
     data() {
       return {
-        isCollapsed: false,
+        isCollapsed: typeof window !== "undefined" && window.innerWidth <= 768,
       };
     },
     mounted() {
@@ -118,22 +118,64 @@
         this.isCollapsed = true;
       }
 
-      window.addEventListener("resize", () => {
+      this.handleResize = () => {
         if (window.innerWidth <= 768) {
           this.isCollapsed = true;
+        } else {
+          this.isCollapsed = false;
         }
-      });
+      };
+
+      window.addEventListener("resize", this.handleResize);
+    },
+    beforeUnmount() {
+      if (this.handleResize) {
+        window.removeEventListener("resize", this.handleResize);
+      }
     },
     methods: {
       toggleSidebar() {
         this.isCollapsed = !this.isCollapsed;
         this.$emit("toggle", this.isCollapsed);
       },
+      closeSidebar() {
+        if (window.innerWidth <= 768 && !this.isCollapsed) {
+          this.isCollapsed = true;
+          this.$emit("toggle", this.isCollapsed);
+        }
+      },
+      handleNavClick() {
+        // Fecha o menu no mobile ao clicar em um item
+        if (window.innerWidth <= 768) {
+          this.closeSidebar();
+        }
+      },
     },
   };
 </script>
 
 <style scoped>
+  .sidebar-wrapper {
+    position: relative;
+    z-index: 1000;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: none;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .sidebar {
     position: fixed;
     left: 0;
@@ -143,7 +185,7 @@
     background-color: var(--bg-primary);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    z-index: 1000;
+    z-index: 1100;
     display: flex;
     flex-direction: column;
   }
@@ -157,7 +199,8 @@
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-shrink: 0;
   }
 
   .logo {
@@ -165,16 +208,6 @@
     font-weight: 700;
     color: var(--primary);
     margin: 0;
-  }
-
-  .toggle-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: var(--text-primary);
-    display: none;
   }
 
   .user-info {
@@ -289,12 +322,18 @@
       max-width: var(--sidebar-width);
     }
 
-    .toggle-btn {
+    .sidebar-overlay {
       display: block;
     }
+  }
 
-    .sidebar:not(.collapsed) {
-      box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+  @media (min-width: 769px) {
+    .sidebar {
+      transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+      display: none !important;
     }
   }
 </style>
