@@ -137,7 +137,7 @@
             // Fallback: se não receber resposta em 5 segundos, resolve automaticamente
             setTimeout(() => {
               resolve();
-            }, 5000);
+            }, 500);
           });
 
           // Aguarda um pequeno delay para feedback visual

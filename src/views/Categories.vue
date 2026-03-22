@@ -232,6 +232,10 @@
           return;
         }
 
+        console.log(this.formData);
+        console.log(this.formData.nome);
+        console.log(this.formData.color);
+
         this.saving = true;
         this.error = "";
         this.success = "";
@@ -274,12 +278,15 @@
           await categoryService.delete(this.selectedCategory.id);
           this.closeDeleteModal();
           this.success = "Categoria excluída com sucesso!";
+
           await this.fetchCategories();
           setTimeout(() => {
             this.success = "";
-          }, 5000);
+          }, 500);
+          
           this.saving = false;
           if (typeof resolve === "function") resolve();
+
         } catch (err) {
           this.saving = false;
           const errorMsg = err.response?.data?.message || "Erro ao excluir categoria";

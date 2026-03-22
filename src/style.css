@@ -113,7 +113,7 @@ button,
 
 button:hover,
 .btn:hover {
-  background-color: var(--secondary);
+  /* background-color: var(--secondary); */
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
 }
