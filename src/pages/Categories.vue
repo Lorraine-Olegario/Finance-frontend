@@ -1,0 +1,361 @@
+<template>
+  <MainLayout page-title="Categorias">
+    <div class="categories-page">
+      <PageHeader
+        title="Categorias de Ativos"
+        subtitle="Gerencie os tipos de ativos do sistema"
+      >
+        <template #actions>
+          <BaseButton @click="openAdd">
+            <template #icon-left>
+              <SvgIcon
+                name="plus"
+                :size="18"
+              />
+            </template>
+            Nova Categoria
+          </BaseButton>
+        </template>
+      </PageHeader>
+
+      <AlertMessage
+        v-if="alert.message"
+        :type="alert.type"
+        :message="alert.message"
+        :dismissible="true"
+        class="categories-page__alert"
+        @dismiss="alert.message = ''"
+      />
+
+      <LoadingSpinner
+        v-if="loading"
+        message="Carregando categorias..."
+      />
+
+      <EmptyState
+        v-else-if="categories.length === 0"
+        title="Nenhuma categoria cadastrada"
+        description="Adicione categorias para organizar seus ativos"
+      >
+        <template #icon>
+          <SvgIcon
+            name="pie-chart"
+            :size="64"
+            class="categories-page__empty-icon"
+          />
+        </template>
+        <template #action>
+          <BaseButton @click="openAdd">
+            <template #icon-left>
+              <SvgIcon
+                name="plus"
+                :size="18"
+              />
+            </template>
+            Criar Primeira Categoria
+          </BaseButton>
+        </template>
+      </EmptyState>
+
+      <div
+        v-else
+        class="categories-page__grid"
+      >
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="categories-page__card"
+        >
+          <div class="categories-page__card-header">
+            <div
+              class="categories-page__swatch"
+              :style="{ backgroundColor: category.color || '#6200EE' }"
+            >
+              <SvgIcon
+                name="trending-up"
+                :size="22"
+                class="categories-page__swatch-icon"
+              />
+            </div>
+            <div class="categories-page__card-info">
+              <h3 class="categories-page__card-name">
+                {{ category.nome }}
+              </h3>
+              <span class="categories-page__card-count">
+                {{ category.ativos_count || 0 }} ativo(s)
+              </span>
+            </div>
+          </div>
+
+          <div class="categories-page__card-actions">
+            <ActionButton
+              variant="edit"
+              title="Editar"
+              @click="openEdit(category)"
+            >
+              <SvgIcon
+                name="edit"
+                :size="16"
+              />
+            </ActionButton>
+            <ActionButton
+              variant="delete"
+              :title="
+                category.ativos_count > 0
+                  ? 'Não é possível excluir categoria com ativos'
+                  : 'Excluir'
+              "
+              :disabled="category.ativos_count > 0"
+              @click="openDelete(category)"
+            >
+              <SvgIcon
+                name="trash"
+                :size="16"
+              />
+            </ActionButton>
+          </div>
+        </div>
+      </div>
+
+      <CategoryFormModal
+        :is-open="showFormModal"
+        :category="selectedCategory"
+        @close="closeFormModal"
+        @submit="handleSubmit"
+      />
+
+      <ConfirmationModal
+        :is-open="showDeleteModal"
+        type="danger"
+        title="Confirmar Exclusão"
+        :message="`Tem certeza que deseja excluir a categoria ${selectedCategory?.nome || ''}?`"
+        :warning-message="
+          (selectedCategory?.ativos_count || 0) > 0
+            ? 'Esta categoria possui ativos vinculados e não pode ser excluída.'
+            : 'Esta ação não pode ser desfeita.'
+        "
+        confirm-text="Excluir"
+        loading-text="Excluindo..."
+        @close="closeDeleteModal"
+        @confirm="handleDelete"
+      />
+    </div>
+  </MainLayout>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import MainLayout from '@/components/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
+import EmptyState from '@/components/atoms/EmptyState.vue'
+import BaseButton from '@/components/atoms/BaseButton.vue'
+import ActionButton from '@/components/atoms/ActionButton.vue'
+import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import AlertMessage from '@/components/atoms/AlertMessage.vue'
+import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
+import CategoryFormModal from '@/components/organisms/categories/CategoryFormModal.vue'
+import categoryService from '@/services/categoryService'
+
+const categories = ref([])
+const loading = ref(false)
+const showFormModal = ref(false)
+const showDeleteModal = ref(false)
+const selectedCategory = ref(null)
+const alert = ref({ type: 'success', message: '' })
+
+function showAlert(type, message) {
+  alert.value = { type, message }
+  setTimeout(() => {
+    alert.value.message = ''
+  }, 3500)
+}
+
+async function fetchCategories() {
+  const response = await categoryService.getAll()
+  if (
+    response.data?.data?.data &&
+    Array.isArray(response.data.data.data)
+  ) {
+    return response.data.data.data
+  }
+  if (response.data?.data && Array.isArray(response.data.data)) {
+    return response.data.data
+  }
+  if (Array.isArray(response.data)) {
+    return response.data
+  }
+  return []
+}
+
+async function loadCategories() {
+  loading.value = true
+  try {
+    categories.value = await fetchCategories()
+  } catch (err) {
+    showAlert(
+      'error',
+      err.response?.data?.message || 'Erro ao carregar categorias'
+    )
+  } finally {
+    loading.value = false
+  }
+}
+
+function openAdd() {
+  selectedCategory.value = null
+  showFormModal.value = true
+}
+
+function openEdit(category) {
+  selectedCategory.value = category
+  showFormModal.value = true
+}
+
+function closeFormModal() {
+  showFormModal.value = false
+  selectedCategory.value = null
+}
+
+function openDelete(category) {
+  selectedCategory.value = category
+  showDeleteModal.value = true
+}
+
+function closeDeleteModal() {
+  showDeleteModal.value = false
+  selectedCategory.value = null
+}
+
+async function handleSubmit({ nome, color, resolve, reject }) {
+  try {
+    if (selectedCategory.value) {
+      await categoryService.update(selectedCategory.value.id, { nome, color })
+      showAlert('success', 'Categoria atualizada com sucesso!')
+    } else {
+      await categoryService.create({ nome, color })
+      showAlert('success', 'Categoria criada com sucesso!')
+    }
+    await loadCategories()
+    resolve()
+  } catch (err) {
+    if (err.response?.data?.errors) {
+      const msg = Object.values(err.response.data.errors).flat().join(', ')
+      reject(new Error(msg))
+      return
+    }
+    reject(
+      new Error(err.response?.data?.message || 'Erro ao salvar categoria')
+    )
+  }
+}
+
+async function handleDelete({ resolve, reject }) {
+  try {
+    await categoryService.delete(selectedCategory.value.id)
+    closeDeleteModal()
+    showAlert('success', 'Categoria excluída com sucesso!')
+    await loadCategories()
+    resolve()
+  } catch (err) {
+    reject(
+      new Error(err.response?.data?.message || 'Erro ao excluir categoria')
+    )
+  }
+}
+
+onMounted(loadCategories)
+</script>
+
+<style scoped>
+.categories-page {
+  padding: 0;
+}
+
+.categories-page__alert {
+  margin-bottom: 1.5rem;
+}
+
+.categories-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.categories-page__card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.categories-page__card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.categories-page__card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.categories-page__swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categories-page__swatch-icon {
+  color: white;
+  opacity: 0.9;
+}
+
+.categories-page__card-info {
+  min-width: 0;
+}
+
+.categories-page__card-name {
+  margin: 0 0 0.25rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categories-page__card-count {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.categories-page__card-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.categories-page__empty-icon {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .categories-page__grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

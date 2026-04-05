@@ -70,6 +70,9 @@ import userRaw from "./user.svg?raw";
 // ── Data / Tempo ───────────────────────────────────────────────────────────
 import calendarRaw from "./calendar.svg?raw";
 
+// ── Utilitários ────────────────────────────────────────────────────────────
+import refreshRaw from "./refresh.svg?raw";
+
 // ── Configuração ───────────────────────────────────────────────────────────
 import settingsRaw from "./settings.svg?raw";
 import logoutRaw from "./logout.svg?raw";
@@ -135,6 +138,9 @@ export const icons = {
 
   // ── Data / Tempo ───────────────────────────────────────────────────────────
   calendar: inner(calendarRaw),
+
+  // ── Utilitários ────────────────────────────────────────────────────────────
+  refresh: inner(refreshRaw),
 
   // ── Configuração ───────────────────────────────────────────────────────────
   settings: inner(settingsRaw),

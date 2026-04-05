@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import DesignSystem from '../pages/DesignSystem/index.vue'
-import Login from '../views/Login.vue'
+import Login from '../pages/Login.vue'
 import Dashboard from '../pages/Dashboard.vue'
-import Users from '../views/Users.vue'
-import Assets from '../views/Assets.vue'
-import Quotes from '../views/Quotes.vue'
-import History from '../views/History.vue'
-import ObservedAssets from '../views/ObservedAssets.vue'
-import UserProfile from '../views/UserProfile.vue'
-import Categories from '../views/Categories.vue'
+import Users from '../pages/Users.vue'
+import Assets from '../pages/Assets.vue'
+import Quotes from '../pages/Quotes.vue'
+import History from '../pages/History.vue'
+import ObservedAssets from '../pages/ObservedAssets.vue'
+import UserProfile from '../pages/UserProfile.vue'
+import Categories from '../pages/Categories.vue'
+import Settings from '../pages/Settings.vue'
 
 const routes = [
   {
@@ -71,6 +72,12 @@ const routes = [
     name: 'Categories',
     component: Categories,
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings,
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -79,27 +86,21 @@ const router = createRouter({
   routes
 })
 
-// Navigation guard
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
-  // Check if route requires authentication
   if (to.meta.requiresAuth) {
     if (!authStore.isAuthenticated) {
-      // Redirect to login if not authenticated
       next({ name: 'Login' })
       return
     }
 
-    // Check if route requires admin role
     if (to.meta.requiresAdmin && !authStore.isAdmin) {
-      // Redirect to dashboard if not admin
       next({ name: 'Dashboard' })
       return
     }
   }
 
-  // Redirect to dashboard if trying to access login while authenticated
   if (to.name === 'Login' && authStore.isAuthenticated) {
     next({ name: 'Dashboard' })
     return
