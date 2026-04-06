@@ -171,7 +171,7 @@
               <td>
                 <span
                   class="badge"
-                  :style="getCategoryStyle(asset.categoria)"
+                  :style="getCategoryStyle(asset)"
                 >
                   {{ asset.categoria || 'N/A' }}
                 </span>
@@ -677,15 +677,11 @@ export default {
       if (!value) return '0,00'
       return parseFloat(value).toFixed(2).replace('.', ',')
     },
-    getCategoryStyle(categoria) {
-      const colors = {
-        Ação: '#3b82f6',
-        FII: '#10b981',
-        ETF: '#f59e0b',
-        BDR: '#8b5cf6',
-        Cripto: '#ec4899'
-      }
-      const color = colors[categoria] || '#6b7280'
+    getCategoryStyle(assetOrCategoria) {
+      const asset = typeof assetOrCategoria === 'object' ? assetOrCategoria : null
+      const color =
+        (asset && (asset.categoria_color || asset.color || asset.color_hex || asset.colorHex)) ||
+        '#6b7280'
       return {
         backgroundColor: color,
         color: 'white'

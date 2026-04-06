@@ -146,7 +146,7 @@ const endItem = computed(() =>
   min-width: 32px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-secondary);
+  background: var(--surface);
   color: var(--text-primary);
   cursor: pointer;
   font-size: 0.875rem;

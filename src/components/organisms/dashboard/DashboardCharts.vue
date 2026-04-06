@@ -72,24 +72,7 @@ const props = defineProps({
 const chartCanvas = ref(null)
 let chartInstance = null
 
-// Segue paleta definida em docs/style-guide.md §4
-const DEFAULT_COLORS = {
-  Ações: '#3b82f6',
-  Acao: '#3b82f6',
-  Acoes: '#3b82f6',
-  FIIs: '#10b981',
-  FII: '#10b981',
-  Criptomoedas: '#ec4899',
-  Criptomoeda: '#ec4899',
-  Cripto: '#ec4899',
-  BDRs: '#8b5cf6',
-  BDR: '#8b5cf6',
-  'Renda Fixa': '#f59e0b',
-  Stocks: '#f59e0b',
-  Stock: '#f59e0b',
-  ETFs: '#06b6d4',
-  ETF: '#06b6d4'
-}
+// Colors should come from API via `props.categoryColors`; keep neutral fallback
 
 const hasAssets = computed(() => props.userAssetsCount > 0)
 
@@ -102,7 +85,7 @@ const topCategories = computed(() =>
         props.userAssetsCount > 0
           ? ((count / props.userAssetsCount) * 100).toFixed(1)
           : '0.0',
-      color: props.categoryColors[name] || DEFAULT_COLORS[name] || '#6b7280'
+      color: props.categoryColors[name] || '#6b7280'
     }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 5)
@@ -118,9 +101,7 @@ function buildChart() {
 
   const labels = Object.keys(props.assetsByType)
   const data = Object.values(props.assetsByType)
-  const colors = labels.map(
-    label => props.categoryColors[label] || DEFAULT_COLORS[label] || '#6b7280'
-  )
+  const colors = labels.map(label => props.categoryColors[label] || '#6b7280')
 
   chartInstance = new Chart(chartCanvas.value.getContext('2d'), {
     type: 'doughnut',

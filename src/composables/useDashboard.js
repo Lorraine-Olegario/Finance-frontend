@@ -42,26 +42,7 @@ export function useDashboard() {
   })
 
   const getCategoryColor = category => {
-    const defaultColors = {
-      Ações: '#3b82f6',
-      Acao: '#3b82f6',
-      Acoes: '#3b82f6',
-      FIIs: '#10b981',
-      FII: '#10b981',
-      Criptomoedas: '#8b5cf6',
-      Criptomoeda: '#8b5cf6',
-      Cripto: '#8b5cf6',
-      BDRs: '#f59e0b',
-      BDR: '#f59e0b',
-      Stocks: '#ec4899',
-      Stock: '#ec4899',
-      ETFs: '#06b6d4',
-      ETF: '#06b6d4'
-    }
-
-    return (
-      categoryColors.value[category] || defaultColors[category] || '#6b7280'
-    )
+    return categoryColors.value[category] || '#6b7280'
   }
 
   const fetchData = async () => {

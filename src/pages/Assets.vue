@@ -56,6 +56,13 @@
         message="Carregando ativos..."
       />
 
+      <AlertMessage
+        v-else-if="fetchError"
+        type="error"
+        :message="fetchError"
+        class="assets-page__error"
+      />
+
       <EmptyState
         v-else-if="filteredAssets.length === 0"
         title="Nenhum ativo encontrado"
@@ -304,6 +311,7 @@ import Badge from '@/components/atoms/Badge.vue'
 import StatusBadge from '@/components/atoms/StatusBadge.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
 import EmptyState from '@/components/atoms/EmptyState.vue'
+import AlertMessage from '@/components/atoms/AlertMessage.vue'
 import Pagination from '@/components/atoms/Pagination.vue'
 import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
@@ -315,6 +323,7 @@ const assets = ref([])
 const categorias = ref([])
 const categoryColors = ref({})
 const loading = ref(false)
+const fetchError = ref('')
 const filterOpen = ref(false)
 const currentPage = ref(1)
 const perPage = 10
@@ -387,26 +396,36 @@ watch(
 
 async function fetchAssets() {
   loading.value = true
+  fetchError.value = ''
   try {
-    const response = await assetService.getUserAssets()
-    const data = response.data
+    const normalizar = list =>
+      list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
 
-    if (data?.ativos_por_categoria?.data) {
-      const ativosPorCategoria = data.ativos_por_categoria.data
+    const first = await assetService.getAllUserAssets(1, 100)
+    const paginator = first.data?.ativos
+
+    if (!paginator || !Array.isArray(paginator.data)) {
       assets.value = []
-      Object.keys(ativosPorCategoria).forEach(categoria => {
-        ativosPorCategoria[categoria].forEach(ativo => {
-          assets.value.push({ ...ativo, categoria })
-        })
-      })
-    } else if (Array.isArray(data?.data)) {
-      assets.value = data.data
-    } else if (Array.isArray(data)) {
-      assets.value = data
-    } else {
-      assets.value = []
+      return
     }
-  } catch {
+
+    let todos = [...paginator.data]
+
+    if (paginator.last_page > 1) {
+      const restantes = []
+      for (let p = 2; p <= paginator.last_page; p++) {
+        restantes.push(assetService.getAllUserAssets(p, 100))
+      }
+      const respostas = await Promise.all(restantes)
+      respostas.forEach(res => {
+        const d = res.data?.ativos?.data
+        if (Array.isArray(d)) todos = todos.concat(d)
+      })
+    }
+
+    assets.value = normalizar(todos)
+  } catch (err) {
+    fetchError.value = err?.response?.data?.message || err?.message || 'Erro ao carregar ativos'
     assets.value = []
   } finally {
     loading.value = false
@@ -445,14 +464,26 @@ async function loadPage() {
 }
 
 function getCategoryColor(categoria) {
-  if (categoryColors.value[categoria]) {
-    return categoryColors.value[categoria]
-  }
+  if (!categoria) return 'var(--primary)'
+
+  // Cor do usuário tem prioridade
+  const userColor = categoryColors.value[categoria] || categoryColors.value[categoria?.toUpperCase()]
+  if (userColor) return userColor
+
+  // Paleta padrão mapeada aos valores reais de `tipo` da API
   const defaults = {
-    Ações: '#ff6b35',
-    FIIs: '#004e89'
+    'AÇÃO': '#3b82f6',
+    'AÇÕES': '#3b82f6',
+    'FII': '#10b981',
+    'FIIS': '#10b981',
+    'ETFS': '#f59e0b',
+    'ETF': '#f59e0b',
+    'BDR': '#8b5cf6',
+    'CRIPTO': '#ec4899',
+    'RENDA FIXA': '#f59e0b'
   }
-  return defaults[categoria] || '#6200EE'
+
+  return defaults[categoria?.toUpperCase()] || 'var(--primary)'
 }
 
 function openAddModal() {
@@ -647,6 +678,10 @@ onMounted(() => {
   height: 64px;
   color: var(--text-secondary);
   opacity: 0.5;
+}
+
+.assets-page__error {
+  margin-bottom: 1.5rem;
 }
 
 .assets-page__table-wrapper {

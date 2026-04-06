@@ -249,17 +249,8 @@ export default {
       this.quotes = []
 
       try {
-        // Verificar se usuário está logado
-        const userId = this.authStore.user?.id
-        if (!userId) {
-          this.error = 'Usuário não autenticado'
-          this.loading = false
-          return
-        }
-
         // 1. Buscar ativos do usuário com paginação
         const assetsResponse = await assetService.getAllUserAssets(
-          userId,
           page,
           this.pagination.perPage
         )

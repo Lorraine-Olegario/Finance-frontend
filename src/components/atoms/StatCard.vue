@@ -7,13 +7,15 @@
       <div class="stat-icon">
         <slot name="icon" />
       </div>
+      <div class="stat-meta">
+        <p class="stat-label">
+          {{ label }}
+        </p>
+        <p class="stat-value">
+          {{ value }}
+        </p>
+      </div>
     </div>
-    <p class="stat-label">
-      {{ label }}
-    </p>
-    <p class="stat-value">
-      {{ value }}
-    </p>
     <p
       v-if="subtitle || $slots['subtitle-icon']"
       class="stat-change"
@@ -42,8 +44,8 @@ defineProps({
 <style scoped>
 .stat-card {
   background: var(--surface);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px;
   border: 1px solid var(--border-color);
   position: relative;
   overflow: hidden;
@@ -84,13 +86,21 @@ defineProps({
 }
 
 .stat-header {
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.stat-meta {
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,8 +117,8 @@ defineProps({
 }
 
 .stat-icon :deep(svg) {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
   position: relative;
   z-index: 1;
@@ -120,6 +130,8 @@ defineProps({
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0 0 0.25rem;
+  position: relative;
+  z-index: 2;
 }
 
 .stat-value {
@@ -127,7 +139,7 @@ defineProps({
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
 }
 
 .stat-change {

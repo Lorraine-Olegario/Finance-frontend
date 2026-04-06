@@ -386,27 +386,7 @@ export default {
     },
 
     getCategoryColor(category) {
-      // Cores padrão por categoria
-      const defaultColors = {
-        Ações: '#3b82f6',
-        Acao: '#3b82f6',
-        Acoes: '#3b82f6',
-        FIIs: '#10b981',
-        FII: '#10b981',
-        Criptomoedas: '#8b5cf6',
-        Criptomoeda: '#8b5cf6',
-        Cripto: '#8b5cf6',
-        BDRs: '#f59e0b',
-        BDR: '#f59e0b',
-        Stocks: '#ec4899',
-        Stock: '#ec4899',
-        ETFs: '#06b6d4',
-        ETF: '#06b6d4'
-      }
-
-      return (
-        this.categoryColors[category] || defaultColors[category] || '#6b7280'
-      )
+      return this.categoryColors[category] || '#6b7280'
     }
   }
 }

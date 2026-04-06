@@ -252,14 +252,7 @@ async function fetchQuotes(page = 1) {
   quotes.value = []
 
   try {
-    const userId = authStore.user?.id
-    if (!userId) {
-      error.value = 'Usuário não autenticado'
-      return
-    }
-
     const assetsResponse = await assetService.getAllUserAssets(
-      userId,
       page,
       pagination.value.perPage
     )

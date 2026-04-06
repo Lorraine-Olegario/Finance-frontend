@@ -49,9 +49,9 @@ export default {
   },
 
   // Get all user assets (flat list with status)
-  getAllUserAssets(userId, page = 1, perPage = 10) {
+  getAllUserAssets(page = 1, perPage = 10) {
     return apiClient.get('/user/ativos/todos', {
-      params: { user_id: userId, page, per_page: perPage }
+      params: { page, per_page: perPage }
     })
   },
 
