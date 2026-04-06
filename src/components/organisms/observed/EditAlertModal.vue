@@ -20,7 +20,9 @@
       >
         <div class="edit-alert-modal__info-item">
           <span class="edit-alert-modal__info-label">Código</span>
-          <strong class="edit-alert-modal__info-value">{{ asset.codigo }}</strong>
+          <strong class="edit-alert-modal__info-value">
+            {{ asset.codigo }}
+          </strong>
         </div>
         <div
           v-if="asset.nome"

@@ -22,7 +22,9 @@
             <span
               v-if="activeFiltersCount > 0"
               class="assets-page__filter-count"
-            >{{ activeFiltersCount }}</span>
+            >
+              {{ activeFiltersCount }}
+            </span>
           </div>
 
           <BaseButton
@@ -90,7 +92,9 @@
             <tr>
               <th class="assets-page__th assets-page__th--code">Código</th>
               <th class="assets-page__th assets-page__th--name">Nome</th>
-              <th class="assets-page__th assets-page__th--category">Categoria</th>
+              <th class="assets-page__th assets-page__th--category">
+                Categoria
+              </th>
               <th class="assets-page__th assets-page__th--status">Status</th>
               <th class="assets-page__th assets-page__th--actions">Ações</th>
             </tr>
@@ -100,7 +104,9 @@
               v-for="asset in paginatedAssets"
               :key="asset.id"
               class="assets-page__row"
-              :class="{ 'assets-page__row--observing': asset.status === 'observando' }"
+              :class="{
+                'assets-page__row--observing': asset.status === 'observando'
+              }"
             >
               <td class="assets-page__td">
                 <div class="assets-page__code-cell">
@@ -209,7 +215,8 @@
             @page-change="p => (currentPage = p)"
           >
             <template #totalLabel="{ total }">
-              Total de ativos: <strong>{{ total }}</strong>
+              Total de ativos:
+              <strong>{{ total }}</strong>
             </template>
           </Pagination>
         </div>
@@ -370,7 +377,13 @@ const activeFiltersCount = computed(() => {
   return count
 })
 
-watch(filters, () => { currentPage.value = 1 }, { deep: true })
+watch(
+  filters,
+  () => {
+    currentPage.value = 1
+  },
+  { deep: true }
+)
 
 async function fetchAssets() {
   loading.value = true
@@ -663,11 +676,21 @@ onMounted(() => {
   letter-spacing: 0.5px;
 }
 
-.assets-page__th--code { width: 20%; }
-.assets-page__th--name { width: 25%; }
-.assets-page__th--category { width: 18%; }
-.assets-page__th--status { width: 15%; }
-.assets-page__th--actions { width: 22%; }
+.assets-page__th--code {
+  width: 20%;
+}
+.assets-page__th--name {
+  width: 25%;
+}
+.assets-page__th--category {
+  width: 18%;
+}
+.assets-page__th--status {
+  width: 15%;
+}
+.assets-page__th--actions {
+  width: 22%;
+}
 
 .assets-page__row {
   border-bottom: 1px solid var(--border);

@@ -41,7 +41,9 @@
       <div class="add-asset-modal__field">
         <label class="add-asset-modal__label">
           Códigos dos Ativos
-          <span class="add-asset-modal__label-hint">(separados por vírgula)</span>
+          <span class="add-asset-modal__label-hint">
+            (separados por vírgula)
+          </span>
         </label>
         <textarea
           v-model="formData.codigos"

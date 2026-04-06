@@ -21,7 +21,9 @@
               v-if="activeFiltersCount > 0"
               #icon-right
             >
-              <span class="quotes-page__filter-count">{{ activeFiltersCount }}</span>
+              <span class="quotes-page__filter-count">
+                {{ activeFiltersCount }}
+              </span>
             </template>
           </BaseButton>
 
@@ -77,7 +79,8 @@
         @page-change="loadPage"
       >
         <template #totalLabel="{ total }">
-          Total de cotações: <strong>{{ total }}</strong>
+          Total de cotações:
+          <strong>{{ total }}</strong>
         </template>
       </Pagination>
 
@@ -107,7 +110,9 @@
       </EmptyState>
 
       <EmptyState
-        v-else-if="!loading && !error && quotes.length === 0 && userAssets.length > 0"
+        v-else-if="
+          !loading && !error && quotes.length === 0 && userAssets.length > 0
+        "
         title="Cotações indisponíveis"
         description="Não foi possível carregar as cotações dos seus ativos no momento."
       >
@@ -307,14 +312,17 @@ async function fetchQuotes(page = 1) {
         }
       } catch (err) {
         errorCount++
-        console.error(`${asset.codigo}: ${err.response?.data?.message || err.message}`)
+        console.error(
+          `${asset.codigo}: ${err.response?.data?.message || err.message}`
+        )
       }
     }
 
     quotes.value = quotesArray
 
     if (quotes.value.length === 0 && errorCount > 0) {
-      error.value = 'Não foi possível carregar nenhuma cotação. Tente novamente.'
+      error.value =
+        'Não foi possível carregar nenhuma cotação. Tente novamente.'
     }
   } catch (err) {
     error.value =

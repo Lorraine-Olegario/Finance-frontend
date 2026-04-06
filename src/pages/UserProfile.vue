@@ -31,9 +31,7 @@
               :size="22"
               class="user-profile-page__card-icon"
             />
-            <h3 class="user-profile-page__card-title">
-              Informações Pessoais
-            </h3>
+            <h3 class="user-profile-page__card-title">Informações Pessoais</h3>
           </div>
 
           <form
@@ -115,9 +113,7 @@
               :size="22"
               class="user-profile-page__card-icon"
             />
-            <h3 class="user-profile-page__card-title">
-              Alterar Senha
-            </h3>
+            <h3 class="user-profile-page__card-title">Alterar Senha</h3>
           </div>
 
           <form
@@ -142,7 +138,9 @@
                 <button
                   type="button"
                   class="user-profile-page__pw-toggle"
-                  :aria-label="showCurrentPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  :aria-label="
+                    showCurrentPassword ? 'Ocultar senha' : 'Mostrar senha'
+                  "
                   @click="showCurrentPassword = !showCurrentPassword"
                 >
                   <SvgIcon
@@ -171,7 +169,9 @@
                 <button
                   type="button"
                   class="user-profile-page__pw-toggle"
-                  :aria-label="showNewPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  :aria-label="
+                    showNewPassword ? 'Ocultar senha' : 'Mostrar senha'
+                  "
                   @click="showNewPassword = !showNewPassword"
                 >
                   <SvgIcon
@@ -200,7 +200,9 @@
                 <button
                   type="button"
                   class="user-profile-page__pw-toggle"
-                  :aria-label="showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  :aria-label="
+                    showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'
+                  "
                   @click="showConfirmPassword = !showConfirmPassword"
                 >
                   <SvgIcon
@@ -315,7 +317,8 @@ async function updateProfile() {
     }, 3000)
   } catch (err) {
     console.error('Erro ao atualizar perfil:', err)
-    profileError.value = err.response?.data?.message ?? 'Erro ao atualizar perfil'
+    profileError.value =
+      err.response?.data?.message ?? 'Erro ao atualizar perfil'
   } finally {
     savingProfile.value = false
   }
@@ -342,7 +345,11 @@ async function updatePassword() {
       new_password_confirmation: passwordForm.value.confirmPassword
     })
     passwordSuccess.value = 'Senha alterada com sucesso!'
-    passwordForm.value = { currentPassword: '', newPassword: '', confirmPassword: '' }
+    passwordForm.value = {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    }
     setTimeout(() => {
       passwordSuccess.value = ''
     }, 3000)

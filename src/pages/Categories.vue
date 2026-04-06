@@ -173,10 +173,7 @@ function showAlert(type, message) {
 
 async function fetchCategories() {
   const response = await categoryService.getAll()
-  if (
-    response.data?.data?.data &&
-    Array.isArray(response.data.data.data)
-  ) {
+  if (response.data?.data?.data && Array.isArray(response.data.data.data)) {
     return response.data.data.data
   }
   if (response.data?.data && Array.isArray(response.data.data)) {
@@ -244,9 +241,7 @@ async function handleSubmit({ nome, color, resolve, reject }) {
       reject(new Error(msg))
       return
     }
-    reject(
-      new Error(err.response?.data?.message || 'Erro ao salvar categoria')
-    )
+    reject(new Error(err.response?.data?.message || 'Erro ao salvar categoria'))
   }
 }
 

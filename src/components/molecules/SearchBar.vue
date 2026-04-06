@@ -27,10 +27,7 @@
       class="search-bar__clear"
       type="button"
       aria-label="Limpar busca"
-      @click="
-        emit('update:modelValue', '');
-        emit('search', '');
-      "
+      @click="emit('update:modelValue', ''); emit('search', '')"
     >
       <SvgIcon
         name="close"

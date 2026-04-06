@@ -165,11 +165,7 @@ async function loadDashboard() {
 
   loading.value = true
   try {
-    await Promise.all([
-      fetchAssetsSummary(),
-      fetchAlerts(),
-      fetchAdminData()
-    ])
+    await Promise.all([fetchAssetsSummary(), fetchAlerts(), fetchAdminData()])
   } catch (err) {
     console.error('[Dashboard] Erro ao carregar dados:', err)
   } finally {

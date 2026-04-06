@@ -118,19 +118,29 @@
                 <th class="observed-assets-page__th">Código</th>
                 <th class="observed-assets-page__th">Nome</th>
                 <th class="observed-assets-page__th">Categoria</th>
-                <th class="observed-assets-page__th observed-assets-page__th--center">
+                <th
+                  class="observed-assets-page__th observed-assets-page__th--center"
+                >
                   Preço Atual
                 </th>
-                <th class="observed-assets-page__th observed-assets-page__th--center">
+                <th
+                  class="observed-assets-page__th observed-assets-page__th--center"
+                >
                   Alerta Min
                 </th>
-                <th class="observed-assets-page__th observed-assets-page__th--center">
+                <th
+                  class="observed-assets-page__th observed-assets-page__th--center"
+                >
                   Alerta Max
                 </th>
-                <th class="observed-assets-page__th observed-assets-page__th--center">
+                <th
+                  class="observed-assets-page__th observed-assets-page__th--center"
+                >
                   Status
                 </th>
-                <th class="observed-assets-page__th observed-assets-page__th--center">
+                <th
+                  class="observed-assets-page__th observed-assets-page__th--center"
+                >
                   Ações
                 </th>
               </tr>
@@ -142,15 +152,21 @@
                 class="observed-assets-page__row"
               >
                 <td class="observed-assets-page__td">
-                  <strong class="observed-assets-page__code">{{ asset.codigo }}</strong>
+                  <strong class="observed-assets-page__code">
+                    {{ asset.codigo }}
+                  </strong>
                 </td>
                 <td class="observed-assets-page__td">
-                  <span class="observed-assets-page__name">{{ asset.nome || 'N/A' }}</span>
+                  <span class="observed-assets-page__name">
+                    {{ asset.nome || 'N/A' }}
+                  </span>
                 </td>
                 <td class="observed-assets-page__td">
                   <Badge :label="asset.categoria || 'N/A'" />
                 </td>
-                <td class="observed-assets-page__td observed-assets-page__td--center">
+                <td
+                  class="observed-assets-page__td observed-assets-page__td--center"
+                >
                   <span
                     v-if="prices[asset.codigo] != null"
                     class="observed-assets-page__price"
@@ -164,7 +180,9 @@
                     —
                   </span>
                 </td>
-                <td class="observed-assets-page__td observed-assets-page__td--center">
+                <td
+                  class="observed-assets-page__td observed-assets-page__td--center"
+                >
                   <span
                     v-if="asset.alert?.valor_min"
                     class="observed-assets-page__price"
@@ -178,7 +196,9 @@
                     —
                   </span>
                 </td>
-                <td class="observed-assets-page__td observed-assets-page__td--center">
+                <td
+                  class="observed-assets-page__td observed-assets-page__td--center"
+                >
                   <span
                     v-if="asset.alert?.valor_max"
                     class="observed-assets-page__price"
@@ -192,7 +212,9 @@
                     —
                   </span>
                 </td>
-                <td class="observed-assets-page__td observed-assets-page__td--center">
+                <td
+                  class="observed-assets-page__td observed-assets-page__td--center"
+                >
                   <StatusBadge
                     v-if="asset.alert"
                     :status="asset.alert.status"
@@ -204,11 +226,15 @@
                     Sem alerta
                   </span>
                 </td>
-                <td class="observed-assets-page__td observed-assets-page__td--center">
+                <td
+                  class="observed-assets-page__td observed-assets-page__td--center"
+                >
                   <div class="observed-assets-page__actions">
                     <ActionButton
                       variant="edit"
-                      :title="asset.alert ? 'Editar alerta' : 'Configurar alerta'"
+                      :title="
+                        asset.alert ? 'Editar alerta' : 'Configurar alerta'
+                      "
                       @click="openEditModal(asset)"
                     >
                       <SvgIcon name="bell" />
@@ -316,7 +342,9 @@ const mergedAssets = computed(() => {
 })
 
 const categories = computed(() => {
-  const cats = [...new Set(mergedAssets.value.map(a => a.categoria).filter(Boolean))]
+  const cats = [
+    ...new Set(mergedAssets.value.map(a => a.categoria).filter(Boolean))
+  ]
   return cats.sort()
 })
 
@@ -354,9 +382,13 @@ const totalPages = computed(() =>
   Math.ceil(filteredAssets.value.length / itemsPerPage)
 )
 
-const assetsWithAlerts = computed(() => mergedAssets.value.filter(a => a.alert).length)
+const assetsWithAlerts = computed(
+  () => mergedAssets.value.filter(a => a.alert).length
+)
 
-const assetsWithoutAlerts = computed(() => mergedAssets.value.filter(a => !a.alert).length)
+const assetsWithoutAlerts = computed(
+  () => mergedAssets.value.filter(a => !a.alert).length
+)
 
 const activeFiltersCount = computed(() => {
   let count = 0
@@ -449,7 +481,10 @@ function closeEditModal() {
 async function handleSaveAlert(alertData) {
   try {
     if (selectedAsset.value?.alert) {
-      await assetService.updateAssetAlert(selectedAsset.value.alert.id, alertData)
+      await assetService.updateAssetAlert(
+        selectedAsset.value.alert.id,
+        alertData
+      )
     } else {
       await assetService.saveAssetAlert(alertData)
     }
@@ -483,7 +518,9 @@ async function handleStopObservingConfirm({ resolve, reject }) {
   } catch (err) {
     reject(
       new Error(
-        err.response?.data?.message || err.message || 'Erro ao parar de observar'
+        err.response?.data?.message ||
+          err.message ||
+          'Erro ao parar de observar'
       )
     )
   }

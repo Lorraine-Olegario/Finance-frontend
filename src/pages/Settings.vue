@@ -115,8 +115,7 @@ async function fetchColors() {
     }
 
     const assetsResponse = await assetService.getAssets(userId)
-    const ativosPorCategoria =
-      assetsResponse.data?.ativos_por_categoria || {}
+    const ativosPorCategoria = assetsResponse.data?.ativos_por_categoria || {}
 
     const colorsResponse = await assetService.getCategoryColors(userId)
     const savedColors = colorsResponse.data?.colors || {}

@@ -48,7 +48,9 @@
       <div
         class="quote-card__change"
         :class="
-          isPositive ? 'quote-card__change--positive' : 'quote-card__change--negative'
+          isPositive
+            ? 'quote-card__change--positive'
+            : 'quote-card__change--negative'
         "
       >
         <SvgIcon
@@ -56,7 +58,9 @@
           :size="14"
         />
         <span class="quote-card__change-value">{{ formattedChange }}</span>
-        <span class="quote-card__change-percent">{{ formattedChangePercent }}</span>
+        <span class="quote-card__change-percent">
+          {{ formattedChangePercent }}
+        </span>
       </div>
     </div>
   </div>
@@ -81,14 +85,21 @@ const isValidQuote = computed(
     (props.quote.regularMarketPrice || props.quote.preco || props.quote.price)
 )
 
-const logoSrc = computed(() => props.quote.logourl || props.quote.logo_url || null)
+const logoSrc = computed(
+  () => props.quote.logourl || props.quote.logo_url || null
+)
 
 const displayName = computed(
-  () => props.quote.shortName || props.quote.longName || props.quote.nome || 'N/A'
+  () =>
+    props.quote.shortName || props.quote.longName || props.quote.nome || 'N/A'
 )
 
 const currentPrice = computed(
-  () => props.quote.regularMarketPrice || props.quote.preco || props.quote.price || 0
+  () =>
+    props.quote.regularMarketPrice ||
+    props.quote.preco ||
+    props.quote.price ||
+    0
 )
 
 const change = computed(

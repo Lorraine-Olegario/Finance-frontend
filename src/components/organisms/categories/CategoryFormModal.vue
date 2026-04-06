@@ -8,9 +8,7 @@
   >
     <div class="category-form-modal">
       <div class="category-form-modal__field">
-        <label class="category-form-modal__label">
-          Nome da Categoria *
-        </label>
+        <label class="category-form-modal__label">Nome da Categoria *</label>
         <BaseInput
           v-model="form.nome"
           type="text"
@@ -20,9 +18,7 @@
       </div>
 
       <div class="category-form-modal__field">
-        <label class="category-form-modal__label">
-          Cor
-        </label>
+        <label class="category-form-modal__label">Cor</label>
         <div class="category-form-modal__color-row">
           <div
             class="category-form-modal__swatch"

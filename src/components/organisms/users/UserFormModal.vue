@@ -124,7 +124,15 @@
           class="user-form-modal__spinner"
           aria-hidden="true"
         />
-        {{ loading ? (isEdit ? 'Salvando...' : 'Criando...') : (isEdit ? 'Salvar' : 'Criar') }}
+        {{
+          loading
+            ? isEdit
+              ? 'Salvando...'
+              : 'Criando...'
+            : isEdit
+              ? 'Salvar'
+              : 'Criar'
+        }}
       </button>
     </template>
   </ConfirmationModal>

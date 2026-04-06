@@ -55,18 +55,10 @@
           <table class="users-page__table">
             <thead>
               <tr class="users-page__head-row">
-                <th class="users-page__th">
-                  Nome
-                </th>
-                <th class="users-page__th">
-                  E-mail
-                </th>
-                <th class="users-page__th">
-                  Perfil
-                </th>
-                <th class="users-page__th users-page__th--actions">
-                  Ações
-                </th>
+                <th class="users-page__th">Nome</th>
+                <th class="users-page__th">E-mail</th>
+                <th class="users-page__th">Perfil</th>
+                <th class="users-page__th users-page__th--actions">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +74,12 @@
                   {{ user.email }}
                 </td>
                 <td class="users-page__td">
-                  <span :class="['users-page__role-badge', `users-page__role-badge--${user.role ?? 'user'}`]">
+                  <span
+                    :class="[
+                      'users-page__role-badge',
+                      `users-page__role-badge--${user.role ?? 'user'}`
+                    ]"
+                  >
                     {{ ROLE_LABELS[user.role] ?? 'Usuário' }}
                   </span>
                 </td>
@@ -121,8 +118,16 @@
           class="users-page__empty"
         >
           <EmptyState
-            :title="searchQuery ? 'Nenhum resultado encontrado' : 'Nenhum usuário cadastrado'"
-            :description="searchQuery ? 'Tente buscar por outro nome ou e-mail.' : 'Clique em &quot;Novo Usuário&quot; para cadastrar o primeiro usuário.'"
+            :title="
+              searchQuery
+                ? 'Nenhum resultado encontrado'
+                : 'Nenhum usuário cadastrado'
+            "
+            :description="
+              searchQuery
+                ? 'Tente buscar por outro nome ou e-mail.'
+                : 'Clique em &quot;Novo Usuário&quot; para cadastrar o primeiro usuário.'
+            "
           >
             <template #icon>
               <SvgIcon
@@ -181,7 +186,11 @@
         :is-open="deleteModalOpen"
         type="danger"
         title="Excluir Usuário"
-        :message="userToDelete ? `Tem certeza que deseja excluir o usuário ${userToDelete.name}?` : ''"
+        :message="
+          userToDelete
+            ? `Tem certeza que deseja excluir o usuário ${userToDelete.name}?`
+            : ''
+        "
         warning-message="Esta ação não pode ser desfeita."
         confirm-text="Excluir"
         loading-text="Excluindo..."
@@ -243,7 +252,9 @@ const filteredUsers = computed(() => {
   )
 })
 
-const lastPage = computed(() => Math.max(1, Math.ceil(filteredUsers.value.length / PER_PAGE)))
+const lastPage = computed(() =>
+  Math.max(1, Math.ceil(filteredUsers.value.length / PER_PAGE))
+)
 
 const paginatedUsers = computed(() => {
   const start = (currentPage.value - 1) * PER_PAGE

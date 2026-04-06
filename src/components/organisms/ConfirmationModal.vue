@@ -94,7 +94,8 @@ const props = defineProps({
   type: {
     type: String,
     default: 'primary',
-    validator: v => ['primary', 'success', 'danger', 'warning', 'info'].includes(v)
+    validator: v =>
+      ['primary', 'success', 'danger', 'warning', 'info'].includes(v)
   },
   title: { type: String, required: true },
   message: { type: String, default: '' },
@@ -357,7 +358,11 @@ async function handleConfirm() {
 }
 
 .modal-footer__btn--info {
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent-blue-dark) 100%
+  );
 }
 
 .modal-footer__btn--info:hover:not(:disabled) {
