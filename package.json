@@ -7,10 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
     "minify:inline-svgs": "node scripts/minify-inline-svgs.cjs",
-    "format": "prettier --write \"src/**/*.{vue,js,css,html}\""
+    "format": "prettier --write \"src/**/*.{vue,js,css,html}\"",
+    "fix": "npm run minify:inline-svgs && npm run format"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
