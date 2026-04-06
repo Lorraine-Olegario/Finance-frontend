@@ -27,7 +27,7 @@
       class="search-bar__clear"
       type="button"
       aria-label="Limpar busca"
-      @click="emit('update:modelValue', ''); emit('search', '')"
+      @click="clearSearch"
     >
       <SvgIcon
         name="close"
@@ -51,6 +51,11 @@ defineProps({
 const emit = defineEmits(['update:modelValue', 'search'])
 
 const isFocused = ref(false)
+
+function clearSearch() {
+  emit('update:modelValue', '')
+  emit('search', '')
+}
 </script>
 
 <style scoped>
