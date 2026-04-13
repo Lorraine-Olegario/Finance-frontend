@@ -165,12 +165,14 @@ async function handleConfirm() {
   padding: 1rem;
   z-index: 9999;
   overflow-y: auto;
+  pointer-events: auto;
 }
 
 .modal-container {
   width: 100%;
   max-width: 600px;
   margin: auto;
+  pointer-events: auto;
 }
 
 .modal-container--small {
@@ -192,6 +194,9 @@ async function handleConfirm() {
   border: 1px solid var(--border);
   max-height: 80vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 10000;
+  pointer-events: auto;
 }
 
 /* Header */

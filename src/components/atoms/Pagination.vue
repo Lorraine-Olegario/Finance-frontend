@@ -144,6 +144,7 @@ const endItem = computed(() =>
   width: 32px;
   height: 32px;
   min-width: 32px;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--surface);

@@ -29,6 +29,8 @@
 <script setup>
 import AppSpinner from './AppSpinner.vue'
 
+defineOptions({ inheritAttrs: false })
+
 defineProps({
   variant: { type: String, default: 'primary' }, // primary | secondary | ghost | danger
   size: { type: String, default: 'md' }, // sm | md | lg

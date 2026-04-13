@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div
-      v-show="isOpen"
+      v-if="isOpen"
       class="filter-drawer"
       @click.self="emit('close')"
     >
