@@ -77,8 +77,9 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import StatCard from '@/components/atoms/StatCard.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
 import SvgIcon from '@/components/atoms/SvgIcon.vue'
@@ -90,9 +91,9 @@ import { useAuthStore } from '@/stores/auth'
 import userService from '@/services/userService'
 import assetService from '@/services/assetService'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
-// ── Estado ─────────────────────────────────────────────────────────────────
 const loading = ref(true)
 const userCount = ref(0)
 const userAssetsCount = ref(0)
@@ -100,7 +101,7 @@ const alertsCount = ref(0)
 const assetsByType = ref({})
 const categoryColors = ref({})
 
-// ── Computed ───────────────────────────────────────────────────────────────
+// ── Computed ──────────────────────────────────────────────────────────────────
 const currentDate = computed(() =>
   new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -112,7 +113,12 @@ const currentDate = computed(() =>
 
 const categoriesCount = computed(() => Object.keys(assetsByType.value).length)
 
-// ── Funções de busca ───────────────────────────────────────────────────────
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadDashboard)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 
 /** Busca resumo de ativos e cores personalizadas de categoria */
 async function fetchAssetsSummary() {
@@ -172,8 +178,6 @@ async function loadDashboard() {
     loading.value = false
   }
 }
-
-onMounted(loadDashboard)
 </script>
 
 <style scoped>

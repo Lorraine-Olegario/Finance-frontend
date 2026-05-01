@@ -82,9 +82,9 @@
 </template>
 
 <script>
-import SidebarDesktop from './SidebarDesktop.vue'
-import SidebarMobile from './SidebarMobile.vue'
-import { useAuthStore } from '../stores/auth'
+import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop.vue'
+import SidebarMobile from '@/components/organisms/navigation/SidebarMobile.vue'
+import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -137,7 +137,6 @@ export default {
       this.sidebarCollapsed = collapsed
     },
     toggleSidebar() {
-      // Chama o método toggleSidebar do componente SidebarMobile via ref
       if (this.$refs.sidebarMobile) {
         this.$refs.sidebarMobile.toggleSidebar()
       }

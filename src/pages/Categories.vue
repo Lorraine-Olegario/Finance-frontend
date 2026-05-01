@@ -144,8 +144,9 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
 import EmptyState from '@/components/atoms/EmptyState.vue'
@@ -156,7 +157,10 @@ import AlertMessage from '@/components/atoms/AlertMessage.vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
 import CategoryFormModal from '@/components/organisms/categories/CategoryFormModal.vue'
 import categoryService from '@/services/categoryService'
+import { useAuthStore } from '@/stores/auth'
 
+// ── State ─────────────────────────────────────────────────────────────────────
+const authStore = useAuthStore()
 const categories = ref([])
 const loading = ref(false)
 const showFormModal = ref(false)
@@ -164,13 +168,14 @@ const showDeleteModal = ref(false)
 const selectedCategory = ref(null)
 const alert = ref({ type: 'success', message: '' })
 
-function showAlert(type, message) {
-  alert.value = { type, message }
-  setTimeout(() => {
-    alert.value.message = ''
-  }, 3500)
-}
+// ── Computed ───────────────────────────────────────────────────────────────────
 
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadCategories)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchCategories() {
   const response = await categoryService.getAll()
   if (response.data?.data?.data && Array.isArray(response.data.data.data)) {
@@ -186,6 +191,7 @@ async function fetchCategories() {
 }
 
 async function loadCategories() {
+  if (!authStore.user?.id) return
   loading.value = true
   try {
     categories.value = await fetchCategories()
@@ -197,6 +203,13 @@ async function loadCategories() {
   } finally {
     loading.value = false
   }
+}
+
+function showAlert(type, message) {
+  alert.value = { type, message }
+  setTimeout(() => {
+    alert.value.message = ''
+  }, 3500)
 }
 
 function openAdd() {
@@ -258,8 +271,6 @@ async function handleDelete({ resolve, reject }) {
     )
   }
 }
-
-onMounted(loadCategories)
 </script>
 
 <style scoped>

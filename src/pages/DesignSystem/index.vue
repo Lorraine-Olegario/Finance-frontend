@@ -86,6 +86,7 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted, onUnmounted } from 'vue'
 
 import SvgIcon from '@/components/atoms/SvgIcon.vue'
@@ -95,6 +96,7 @@ import MoleculesSection from './sections/MoleculesSection.vue'
 
 defineOptions({ name: 'DesignSystemPage' })
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const activeSection = ref('cores')
 
 const navItems = {
@@ -130,13 +132,9 @@ const navItems = {
   ]
 }
 
-function scrollTo(id) {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  activeSection.value = id
-}
-
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
 let observer = null
+
 onMounted(() => {
   const sections = document.querySelectorAll('.ds-section')
   observer = new IntersectionObserver(
@@ -149,7 +147,15 @@ onMounted(() => {
   )
   sections.forEach(s => observer.observe(s))
 })
+
 onUnmounted(() => observer?.disconnect())
+
+// ── Functions ─────────────────────────────────────────────────────────────────
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  activeSection.value = id
+}
 </script>
 
 <style>

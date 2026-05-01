@@ -254,8 +254,9 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader.vue'
 import BaseInput from '@/components/atoms/BaseInput.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
@@ -264,6 +265,7 @@ import SvgIcon from '@/components/atoms/SvgIcon.vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
 const profileForm = ref({ name: '', email: '' })
@@ -284,6 +286,7 @@ const showCurrentPassword = ref(false)
 const showNewPassword = ref(false)
 const showConfirmPassword = ref(false)
 
+// ── Computed ──────────────────────────────────────────────────────────────────
 const userInitials = computed(() => {
   if (!authStore.user?.name) return '?'
   return authStore.user.name
@@ -294,6 +297,12 @@ const userInitials = computed(() => {
     .substring(0, 2)
 })
 
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadUserData)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 function loadUserData() {
   if (authStore.user) {
     profileForm.value.name = authStore.user.name
@@ -316,7 +325,7 @@ async function updateProfile() {
       profileSuccess.value = ''
     }, 3000)
   } catch (err) {
-    console.error('Erro ao atualizar perfil:', err)
+    console.error('[UserProfile] Erro ao atualizar perfil:', err)
     profileError.value =
       err.response?.data?.message ?? 'Erro ao atualizar perfil'
   } finally {
@@ -354,14 +363,12 @@ async function updatePassword() {
       passwordSuccess.value = ''
     }, 3000)
   } catch (err) {
-    console.error('Erro ao alterar senha:', err)
+    console.error('[UserProfile] Erro ao alterar senha:', err)
     passwordError.value = err.response?.data?.message ?? 'Erro ao alterar senha'
   } finally {
     savingPassword.value = false
   }
 }
-
-onMounted(loadUserData)
 </script>
 
 <style scoped>

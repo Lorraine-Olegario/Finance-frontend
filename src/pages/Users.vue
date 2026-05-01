@@ -202,8 +202,9 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader.vue'
 import SearchBar from '@/components/molecules/SearchBar.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
@@ -216,7 +217,10 @@ import SvgIcon from '@/components/atoms/SvgIcon.vue'
 import UserFormModal from '@/components/organisms/users/UserFormModal.vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
 import userService from '@/services/userService'
+import { useAuthStore } from '@/stores/auth'
 
+// ── State ─────────────────────────────────────────────────────────────────────
+const authStore = useAuthStore()
 const PER_PAGE = 15
 
 const ROLE_LABELS = {
@@ -224,26 +228,21 @@ const ROLE_LABELS = {
   admin: 'Administrador'
 }
 
-// State
 const users = ref([])
 const searchQuery = ref('')
 const loading = ref(false)
 const fetchError = ref('')
-
-// Pagination
 const currentPage = ref(1)
 
-// Form modal
 const formModalOpen = ref(false)
 const editingUser = ref(null)
 const formLoading = ref(false)
 const formError = ref('')
 
-// Delete modal
 const deleteModalOpen = ref(false)
 const userToDelete = ref(null)
 
-// Computed
+// ── Computed ──────────────────────────────────────────────────────────────────
 const filteredUsers = computed(() => {
   if (!searchQuery.value.trim()) return users.value
   const q = searchQuery.value.toLowerCase()
@@ -261,18 +260,20 @@ const paginatedUsers = computed(() => {
   return filteredUsers.value.slice(start, start + PER_PAGE)
 })
 
-// Reset page when search changes
-watch(searchQuery, () => {
-  currentPage.value = 1
-})
+// ── Watchers ──────────────────────────────────────────────────────────────────
+watch(searchQuery, () => { currentPage.value = 1 })
 
-// Data fetching
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadUsers)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchUsers() {
   const response = await userService.getUsers()
   users.value = response.data
 }
 
 async function loadUsers() {
+  if (!authStore.user?.id) return
   loading.value = true
   fetchError.value = ''
   try {
@@ -285,7 +286,6 @@ async function loadUsers() {
   }
 }
 
-// Form modal actions
 function openCreateModal() {
   editingUser.value = null
   formError.value = ''
@@ -303,6 +303,16 @@ function closeFormModal() {
   editingUser.value = null
   formError.value = ''
   formLoading.value = false
+}
+
+function openDeleteModal(user) {
+  userToDelete.value = user
+  deleteModalOpen.value = true
+}
+
+function closeDeleteModal() {
+  deleteModalOpen.value = false
+  userToDelete.value = null
 }
 
 async function handleFormSubmit(formData) {
@@ -328,17 +338,6 @@ async function handleFormSubmit(formData) {
   }
 }
 
-// Delete modal actions
-function openDeleteModal(user) {
-  userToDelete.value = user
-  deleteModalOpen.value = true
-}
-
-function closeDeleteModal() {
-  deleteModalOpen.value = false
-  userToDelete.value = null
-}
-
 async function handleDeleteConfirm({ resolve, reject }) {
   try {
     await userService.deleteUser(userToDelete.value.id)
@@ -350,8 +349,6 @@ async function handleDeleteConfirm({ resolve, reject }) {
     reject(new Error(err.response?.data?.message ?? 'Erro ao excluir usuário'))
   }
 }
-
-onMounted(loadUsers)
 </script>
 
 <style scoped>

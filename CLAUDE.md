@@ -99,3 +99,65 @@ src/
 - `@src/views/` está sendo migrado para `@src/pages/` — não criar novos arquivos em `@src/views/`.
 - `@src/components/common/` e subpastas legadas (`dashboard/`, `my-assets/`, etc.) serão migradas — não adicionar novos componentes nelas.
 - Nunca modificar `@src/services/api.js` sem revisar todos os services que o importam.
+
+### Estrutura de Páginas Vue
+
+Toda página em `src/pages/` deve seguir o padrão documentado em `@docs/patterns/page-pattern.md`.
+
+Ordem obrigatória das seções em `<script setup>`:
+
+```
+// ── Imports ──────────────────────────
+// ── State ────────────────────────────
+// ── Computed ─────────────────────────
+// ── Watchers ─────────────────────────
+// ── Lifecycle ────────────────────────
+// ── Functions ────────────────────────
+```
+
+Prefixos de funções:
+- `fetch*` — uma responsabilidade de busca por função
+- `load*` — orquestrador que chama os `fetch*` via `Promise.all`
+- `handle*` — handlers de eventos do template
+- `open*` / `close*` — controle de modais e drawers
+- `format*` — formatação local sem efeito colateral
+- `apply*` — aplicação de filtros (ex: `applyFilters`)
+
+Para o campo select de **Categorias** em filtros, sempre buscar via `categoryService.getAll()` em uma função `fetchCategories()` — nunca derivar as categorias dos ativos carregados.
+
+### Responsabilidade de Loading
+
+- Funções `fetch*` são chamadas de API puras — **não** gerenciam `loading.value` nem `fetchError.value`.
+- Apenas a função `load*` (orquestradora) gerencia `loading.value`, `fetchError.value` e o bloco try/catch principal.
+- Funções `fetch*` devem lançar erros (sem try/catch interno para erros críticos) para que o orquestrador os capture.
+- Erros opcionais (dados secundários como cores, alertas) podem ter try/catch silencioso dentro do próprio `fetch*`.
+
+Exemplo correto:
+```js
+async function fetchAssets() {
+  const res = await assetService.getAllUserAssets(...)
+  assets.value = res.data.ativos  // lança se falhar
+}
+
+async function loadPage() {
+  if (!authStore.user?.id) return
+  loading.value = true
+  fetchError.value = ''
+  try {
+    await Promise.all([fetchAssets(), fetchCategories()])
+  } catch (err) {
+    fetchError.value = err?.response?.data?.message || 'Erro ao carregar'
+  } finally {
+    loading.value = false
+  }
+}
+```
+
+### Logs de Erro
+
+- Todo `console.error` em páginas deve incluir o prefixo `[NomeDaPágina]`, ex: `[Assets]`, `[Users]`, `[Settings]`.
+- Formato: `console.error('[NomeDaPágina] Descrição do erro:', err)`
+
+### Exceções ao Padrão de Página
+
+- Arquivos em `src/pages/DesignSystem/sections/` (`AtomsSection.vue`, `TokensSection.vue`, `MoleculesSection.vue`) são componentes de apresentação — não possuem `loadPage` nem chamadas de API. Seguem a estrutura de seções (comentários `// ──`) mas não o padrão de orquestração de dados.

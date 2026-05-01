@@ -36,8 +36,8 @@
 
 <script>
 import { computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { menuItems } from '../config/menuItems'
+import { useAuthStore } from '@/stores/auth'
+import { menuItems } from '@/config/menuItems'
 
 export default {
   name: 'SidebarMobile',

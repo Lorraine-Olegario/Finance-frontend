@@ -73,7 +73,11 @@ const props = defineProps({
   isOpen: { type: Boolean, default: false },
   filters: {
     type: Object,
-    default: () => ({ search: '', categoria: '', hasAlert: '' })
+    default: () => ({ 
+      search: '', 
+      categoria: '', 
+      hasAlert: '' 
+    })
   },
   categories: { type: Array, default: () => [] }
 })

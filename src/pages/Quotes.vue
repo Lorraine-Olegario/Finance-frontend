@@ -149,8 +149,9 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
 import SvgIcon from '@/components/atoms/SvgIcon.vue'
@@ -163,6 +164,7 @@ import QuotesFilterDrawer from '@/components/organisms/quotes/QuotesFilterDrawer
 import assetService from '@/services/assetService'
 import { useAuthStore } from '@/stores/auth'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
 const userAssets = ref([])
@@ -185,6 +187,7 @@ const pagination = ref({
   lastPage: 1
 })
 
+// ── Computed ──────────────────────────────────────────────────────────────────
 const filteredQuotes = computed(() => {
   let result = [...quotes.value]
 
@@ -246,97 +249,102 @@ const activeFiltersCount = computed(() => {
   return count
 })
 
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(() => loadPage(1))
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchQuotes(page = 1) {
-  loading.value = true
-  error.value = ''
   quotes.value = []
 
-  try {
-    const assetsResponse = await assetService.getAllUserAssets(
-      page,
-      pagination.value.perPage
-    )
+  const assetsResponse = await assetService.getAllUserAssets(
+    page,
+    pagination.value.perPage
+  )
 
-    const responseData = assetsResponse.data.ativos.data
-    const paginationData = assetsResponse.data.ativos || {}
+  const responseData = assetsResponse.data.ativos.data
+  const paginationData = assetsResponse.data.ativos || {}
 
-    userAssets.value = responseData
+  userAssets.value = responseData
 
-    pagination.value = {
-      currentPage: paginationData.current_page || 1,
-      perPage: paginationData.per_page || 12,
-      total: paginationData.total || 0,
-      lastPage: paginationData.last_page || 1
-    }
+  pagination.value = {
+    currentPage: paginationData.current_page || 1,
+    perPage: paginationData.per_page || 12,
+    total: paginationData.total || 0,
+    lastPage: paginationData.last_page || 1
+  }
 
-    if (userAssets.value.length === 0) return
+  if (userAssets.value.length === 0) return
 
-    const quotesArray = []
-    let errorCount = 0
+  const quotesArray = []
+  let errorCount = 0
 
-    for (const asset of userAssets.value) {
-      try {
-        const response = await assetService.getAssetQuote(asset.codigo)
+  for (const asset of userAssets.value) {
+    try {
+      const response = await assetService.getAssetQuote(asset.codigo)
 
-        if (response?.data) {
-          let quoteData = null
+      if (response?.data) {
+        let quoteData = null
 
-          if (Array.isArray(response.data)) {
-            quoteData = response.data[0]
-          } else if (response.data.data) {
-            quoteData = response.data.data
-          } else {
-            quoteData = response.data
-          }
+        if (Array.isArray(response.data)) {
+          quoteData = response.data[0]
+        } else if (response.data.data) {
+          quoteData = response.data.data
+        } else {
+          quoteData = response.data
+        }
 
-          if (quoteData?.symbol) {
-            quotesArray.push({
-              ...quoteData,
-              status: asset.status,
-              observa: asset.observa,
-              tipo: asset.tipo,
-              assetId: asset.id
-            })
-          } else {
-            errorCount++
-          }
+        if (quoteData?.symbol) {
+          quotesArray.push({
+            ...quoteData,
+            status: asset.status,
+            observa: asset.observa,
+            tipo: asset.tipo,
+            assetId: asset.id
+          })
         } else {
           errorCount++
         }
-      } catch (err) {
+      } else {
         errorCount++
-        console.error(
-          `${asset.codigo}: ${err.response?.data?.message || err.message}`
-        )
       }
+    } catch (err) {
+      errorCount++
+      console.error(
+        `[Quotes] ${asset.codigo}: ${err.response?.data?.message || err.message}`
+      )
     }
+  }
 
-    quotes.value = quotesArray
+  quotes.value = quotesArray
 
-    if (quotes.value.length === 0 && errorCount > 0) {
-      error.value =
-        'Não foi possível carregar nenhuma cotação. Tente novamente.'
-    }
+  if (quotes.value.length === 0 && errorCount > 0) {
+    error.value =
+      'Não foi possível carregar nenhuma cotação. Tente novamente.'
+  }
+}
+
+async function loadPage(page) {
+  if (!authStore.user?.id) return
+  loading.value = true
+  error.value = ''
+  try {
+    await fetchQuotes(page)
   } catch (err) {
     error.value =
       err.response?.data?.error ||
       err.response?.data?.message ||
       'Erro ao carregar ativos'
-    console.error('Erro geral:', err)
+    console.error('[Quotes] Erro geral:', err)
   } finally {
     loading.value = false
   }
 }
 
-function loadPage(page) {
-  fetchQuotes(page)
-}
-
 function applyFilters(newFilters) {
   filters.value = { ...newFilters }
 }
-
-onMounted(() => loadPage(1))
 </script>
 
 <style scoped>

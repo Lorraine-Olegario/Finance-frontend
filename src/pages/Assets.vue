@@ -297,12 +297,13 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader.vue'
 import AssetsFilterDrawer from '@/components/organisms/assets/AssetsFilterDrawer.vue'
 import AddAssetModal from '@/components/organisms/assets/AddAssetModal.vue'
-import EditAssetModal from '@/components/my-assets/EditAssetModal.vue'
+import EditAssetModal from '@/components/organisms/assets/EditAssetModal.vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
 import SvgIcon from '@/components/atoms/SvgIcon.vue'
@@ -317,6 +318,7 @@ import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
 import categoryService from '@/services/categoryService'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
 const assets = ref([])
@@ -327,6 +329,8 @@ const fetchError = ref('')
 const filterOpen = ref(false)
 const currentPage = ref(1)
 const perPage = 10
+const selectedAsset = ref(null)
+const editCategoryColor = ref('')
 
 const filters = ref({
   search: '',
@@ -343,9 +347,7 @@ const modals = ref({
   observe: false
 })
 
-const selectedAsset = ref(null)
-const editCategoryColor = ref('')
-
+// ── Computed ──────────────────────────────────────────────────────────────────
 const filteredAssets = computed(() => {
   let result = assets.value
 
@@ -386,50 +388,40 @@ const activeFiltersCount = computed(() => {
   return count
 })
 
-watch(
-  filters,
-  () => {
-    currentPage.value = 1
-  },
-  { deep: true }
-)
+// ── Watchers ──────────────────────────────────────────────────────────────────
+watch(filters, () => { currentPage.value = 1 }, { deep: true })
 
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadPage)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchAssets() {
-  loading.value = true
-  fetchError.value = ''
-  try {
-    const normalizar = list =>
-      list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
+  const normalizar = list =>
+    list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
 
-    const first = await assetService.getAllUserAssets(1, 100)
-    const paginator = first.data?.ativos
+  const first = await assetService.getAllUserAssets(1, 100)
+  const paginator = first.data?.ativos
 
-    if (!paginator || !Array.isArray(paginator.data)) {
-      assets.value = []
-      return
-    }
-
-    let todos = [...paginator.data]
-
-    if (paginator.last_page > 1) {
-      const restantes = []
-      for (let p = 2; p <= paginator.last_page; p++) {
-        restantes.push(assetService.getAllUserAssets(p, 100))
-      }
-      const respostas = await Promise.all(restantes)
-      respostas.forEach(res => {
-        const d = res.data?.ativos?.data
-        if (Array.isArray(d)) todos = todos.concat(d)
-      })
-    }
-
-    assets.value = normalizar(todos)
-  } catch (err) {
-    fetchError.value = err?.response?.data?.message || err?.message || 'Erro ao carregar ativos'
+  if (!paginator || !Array.isArray(paginator.data)) {
     assets.value = []
-  } finally {
-    loading.value = false
+    return
   }
+
+  let todos = [...paginator.data]
+
+  if (paginator.last_page > 1) {
+    const restantes = []
+    for (let p = 2; p <= paginator.last_page; p++) {
+      restantes.push(assetService.getAllUserAssets(p, 100))
+    }
+    const respostas = await Promise.all(restantes)
+    respostas.forEach(res => {
+      const d = res.data?.ativos?.data
+      if (Array.isArray(d)) todos = todos.concat(d)
+    })
+  }
+
+  assets.value = normalizar(todos)
 }
 
 async function fetchCategories() {
@@ -442,7 +434,7 @@ async function fetchCategories() {
       }))
     }
   } catch {
-    // silently fail
+    // erro opcional — não bloqueia a página
   }
 }
 
@@ -459,18 +451,26 @@ async function fetchCategoryColors() {
 }
 
 async function loadPage() {
-  await Promise.all([fetchAssets(), fetchCategories()])
-  await fetchCategoryColors()
+  if (!authStore.user?.id) return
+  loading.value = true
+  fetchError.value = ''
+  try {
+    await Promise.all([fetchAssets(), fetchCategories()])
+    await fetchCategoryColors()
+  } catch (err) {
+    fetchError.value = err?.response?.data?.message || err?.message || 'Erro ao carregar ativos'
+    assets.value = []
+  } finally {
+    loading.value = false
+  }
 }
 
 function getCategoryColor(categoria) {
   if (!categoria) return 'var(--primary)'
 
-  // Cor do usuário tem prioridade
   const userColor = categoryColors.value[categoria] || categoryColors.value[categoria?.toUpperCase()]
   if (userColor) return userColor
 
-  // Paleta padrão mapeada aos valores reais de `tipo` da API
   const defaults = {
     'AÇÃO': '#3b82f6',
     'AÇÕES': '#3b82f6',
@@ -520,12 +520,20 @@ function closeModal(name) {
   modals.value[name] = false
 }
 
+function applyFilters(newFilters) {
+  filters.value = { ...newFilters }
+}
+
+function resetFilters() {
+  filters.value = { search: '', categoria: '', status: '' }
+}
+
 async function handleAddAssets({ categoria, codigos }) {
   try {
     await assetService.createUserAssets({ [categoria]: codigos })
     await fetchAssets()
   } catch (err) {
-    console.error('Erro ao adicionar ativos:', err)
+    console.error('[Assets] Erro ao adicionar ativos:', err)
   }
 }
 
@@ -617,18 +625,6 @@ async function handleDeleteAsset({ resolve, reject }) {
     reject(new Error(msg))
   }
 }
-
-function applyFilters(newFilters) {
-  filters.value = { ...newFilters }
-}
-
-function resetFilters() {
-  filters.value = { search: '', categoria: '', status: '' }
-}
-
-onMounted(() => {
-  loadPage()
-})
 </script>
 
 <style scoped>

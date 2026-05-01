@@ -25,8 +25,8 @@
 
 <script>
 import { computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { menuItems } from '../config/menuItems'
+import { useAuthStore } from '@/stores/auth'
+import { menuItems } from '@/config/menuItems'
 
 export default {
   name: 'SidebarDesktop',
@@ -35,7 +35,6 @@ export default {
 
     const visibleMenuItems = computed(() => {
       return menuItems.filter(item => {
-        // Se o item requer admin, verifica se o usuário é admin
         if (item.adminOnly) {
           return authStore.isAdmin
         }
