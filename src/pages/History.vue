@@ -121,13 +121,13 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import SearchBar from '@/components/molecules/SearchBar.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import EmptyState from '@/components/atoms/EmptyState.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import SearchBar from '@/components/molecules/SearchBar/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import EmptyState from '@/components/atoms/EmptyState/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import assetService from '@/services/assetService'
 
 // ── State ─────────────────────────────────────────────────────────────────────

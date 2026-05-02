@@ -79,10 +79,10 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, reactive, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
 

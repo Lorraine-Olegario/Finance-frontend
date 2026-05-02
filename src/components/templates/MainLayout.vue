@@ -82,8 +82,8 @@
 </template>
 
 <script>
-import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop.vue'
-import SidebarMobile from '@/components/organisms/navigation/SidebarMobile.vue'
+import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop/index.vue'
+import SidebarMobile from '@/components/organisms/navigation/SidebarMobile/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'

@@ -257,11 +257,11 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import BaseInput from '@/components/atoms/BaseInput.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import BaseInput from '@/components/atoms/BaseInput/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
 

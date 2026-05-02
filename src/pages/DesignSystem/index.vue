@@ -89,7 +89,7 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted, onUnmounted } from 'vue'
 
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import TokensSection from './sections/TokensSection.vue'
 import AtomsSection from './sections/AtomsSection.vue'
 import MoleculesSection from './sections/MoleculesSection.vue'

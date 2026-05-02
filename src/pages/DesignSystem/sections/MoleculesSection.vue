@@ -369,18 +369,18 @@
 <script setup>
 import { ref } from 'vue'
 
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import BaseInput from '@/components/atoms/BaseInput.vue'
-import BaseSelect from '@/components/atoms/BaseSelect.vue'
-import ActionButton from '@/components/atoms/ActionButton.vue'
-import StatCard from '@/components/atoms/StatCard.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import BaseInput from '@/components/atoms/BaseInput/index.vue'
+import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
+import ActionButton from '@/components/atoms/ActionButton/index.vue'
+import StatCard from '@/components/atoms/StatCard/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
-import SearchBar from '@/components/molecules/SearchBar.vue'
-import FormField from '@/components/molecules/FormField.vue'
-import StatsGrid from '@/components/molecules/StatsGrid.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import TableActions from '@/components/molecules/TableActions.vue'
+import SearchBar from '@/components/molecules/SearchBar/index.vue'
+import FormField from '@/components/molecules/FormField/index.vue'
+import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import TableActions from '@/components/molecules/TableActions/index.vue'
 
 const demoSearch = ref('')
 const demoSearchFilled = ref('PETR4')
