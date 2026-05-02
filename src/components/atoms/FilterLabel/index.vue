@@ -18,8 +18,14 @@
 
 <script setup>
 defineProps({
-  label: { type: String, required: true },
-  forId: { type: String, default: null }
+  label: {
+    type: String,
+    required: true,
+  },
+  forId: {
+    type: String,
+    default: null,
+  },
 })
 </script>
 

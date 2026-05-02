@@ -72,7 +72,10 @@ import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import StatusBadge from '@/components/atoms/StatusBadge/index.vue'
 
 const props = defineProps({
-  quote: { type: Object, required: true }
+  quote: {
+    type: Object,
+    required: true,
+  },
 })
 
 const imageError = ref(false)

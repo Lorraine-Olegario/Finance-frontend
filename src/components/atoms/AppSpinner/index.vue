@@ -9,9 +9,18 @@
 
 <script setup>
 defineProps({
-  size: { type: String, default: '20px' },
-  inverted: { type: Boolean, default: false },
-  label: { type: String, default: 'Carregando...' }
+  size: {
+    type: String,
+    default: '20px',
+  },
+  inverted: {
+    type: Boolean,
+    default: false,
+  },
+  label: {
+    type: String,
+    default: 'Carregando...',
+  },
 })
 </script>
 

@@ -18,9 +18,18 @@
 
 <script setup>
 defineProps({
-  message: { type: String, default: 'Carregando...' },
-  size: { type: String, default: '48px' },
-  fullscreen: { type: Boolean, default: false }
+  message: {
+    type: String,
+    default: 'Carregando...',
+  },
+  size: {
+    type: String,
+    default: '48px',
+  },
+  fullscreen: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 

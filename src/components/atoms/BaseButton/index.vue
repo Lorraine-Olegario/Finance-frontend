@@ -32,11 +32,28 @@ import AppSpinner from '@/components/atoms/AppSpinner/index.vue'
 defineOptions({ inheritAttrs: false })
 
 defineProps({
-  variant: { type: String, default: 'primary' }, // primary | secondary | ghost | danger
-  size: { type: String, default: 'md' }, // sm | md | lg
-  type: { type: String, default: 'button' },
-  loading: { type: Boolean, default: false },
-  disabled: { type: Boolean, default: false }
+  variant: {
+    type: String,
+    default: 'primary',
+    validator: v => ['primary', 'secondary', 'ghost', 'danger'].includes(v),
+  },
+  size: {
+    type: String,
+    default: 'md',
+    validator: v => ['sm', 'md', 'lg'].includes(v),
+  },
+  type: {
+    type: String,
+    default: 'button',
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 

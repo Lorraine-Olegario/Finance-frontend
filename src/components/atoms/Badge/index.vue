@@ -11,8 +11,14 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  label: { type: String, required: true },
-  color: { type: String, default: null } // hex override; usa CATEGORY_COLORS se omitido
+  label: {
+    type: String,
+    required: true,
+  },
+  color: {
+    type: String,
+    default: null,
+  },
 })
 
 const badgeStyle = computed(() => {

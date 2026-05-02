@@ -25,16 +25,32 @@
   </select>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
-  modelValue: { default: '' },
-  options: { type: Array, default: () => [] }, // [{ value, label }]
-  placeholder: { type: String, default: '' },
-  disabled: { type: Boolean, default: false },
-  required: { type: Boolean, default: false }
+  modelValue: {
+    default: '',
+  },
+  options: {
+    type: Array,
+    default: () => [],
+  },
+  placeholder: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-defineEmits(['update:modelValue'])
+defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 </script>
 
 <style scoped lang="scss">

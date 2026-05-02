@@ -76,21 +76,44 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 const props = defineProps({
-  currentPage: { type: Number, required: true },
-  lastPage: { type: Number, required: true },
-  total: { type: Number, required: true },
-  perPage: { type: Number, default: 10 },
-  maxVisiblePages: { type: Number, default: 5 },
-  showTotal: { type: Boolean, default: true },
-  showPageInfo: { type: Boolean, default: false }
+  currentPage: {
+    type: Number,
+    required: true,
+  },
+  lastPage: {
+    type: Number,
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
+  },
+  perPage: {
+    type: Number,
+    default: 10,
+  },
+  maxVisiblePages: {
+    type: Number,
+    default: 5,
+  },
+  showTotal: {
+    type: Boolean,
+    default: true,
+  },
+  showPageInfo: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['page-change'])
+const emit = defineEmits<{
+  'page-change': [page: number]
+}>()
 
 const visiblePages = computed(() => {
   const { currentPage: curr, lastPage: last, maxVisiblePages: max } = props

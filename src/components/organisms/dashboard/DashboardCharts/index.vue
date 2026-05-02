@@ -64,9 +64,18 @@ import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 Chart.register(...registerables)
 
 const props = defineProps({
-  assetsByType: { type: Object, default: () => ({}) },
-  userAssetsCount: { type: Number, default: 0 },
-  categoryColors: { type: Object, default: () => ({}) }
+  assetsByType: {
+    type: Object,
+    default: () => ({}),
+  },
+  userAssetsCount: {
+    type: Number,
+    default: 0,
+  },
+  categoryColors: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 
 const chartCanvas = ref(null)

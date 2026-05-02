@@ -67,18 +67,27 @@
   </ConfirmationModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 import BaseInput from '@/components/atoms/BaseInput/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, required: true },
-  category: { type: Object, default: null }
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  category: {
+    type: Object,
+    default: null,
+  },
 })
 
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits<{
+  close: []
+  submit: [payload: Record<string, unknown>]
+}>()
 
 const DEFAULT_COLOR = '#6200EE'
 

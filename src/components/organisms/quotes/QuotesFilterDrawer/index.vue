@@ -42,26 +42,33 @@
   </FilterDrawer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import FilterDrawer from '@/components/organisms/FilterDrawer/index.vue'
 import BaseInput from '@/components/atoms/BaseInput/index.vue'
 import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, default: false },
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
   filters: {
     type: Object,
     default: () => ({
       search: '',
       variacao: '',
       sortBy: 'codigo',
-      sortOrder: 'asc'
-    })
-  }
+      sortOrder: 'asc',
+    }),
+  },
 })
 
-const emit = defineEmits(['close', 'apply', 'reset'])
+const emit = defineEmits<{
+  close: []
+  apply: [filters: Record<string, unknown>]
+  reset: []
+}>()
 
 const localFilters = ref({ ...props.filters })
 

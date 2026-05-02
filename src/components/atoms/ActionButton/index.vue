@@ -18,7 +18,6 @@ defineProps({
   variant: {
     type: String,
     default: 'default',
-    // default | edit | delete | play | pause | observe | info
     validator: v =>
       [
         'default',
@@ -27,11 +26,17 @@ defineProps({
         'play',
         'pause',
         'observe',
-        'info'
-      ].includes(v)
+        'info',
+      ].includes(v),
   },
-  title: { type: String, default: '' },
-  disabled: { type: Boolean, default: false }
+  title: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 

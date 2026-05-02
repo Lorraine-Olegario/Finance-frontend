@@ -57,15 +57,25 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 defineProps({
-  isOpen: { type: Boolean, default: false },
-  title: { type: String, default: 'Filtros' }
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
+  title: {
+    type: String,
+    default: 'Filtros',
+  },
 })
 
-const emit = defineEmits(['close', 'apply', 'reset'])
+const emit = defineEmits<{
+  close: []
+  apply: []
+  reset: []
+}>()
 </script>
 
 <style scoped lang="scss">

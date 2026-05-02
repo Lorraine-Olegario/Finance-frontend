@@ -14,17 +14,39 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
-  modelValue: { default: '' },
-  type: { type: String, default: 'text' }, // text|email|password|number|search|color
-  placeholder: { type: String, default: '' },
-  disabled: { type: Boolean, default: false },
-  readonly: { type: Boolean, default: false },
-  required: { type: Boolean, default: false }
+  modelValue: {
+    default: '',
+  },
+  type: {
+    type: String,
+    default: 'text',
+    validator: (v: string) => ['text', 'email', 'password', 'number', 'search', 'color'].includes(v),
+  },
+  placeholder: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-defineEmits(['update:modelValue', 'blur', 'focus'])
+defineEmits<{
+  'update:modelValue': [value: string]
+  blur: [event: FocusEvent]
+  focus: [event: FocusEvent]
+}>()
 </script>
 
 <style scoped lang="scss">

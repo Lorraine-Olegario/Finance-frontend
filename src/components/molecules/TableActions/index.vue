@@ -12,8 +12,8 @@ defineProps({
   align: {
     type: String,
     default: 'center',
-    validator: v => ['start', 'center', 'end'].includes(v)
-  }
+    validator: v => ['start', 'center', 'end'].includes(v),
+  },
 })
 </script>
 

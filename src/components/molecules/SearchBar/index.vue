@@ -38,17 +38,29 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 defineProps({
-  modelValue: { type: String, default: '' },
-  placeholder: { type: String, default: 'Buscar...' },
-  disabled: { type: Boolean, default: false }
+  modelValue: {
+    type: String,
+    default: '',
+  },
+  placeholder: {
+    type: String,
+    default: 'Buscar...',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['update:modelValue', 'search'])
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+  search: [value: string]
+}>()
 
 const isFocused = ref(false)
 

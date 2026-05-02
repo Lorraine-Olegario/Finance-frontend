@@ -138,7 +138,7 @@
   </ConfirmationModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 import BaseInput from '@/components/atoms/BaseInput/index.vue'
@@ -146,13 +146,28 @@ import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, required: true },
-  user: { type: Object, default: null },
-  loading: { type: Boolean, default: false },
-  error: { type: String, default: '' }
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  user: {
+    type: Object,
+    default: null,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  error: {
+    type: String,
+    default: '',
+  },
 })
 
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits<{
+  close: []
+  submit: [payload: Record<string, unknown>]
+}>()
 
 const ROLE_OPTIONS = [
   { value: 'user', label: 'Usuário' },

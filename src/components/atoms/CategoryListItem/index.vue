@@ -12,10 +12,22 @@
 
 <script setup>
 defineProps({
-  name: { type: String, required: true },
-  count: { type: Number, required: true },
-  percentage: { type: [Number, String], required: true },
-  color: { type: String, default: '#6b7280' }
+  name: {
+    type: String,
+    required: true,
+  },
+  count: {
+    type: Number,
+    required: true,
+  },
+  percentage: {
+    type: [Number, String],
+    required: true,
+  },
+  color: {
+    type: String,
+    default: '#6b7280',
+  },
 })
 </script>
 

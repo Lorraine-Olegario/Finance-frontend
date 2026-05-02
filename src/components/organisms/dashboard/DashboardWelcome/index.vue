@@ -22,8 +22,14 @@ import { computed } from 'vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 const props = defineProps({
-  userName: { type: String, default: 'Usuário' },
-  date: { type: String, required: true }
+  userName: {
+    type: String,
+    default: 'Usuário',
+  },
+  date: {
+    type: String,
+    required: true,
+  },
 })
 
 const firstName = computed(() => props.userName.split(' ')[0] || 'Usuário')

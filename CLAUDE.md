@@ -161,3 +161,22 @@ async function loadPage() {
 ### Exceções ao Padrão de Página
 
 - Arquivos em `src/pages/DesignSystem/sections/` (`AtomsSection.vue`, `TokensSection.vue`, `MoleculesSection.vue`) são componentes de apresentação — não possuem `loadPage` nem chamadas de API. Seguem a estrutura de seções (comentários `// ──`) mas não o padrão de orquestração de dados.
+
+## Padrão de defineProps
+
+- Cada prop sempre expandida em múltiplas linhas
+- Trailing comma em todas as chaves e na última prop
+- Props com valores enumerados obrigatoriamente incluem validator com Array.includes()
+- O tipo do parâmetro do validator acompanha o type da prop
+- Comentários de opções válidas são substituídos pelo validator
+- Props obrigatórias usam required: true (sem default)
+- Default de Object e Array sempre como factory function: () => ({}) / () => []
+- required: true e default são mutuamente exclusivos
+
+## Padrão de defineEmits
+
+- Sempre usar a forma tipada: defineEmits<{ evento: [payload: Tipo] }>()
+- Cada evento em sua própria linha
+- Eventos sem payload usam array vazio: []
+- Nomes com hífen ou dois-pontos entre aspas simples
+- Manter const emit = se já existia no componente

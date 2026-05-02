@@ -156,18 +156,27 @@
   </ConfirmationModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, required: true },
-  asset: { type: Object, default: null }
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  asset: {
+    type: Object,
+    default: null,
+  },
 })
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits<{
+  close: []
+  save: [payload: Record<string, unknown>]
+}>()
 
 const validationError = ref('')
 

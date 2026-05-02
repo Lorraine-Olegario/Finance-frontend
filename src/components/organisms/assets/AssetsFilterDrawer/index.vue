@@ -36,22 +36,32 @@
   </FilterDrawer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import FilterDrawer from '@/components/organisms/FilterDrawer/index.vue'
 import BaseInput from '@/components/atoms/BaseInput/index.vue'
 import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, default: false },
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
   filters: {
     type: Object,
-    default: () => ({ search: '', categoria: '', status: '' })
+    default: () => ({ search: '', categoria: '', status: '' }),
   },
-  categorias: { type: Array, default: () => [] }
+  categorias: {
+    type: Array,
+    default: () => [],
+  },
 })
 
-const emit = defineEmits(['close', 'apply', 'reset'])
+const emit = defineEmits<{
+  close: []
+  apply: [filters: Record<string, unknown>]
+  reset: []
+}>()
 
 const localFilters = ref({ ...props.filters })
 

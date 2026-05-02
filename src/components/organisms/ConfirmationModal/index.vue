@@ -80,31 +80,51 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, required: true },
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
   size: {
     type: String,
     default: 'medium',
-    validator: v => ['small', 'medium', 'large'].includes(v)
+    validator: (v: string) => ['small', 'medium', 'large'].includes(v),
   },
   type: {
     type: String,
     default: 'primary',
-    validator: v =>
-      ['primary', 'success', 'danger', 'warning', 'info'].includes(v)
+    validator: (v: string) => ['primary', 'success', 'danger', 'warning', 'info'].includes(v),
   },
-  title: { type: String, required: true },
-  message: { type: String, default: '' },
-  warningMessage: { type: String, default: '' },
-  confirmText: { type: String, default: 'Confirmar' },
-  loadingText: { type: String, default: 'Processando...' }
+  title: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    default: '',
+  },
+  warningMessage: {
+    type: String,
+    default: '',
+  },
+  confirmText: {
+    type: String,
+    default: 'Confirmar',
+  },
+  loadingText: {
+    type: String,
+    default: 'Processando...',
+  },
 })
 
-const emit = defineEmits(['close', 'confirm'])
+const emit = defineEmits<{
+  close: []
+  confirm: [handlers: Record<string, unknown>]
+}>()
 
 const loading = ref(false)
 

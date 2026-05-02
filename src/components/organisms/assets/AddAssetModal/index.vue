@@ -76,7 +76,7 @@
   </ConfirmationModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
@@ -84,11 +84,20 @@ import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 
 const props = defineProps({
-  isOpen: { type: Boolean, required: true },
-  categorias: { type: Array, default: () => [] }
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+  categorias: {
+    type: Array,
+    default: () => [],
+  },
 })
 
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits<{
+  close: []
+  submit: [payload: Record<string, unknown>]
+}>()
 
 const formData = ref({ categoria: '', codigos: '' })
 const saving = ref(false)

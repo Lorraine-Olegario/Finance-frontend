@@ -12,8 +12,8 @@ defineProps({
   status: {
     type: String,
     required: true,
-    validator: v => ['ativo', 'observando', 'inativo', 'pausado'].includes(v)
-  }
+    validator: v => ['ativo', 'observando', 'inativo', 'pausado'].includes(v),
+  },
 })
 
 const STATUS_LABELS = {

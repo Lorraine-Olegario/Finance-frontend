@@ -11,8 +11,14 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  cols: { type: Number, default: null },
-  minWidth: { type: String, default: '220px' }
+  cols: {
+    type: Number,
+    default: null,
+  },
+  minWidth: {
+    type: String,
+    default: '220px',
+  },
 })
 
 const colsStyle = computed(() => {

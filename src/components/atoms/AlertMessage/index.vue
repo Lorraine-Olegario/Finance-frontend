@@ -36,21 +36,32 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 defineProps({
   type: {
     type: String,
     default: 'error',
-    validator: v => ['error', 'warning', 'success', 'info'].includes(v)
+    validator: (v: string) => ['error', 'warning', 'success', 'info'].includes(v),
   },
-  title: { type: String, default: '' },
-  message: { type: String, required: true },
-  dismissible: { type: Boolean, default: false }
+  title: {
+    type: String,
+    default: '',
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+  dismissible: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-defineEmits(['dismiss'])
+defineEmits<{
+  dismiss: []
+}>()
 
 const iconMap = {
   error: 'alert-circle',

@@ -46,14 +46,26 @@
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
 defineProps({
-  label: { type: String, default: '' },
+  label: {
+    type: String,
+    default: '',
+  },
   fieldId: {
     type: String,
-    default: () => `field-${Math.random().toString(36).slice(2, 7)}`
+    default: () => `field-${Math.random().toString(36).slice(2, 7)}`,
   },
-  hint: { type: String, default: '' },
-  error: { type: String, default: '' },
-  required: { type: Boolean, default: false }
+  hint: {
+    type: String,
+    default: '',
+  },
+  error: {
+    type: String,
+    default: '',
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
