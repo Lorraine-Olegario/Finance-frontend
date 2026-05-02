@@ -396,55 +396,52 @@ onMounted(loadPage)
 
 // ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchAssets() {
-  const normalizar = list =>
-    list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
-
-  const first = await assetService.getAllUserAssets(1, 100)
-  const paginator = first.data?.ativos
-
-  if (!paginator || !Array.isArray(paginator.data)) {
-    assets.value = []
-    return
-  }
-
-  let todos = [...paginator.data]
-
-  if (paginator.last_page > 1) {
-    const restantes = []
-    for (let p = 2; p <= paginator.last_page; p++) {
-      restantes.push(assetService.getAllUserAssets(p, 100))
-    }
-    const respostas = await Promise.all(restantes)
-    respostas.forEach(res => {
-      const d = res.data?.ativos?.data
-      if (Array.isArray(d)) todos = todos.concat(d)
-    })
-  }
-
-  assets.value = normalizar(todos)
-}
-
-async function fetchCategories() {
   try {
-    const response = await categoryService.getAll()
-    if (response.data && Array.isArray(response.data.data)) {
-      categorias.value = response.data.data.map(cat => ({
-        id: cat.id,
-        nome: cat.nome || cat.name || String(cat)
-      }))
+    const normalizar = list =>
+      list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
+
+    const first = await assetService.getAllUserAssets(1, 100)
+    const paginator = first.data?.ativos
+
+    if (!paginator || !Array.isArray(paginator.data)) {
+      assets.value = []
+      return
     }
+
+    let todos = [...paginator.data]
+
+    if (paginator.last_page > 1) {
+      const restantes = []
+      for (let p = 2; p <= paginator.last_page; p++) {
+        restantes.push(assetService.getAllUserAssets(p, 100))
+      }
+      const respostas = await Promise.all(restantes)
+      respostas.forEach(res => {
+        const d = res.data?.ativos?.data
+        if (Array.isArray(d)) todos = todos.concat(d)
+      })
+    }
+
+    assets.value = normalizar(todos)
   } catch {
     // erro opcional — não bloqueia a página
   }
 }
 
+async function fetchCategories() {
+  const response = await categoryService.getAll()
+  if (response.data && Array.isArray(response.data.data)) {
+    categorias.value = response.data.data.map(cat => ({
+      id: cat.id,
+      nome: cat.nome || cat.name || String(cat)
+    }))
+  }
+}
+
 async function fetchCategoryColors() {
   try {
-    const userId = authStore.user?.id
-    if (userId) {
-      const res = await assetService.getCategoryColors(userId)
-      categoryColors.value = res.data?.colors || {}
-    }
+    const res = await assetService.getCategoryColors()
+    categoryColors.value = res.data?.colors || {}
   } catch {
     categoryColors.value = {}
   }
@@ -458,7 +455,7 @@ async function loadPage() {
     await Promise.all([fetchAssets(), fetchCategories()])
     await fetchCategoryColors()
   } catch (err) {
-    fetchError.value = err?.response?.data?.message || err?.message || 'Erro ao carregar ativos'
+    fetchError.value = 'Erro ao carregar ativos. Tente novamente.'
     assets.value = []
   } finally {
     loading.value = false
@@ -466,24 +463,13 @@ async function loadPage() {
 }
 
 function getCategoryColor(categoria) {
-  if (!categoria) return 'var(--primary)'
+  if (!categoria) return null
 
-  const userColor = categoryColors.value[categoria] || categoryColors.value[categoria?.toUpperCase()]
-  if (userColor) return userColor
-
-  const defaults = {
-    'AÇÃO': '#3b82f6',
-    'AÇÕES': '#3b82f6',
-    'FII': '#10b981',
-    'FIIS': '#10b981',
-    'ETFS': '#f59e0b',
-    'ETF': '#f59e0b',
-    'BDR': '#8b5cf6',
-    'CRIPTO': '#ec4899',
-    'RENDA FIXA': '#f59e0b'
-  }
-
-  return defaults[categoria?.toUpperCase()] || 'var(--primary)'
+  return (
+    categoryColors.value[categoria] ||
+    categoryColors.value[categoria?.toUpperCase()] ||
+    null
+  )
 }
 
 function openAddModal() {
@@ -538,9 +524,6 @@ async function handleAddAssets({ categoria, codigos }) {
 }
 
 async function handleUpdateAsset(assetData) {
-  const userId = authStore.user?.id
-  if (!userId) return
-
   if (assetData.categoryColor && assetData.categoria) {
     const currentColor = categoryColors.value[assetData.categoria]
     if (assetData.categoryColor !== currentColor) {
@@ -548,7 +531,7 @@ async function handleUpdateAsset(assetData) {
         ...categoryColors.value,
         [assetData.categoria]: assetData.categoryColor
       }
-      await assetService.updateCategoryColors(userId, newColors)
+      await assetService.updateCategoryColors(newColors)
       categoryColors.value = newColors
     }
   }

@@ -14,7 +14,6 @@ src/components/organisms/
 └── dashboard/
     ├── DashboardWelcome.vue      # Banner de boas-vindas
     ├── DashboardCharts.vue       # Gráfico + lista de categorias
-    └── QuickActionsPanel.vue     # Ações rápidas de navegação
 ```
 
 > **Regra:** ao criar organismos para novas áreas (relatórios, admin, etc.),

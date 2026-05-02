@@ -66,8 +66,6 @@
         :category-colors="categoryColors"
       />
 
-      <QuickActionsPanel />
-
       <LoadingSpinner
         v-if="loading"
         fullscreen
@@ -86,7 +84,6 @@ import SvgIcon from '@/components/atoms/SvgIcon.vue'
 import StatsGrid from '@/components/molecules/StatsGrid.vue'
 import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome.vue'
 import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts.vue'
-import QuickActionsPanel from '@/components/organisms/dashboard/QuickActionsPanel.vue'
 import { useAuthStore } from '@/stores/auth'
 import userService from '@/services/userService'
 import assetService from '@/services/assetService'
@@ -123,7 +120,6 @@ onMounted(loadDashboard)
 /** Busca resumo de ativos e cores personalizadas de categoria */
 async function fetchAssetsSummary() {
   const res = await assetService.getUserAssetsSummary()
-  userAssetsCount.value = res.data?.total || 0
 
   const categorias = res.data?.categorias
   if (Array.isArray(categorias)) {
@@ -133,7 +129,7 @@ async function fetchAssetsSummary() {
   }
 
   try {
-    const colorsRes = await assetService.getCategoryColors(authStore.user?.id)
+    const colorsRes = await assetService.getCategoryColors()
     categoryColors.value = colorsRes.data?.colors || {}
   } catch {
     categoryColors.value = {}

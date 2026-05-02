@@ -97,15 +97,6 @@ const hasChanges = ref(false)
 const message = ref('')
 const messageType = ref('success')
 
-const defaultColors = {
-  Ações: '#FF8C00',
-  FIIs: '#6200EE',
-  Criptomoedas: '#03DAC6',
-  BDRs: '#BB86FC',
-  Stocks: '#3700B3',
-  ETFs: '#018786'
-}
-
 // ── Computed ───────────────────────────────────────────────────────────────────
 
 // ── Watchers ──────────────────────────────────────────────────────────────────
@@ -115,19 +106,16 @@ onMounted(loadPage)
 
 // ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchColors() {
-  const userId = authStore.user?.id
-
-  const assetsResponse = await assetService.getAssets(userId)
+  const assetsResponse = await assetService.getAssets()
   const ativosPorCategoria = assetsResponse.data?.ativos_por_categoria || {}
 
-  const colorsResponse = await assetService.getCategoryColors(userId)
+  const colorsResponse = await assetService.getCategoryColors()
   const savedColors = colorsResponse.data?.colors || {}
 
   Object.keys(categoryColors).forEach(k => delete categoryColors[k])
 
   Object.keys(ativosPorCategoria).forEach(categoria => {
-    categoryColors[categoria] =
-      savedColors[categoria] || defaultColors[categoria] || '#CF6679'
+    categoryColors[categoria] = savedColors[categoria]
   })
 
   originalColors.value = { ...categoryColors }
@@ -156,13 +144,7 @@ async function saveColors() {
   saving.value = true
 
   try {
-    const userId = authStore.user?.id
-    if (!userId) {
-      showMessage('Usuário não identificado', 'error')
-      return
-    }
-
-    await assetService.updateCategoryColors(userId, { ...categoryColors })
+    await assetService.updateCategoryColors({ ...categoryColors })
     originalColors.value = { ...categoryColors }
     hasChanges.value = false
     showMessage('Cores salvas com sucesso!', 'success')

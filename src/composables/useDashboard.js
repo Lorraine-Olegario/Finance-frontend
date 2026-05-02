@@ -42,21 +42,14 @@ export function useDashboard() {
   })
 
   const getCategoryColor = category => {
-    return categoryColors.value[category] || '#6b7280'
+    return categoryColors.value[category] || categoryColors.value[category?.toUpperCase()] || null
   }
 
   const fetchData = async () => {
     loading.value = true
     try {
-      const userId = authStore.user?.id
-
-      if (!userId) {
-        console.error('Usuário não identificado')
-        return
-      }
-
       // Buscar ativos do usuário
-      const response = await assetService.getAssets(userId)
+      const response = await assetService.getAssets()
 
       // A API pode retornar os dados de duas formas diferentes
       let ativosPorCategoria = {}
@@ -81,7 +74,7 @@ export function useDashboard() {
       // Buscar cores e alertas em paralelo
       await Promise.allSettled([
         assetService
-          .getCategoryColors(userId)
+          .getCategoryColors()
           .then(res => {
             categoryColors.value = res.data?.colors || {}
           })
@@ -90,7 +83,7 @@ export function useDashboard() {
           }),
 
         assetService
-          .getAssetAlerts(userId)
+          .getAssetAlerts()
           .then(res => {
             alertsCount.value = res.data?.length || 0
           })

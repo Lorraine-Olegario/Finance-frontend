@@ -326,16 +326,12 @@ async function fetchQuotes(page = 1) {
 }
 
 async function loadPage(page) {
-  if (!authStore.user?.id) return
   loading.value = true
   error.value = ''
   try {
     await fetchQuotes(page)
   } catch (err) {
-    error.value =
-      err.response?.data?.error ||
-      err.response?.data?.message ||
-      'Erro ao carregar ativos'
+    error.value = 'Erro ao carregar cotações. Tente novamente.'
     console.error('[Quotes] Erro geral:', err)
   } finally {
     loading.value = false

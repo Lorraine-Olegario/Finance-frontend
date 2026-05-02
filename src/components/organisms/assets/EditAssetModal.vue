@@ -210,19 +210,7 @@ export default {
       this.saving = false
     },
     resetColor() {
-      const defaultColors = {
-        'AÇÃO': '#3b82f6',
-        'AÇÕES': '#3b82f6',
-        'FII': '#10b981',
-        'FIIS': '#10b981',
-        'ETFS': '#f59e0b',
-        'ETF': '#f59e0b',
-        'BDR': '#8b5cf6',
-        'CRIPTO': '#ec4899',
-        'RENDA FIXA': '#f59e0b'
-      }
-      this.formData.categoryColor =
-        defaultColors[this.formData.categoria?.toUpperCase()] || '#6200EE'
+      this.formData.categoryColor = '#6200EE'
     },
     async handleSubmit() {
       this.error = ''

@@ -42,9 +42,9 @@ export default {
   },
 
   // Get all assets
-  getAssets(userId, page = 1, perPage = 10) {
+  getAssets(page = 1, perPage = 10) {
     return apiClient.get('user/ativos/categoria', {
-      params: { user_id: userId, page, per_page: perPage }
+      params: { page, per_page: perPage }
     })
   },
 
@@ -56,21 +56,19 @@ export default {
   },
 
   // Get assets for quotes (flattened list of observed assets)
-  getAssetsForQuotes(userId) {
-    return apiClient.get('/user/ativos/observados', {
-      params: { user_id: userId }
-    })
+  /*
+  getAssetsForQuotes() {
+    return apiClient.get('/user/ativos/observados')
   },
+  */
 
   // Get category colors
-  getCategoryColors(userId) {
-    return apiClient.get('/user/category-colors', {
-      params: { user_id: userId }
-    })
+  getCategoryColors() {
+    return apiClient.get('/user/category-colors')
   },
 
   // Update category colors
-  updateCategoryColors(userId, colors) {
+  updateCategoryColors(colors) {
     return apiClient.put(`/user/category-colors`, { colors })
   },
 

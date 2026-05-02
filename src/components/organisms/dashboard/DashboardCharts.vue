@@ -72,33 +72,22 @@ const props = defineProps({
 const chartCanvas = ref(null)
 let chartInstance = null
 
-const DEFAULT_PALETTE = [
-  '#6200ee',
-  '#3b82f6',
-  '#10b981',
-  '#f59e0b',
-  '#ef4444',
-  '#8b5cf6',
-  '#ec4899',
-  '#14b8a6'
-]
-
-function resolveColor(name, index) {
-  return props.categoryColors[name] || DEFAULT_PALETTE[index % DEFAULT_PALETTE.length]
+function resolveColor(name) {
+  return props.categoryColors[name] || props.categoryColors[name?.toUpperCase()] || undefined
 }
 
 const hasAssets = computed(() => props.userAssetsCount > 0)
 
 const topCategories = computed(() =>
   Object.entries(props.assetsByType)
-    .map(([name, count], index) => ({
+    .map(([name, count]) => ({
       name,
       count,
       percentage:
         props.userAssetsCount > 0
           ? ((count / props.userAssetsCount) * 100).toFixed(1)
           : '0.0',
-      color: resolveColor(name, index)
+      color: resolveColor(name)
     }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 5)
@@ -114,7 +103,7 @@ function buildChart() {
 
   const labels = Object.keys(props.assetsByType)
   const data = Object.values(props.assetsByType)
-  const colors = labels.map((label, index) => resolveColor(label, index))
+  const colors = labels.map(label => resolveColor(label))
 
   chartInstance = new Chart(chartCanvas.value.getContext('2d'), {
     type: 'doughnut',

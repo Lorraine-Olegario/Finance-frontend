@@ -6,7 +6,7 @@
         subtitle="Consulte o histórico de preços de um ativo pelo seu código"
       />
 
-      <div class="history-page__form card">
+      <div class="history-page__form">
         <div class="history-page__search">
           <SearchBar
             v-model="searchCode"
@@ -40,7 +40,7 @@
 
       <div
         v-if="historyData.length"
-        class="history-page__results card"
+        class="history-page__results"
       >
         <h3 class="history-page__results-title">
           Histórico de {{ lastSearchCode }}
@@ -162,8 +162,7 @@ async function handleSearch() {
   try {
     await fetchHistory(searchCode.value.toUpperCase())
   } catch (err) {
-    error.value = err.response?.data?.message || 'Erro ao buscar histórico'
-    console.error('[History] Erro ao buscar histórico:', err)
+    error.value = 'Erro ao buscar histórico. Tente novamente.'
   } finally {
     loading.value = false
   }
@@ -194,9 +193,6 @@ function getChangeClass(changePercent) {
 </script>
 
 <style scoped>
-.history-page {
-  max-width: 1200px;
-}
 
 .history-page__form {
   margin-bottom: 1.5rem;
