@@ -1,12 +1,12 @@
 <template>
-  <div class="cat-item">
+  <div class="category-item">
     <span
-      class="cat-dot"
+      class="category-item__dot"
       :style="{ backgroundColor: color }"
     />
-    <span class="cat-name">{{ name }}</span>
-    <span class="cat-count">{{ count }}</span>
-    <span class="cat-pct">{{ percentage }}%</span>
+    <span class="category-item__name">{{ name }}</span>
+    <span class="category-item__count">{{ count }}</span>
+    <span class="category-item__percentage">{{ percentage }}%</span>
   </div>
 </template>
 
@@ -20,34 +20,34 @@ defineProps({
 </script>
 
 <style scoped>
-.cat-item {
+.category-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
 }
 
-.cat-dot {
+.category-item__dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.cat-name {
+.category-item__name {
   flex: 1;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.cat-count {
+.category-item__count {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
-.cat-pct {
+.category-item__percentage {
   font-size: 0.875rem;
   color: var(--text-secondary);
   background: var(--bg-secondary);

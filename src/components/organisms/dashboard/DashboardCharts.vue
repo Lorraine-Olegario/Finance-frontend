@@ -18,7 +18,7 @@
         <template #action>
           <RouterLink
             to="/my-assets"
-            class="btn btn-primary btn-sm"
+            class="dashboard-charts__cta"
           >
             Adicionar Ativos
           </RouterLink>
@@ -161,6 +161,30 @@ onBeforeUnmount(() => chartInstance?.destroy())
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.dashboard-charts__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dashboard-charts__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
+  color: white;
 }
 
 @media (max-width: 1024px) {

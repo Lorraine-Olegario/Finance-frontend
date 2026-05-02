@@ -448,12 +448,11 @@ async function fetchCategoryColors() {
 }
 
 async function loadPage() {
-  if (!authStore.user?.id) return
   loading.value = true
   fetchError.value = ''
+
   try {
-    await Promise.all([fetchAssets(), fetchCategories()])
-    await fetchCategoryColors()
+    await Promise.all([fetchAssets(), fetchCategories(), fetchCategoryColors()])
   } catch (err) {
     fetchError.value = 'Erro ao carregar ativos. Tente novamente.'
     assets.value = []

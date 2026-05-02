@@ -1,23 +1,23 @@
 <template>
   <div class="empty-state">
-    <div class="empty-icon-wrapper">
+    <div class="empty-state__icon-wrapper">
       <slot name="icon">
         <SvgIcon
           name="info"
           :size="64"
-          class="empty-icon"
+          class="empty-state__icon"
         />
       </slot>
     </div>
-    <h3 class="empty-title">
+    <h3 class="empty-state__title">
       {{ title }}
     </h3>
-    <p class="empty-description">
+    <p class="empty-state__description">
       {{ description }}
     </p>
     <div
       v-if="$slots.action"
-      class="empty-action"
+      class="empty-state__action"
     >
       <slot name="action" />
     </div>
@@ -42,31 +42,31 @@ defineProps({
   border: 2px dashed var(--border);
 }
 
-.empty-icon-wrapper {
+.empty-state__icon-wrapper {
   margin: 0 auto 1.5rem;
 }
 
-.empty-icon {
+.empty-state__icon {
   width: 64px;
   height: 64px;
   color: var(--text-secondary);
   opacity: 0.5;
 }
 
-.empty-title {
+.empty-state__title {
   color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-.empty-description {
+.empty-state__description {
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
   font-size: 1rem;
 }
 
-.empty-action {
+.empty-state__action {
   display: flex;
   justify-content: center;
   gap: 1rem;

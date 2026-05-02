@@ -1,23 +1,23 @@
 <template>
   <aside class="sidebar-desktop">
-    <div class="sidebar-header">
-      <h2 class="logo">Finance</h2>
+    <div class="sidebar-desktop__header">
+      <h2 class="sidebar-desktop__logo">Finance</h2>
     </div>
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-desktop__nav">
       <router-link
         v-for="item in visibleMenuItems"
         :key="item.id"
         :to="item.to"
-        class="nav-item"
-        :exact-active-class="item.exact ? 'active' : ''"
-        :active-class="!item.exact ? 'active' : ''"
+        class="sidebar-desktop__nav-item"
+        :exact-active-class="item.exact ? 'sidebar-desktop__nav-item--active' : ''"
+        :active-class="!item.exact ? 'sidebar-desktop__nav-item--active' : ''"
       >
         <div
-          class="nav-icon"
+          class="sidebar-desktop__nav-icon"
           v-html="item.icon"
         />
-        <span class="label">{{ item.label }}</span>
+        <span class="sidebar-desktop__nav-label">{{ item.label }}</span>
       </router-link>
     </nav>
   </aside>
@@ -63,7 +63,7 @@ export default {
   flex-direction: column;
 }
 
-.sidebar-header {
+.sidebar-desktop__header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -72,20 +72,20 @@ export default {
   flex-shrink: 0;
 }
 
-.logo {
+.sidebar-desktop__logo {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
   margin: 0;
 }
 
-.sidebar-nav {
+.sidebar-desktop__nav {
   flex: 1;
   padding: 1rem 0;
   overflow-y: auto;
 }
 
-.nav-item {
+.sidebar-desktop__nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -97,35 +97,35 @@ export default {
   cursor: pointer;
 }
 
-.nav-icon {
+.sidebar-desktop__nav-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
 
-.nav-icon :deep(svg) {
+.sidebar-desktop__nav-icon :deep(svg) {
   width: 100%;
   height: 100%;
   stroke: currentColor;
 }
 
-.nav-item:hover {
+.sidebar-desktop__nav-item:hover {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
 
-.nav-item.active {
+.sidebar-desktop__nav-item--active {
   background-color: rgba(98, 0, 238, 0.05);
   color: var(--primary);
   border-left-color: var(--primary);
   font-weight: 600;
 }
 
-.nav-item.active .nav-icon :deep(svg) {
+.sidebar-desktop__nav-item--active .sidebar-desktop__nav-icon :deep(svg) {
   stroke: var(--primary);
 }
 
-.label {
+.sidebar-desktop__nav-label {
   font-size: 0.9rem;
   font-weight: 500;
 }

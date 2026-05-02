@@ -2,7 +2,7 @@
   <div class="ds-root">
     <!-- Sidebar -->
     <aside class="ds-sidebar">
-      <div class="ds-sidebar-header">
+      <div class="ds-sidebar__header">
         <div class="ds-logo">
           <SvgIcon
             name="logo-grid"
@@ -10,26 +10,26 @@
           />
         </div>
         <div>
-          <p class="ds-logo-title">Finance UI</p>
-          <p class="ds-logo-sub">Design System</p>
+          <p class="ds-logo__title">Finance UI</p>
+          <p class="ds-logo__sub">Design System</p>
         </div>
       </div>
 
       <nav class="ds-nav">
-        <p class="ds-nav-group-label">Fundamentos</p>
+        <p class="ds-nav__group-label">Fundamentos</p>
         <a
           v-for="item in navItems.tokens"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem"
         >
           Atoms
@@ -38,15 +38,15 @@
           v-for="item in navItems.atoms"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem"
         >
           Molecules
@@ -55,20 +55,20 @@
           v-for="item in navItems.molecules"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem; opacity: 0.5"
         >
           Organisms
         </p>
-        <span class="ds-nav-soon">Em breve…</span>
+        <span class="ds-nav__soon">Em breve…</span>
       </nav>
     </aside>
 

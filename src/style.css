@@ -130,25 +130,25 @@ button:disabled,
   transform: none;
 }
 
-button.secondary,
-.btn.secondary {
+button.btn--secondary,
+.btn--secondary {
   background-color: var(--bg-secondary);
   color: var(--primary);
   border: 1px solid var(--border);
 }
 
-button.secondary:hover,
-.btn.secondary:hover {
+button.btn--secondary:hover,
+.btn--secondary:hover {
   background-color: var(--border);
 }
 
-button.danger,
-.btn.danger {
+button.btn--danger,
+.btn--danger {
   background-color: var(--error);
 }
 
-button.danger:hover,
-.btn.danger:hover {
+button.btn--danger:hover,
+.btn--danger:hover {
   background-color: #8b0016;
 }
 
@@ -186,7 +186,7 @@ select:focus {
   margin-bottom: 1.25rem;
 }
 
-.form-group label {
+.form-group__label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;

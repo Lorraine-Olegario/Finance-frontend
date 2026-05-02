@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div class="main-layout">
     <SidebarDesktop />
     <SidebarMobile
       ref="sidebarMobile"
@@ -7,66 +7,66 @@
     />
 
     <div
-      class="main-wrapper"
-      :class="{ 'sidebar-collapsed': sidebarCollapsed }"
+      class="main-layout__wrapper"
+      :class="{ 'main-layout__wrapper--sidebar-collapsed': sidebarCollapsed }"
     >
-      <header class="main-header">
-        <div class="header-left">
+      <header class="main-layout__header">
+        <div class="main-layout__header-left">
           <button
-            class="mobile-menu-btn"
+            class="main-layout__mobile-menu-btn"
             @click="toggleSidebar"
           >
             ☰
           </button>
-          <h1 class="page-title">
+          <h1 class="main-layout__page-title">
             {{ pageTitle }}
           </h1>
         </div>
 
         <div
           v-if="authStore.user"
-          class="header-user"
+          class="main-layout__header-user"
         >
-          <div class="user-info">
-            <span class="user-name">{{ authStore.user.name }}</span>
+          <div class="main-layout__user-info">
+            <span class="main-layout__user-name">{{ authStore.user.name }}</span>
           </div>
           <div
             ref="userMenu"
-            class="user-menu"
+            class="main-layout__user-menu"
           >
             <div
-              class="user-avatar"
+              class="main-layout__user-avatar"
               @click.stop="toggleUserMenu"
             >
               {{ userInitials }}
             </div>
             <div
               v-if="userMenuOpen"
-              class="dropdown-menu"
+              class="main-layout__dropdown"
               @click.stop
             >
-              <div class="dropdown-header">
-                <div class="dropdown-user-info">
+              <div class="main-layout__dropdown-header">
+                <div class="main-layout__dropdown-user-info">
                   <strong>{{ authStore.user.name }}</strong>
-                  <span class="user-email">{{ authStore.user.email }}</span>
+                  <span class="main-layout__user-email">{{ authStore.user.email }}</span>
                 </div>
               </div>
-              <div class="dropdown-divider" />
+              <div class="main-layout__dropdown-divider" />
               <router-link
                 to="/profile"
-                class="dropdown-item"
+                class="main-layout__dropdown-item"
                 @click="closeUserMenu"
               >
                 <!-- prettier-ignore -->
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /> </svg>
+                <svg class="main-layout__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /> </svg>
                 Meu Perfil
               </router-link>
               <button
-                class="dropdown-item logout"
+                class="main-layout__dropdown-item main-layout__dropdown-item--logout"
                 @click="handleLogout"
               >
                 <!-- prettier-ignore -->
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" y1="12" x2="9" y2="12" /> </svg>
+                <svg class="main-layout__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" y1="12" x2="9" y2="12" /> </svg>
                 Sair
               </button>
             </div>
@@ -74,7 +74,7 @@
         </div>
       </header>
 
-      <main class="main-content">
+      <main class="main-layout__content">
         <slot />
       </main>
     </div>
@@ -163,12 +163,12 @@ export default {
 </script>
 
 <style scoped>
-.layout {
+.main-layout {
   display: flex;
   min-height: 100vh;
 }
 
-.main-wrapper {
+.main-layout__wrapper {
   flex: 1;
   margin-left: var(--sidebar-width);
   transition: margin-left 0.3s ease;
@@ -177,11 +177,11 @@ export default {
   min-height: 100vh;
 }
 
-.main-wrapper.sidebar-collapsed {
+.main-layout__wrapper--sidebar-collapsed {
   margin-left: 0;
 }
 
-.main-header {
+.main-layout__header {
   background-color: var(--bg-primary);
   padding: 1rem 2rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -195,13 +195,13 @@ export default {
   overflow: visible;
 }
 
-.header-left {
+.main-layout__header-left {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.mobile-menu-btn {
+.main-layout__mobile-menu-btn {
   display: none;
   background: none;
   border: none;
@@ -211,7 +211,7 @@ export default {
   color: var(--text-primary);
 }
 
-.page-title {
+.main-layout__page-title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
@@ -219,12 +219,12 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .page-title {
+  .main-layout__page-title {
     display: none;
   }
 }
 
-.header-user {
+.main-layout__header-user {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -232,21 +232,21 @@ export default {
   z-index: 100;
 }
 
-.user-info {
+.main-layout__user-info {
   text-align: right;
 }
 
-.user-name {
+.main-layout__user-name {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.user-menu {
+.main-layout__user-menu {
   position: relative;
 }
 
-.user-avatar {
+.main-layout__user-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -262,12 +262,12 @@ export default {
   user-select: none;
 }
 
-.user-avatar:hover {
+.main-layout__user-avatar:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.dropdown-menu {
+.main-layout__dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
@@ -293,35 +293,35 @@ export default {
   }
 }
 
-.dropdown-header {
+.main-layout__dropdown-header {
   padding: 16px;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
 }
 
-.dropdown-user-info {
+.main-layout__dropdown-user-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.dropdown-user-info strong {
+.main-layout__dropdown-user-info strong {
   font-size: 14px;
   font-weight: 600;
 }
 
-.user-email {
+.main-layout__user-email {
   font-size: 12px;
   opacity: 0.9;
 }
 
-.dropdown-divider {
+.main-layout__dropdown-divider {
   height: 1px;
   background: var(--border-color);
   margin: 0;
 }
 
-.dropdown-item {
+.main-layout__dropdown-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -337,26 +337,26 @@ export default {
   cursor: pointer;
 }
 
-.dropdown-item .icon {
+.main-layout__dropdown-icon {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
 }
 
-.dropdown-item:hover {
+.main-layout__dropdown-item:hover {
   background: var(--bg-hover);
 }
 
-.dropdown-item.logout {
+.main-layout__dropdown-item--logout {
   color: var(--danger);
   border-top: 1px solid var(--border-color);
 }
 
-.dropdown-item.logout:hover {
+.main-layout__dropdown-item--logout:hover {
   background: rgba(239, 68, 68, 0.1);
 }
 
-.main-content {
+.main-layout__content {
   flex: 1;
   padding: 2rem;
   background-color: var(--bg-secondary);
@@ -365,24 +365,24 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .main-wrapper {
+  .main-layout__wrapper {
     margin-left: 0;
   }
 
-  .mobile-menu-btn {
+  .main-layout__mobile-menu-btn {
     display: block;
   }
 
-  .mobile-menu-btn:hover {
+  .main-layout__mobile-menu-btn:hover {
     background-color: var(--bg-secondary);
     border-radius: 4px;
   }
 
-  .main-content {
+  .main-layout__content {
     padding: 1rem;
   }
 
-  .user-info {
+  .main-layout__user-info {
     display: none;
   }
 }

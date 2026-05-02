@@ -3,8 +3,8 @@
     :to="to"
     class="quick-action-card"
   >
-    <span class="quick-action-icon"><slot name="icon" /></span>
-    <span class="quick-action-label">{{ label }}</span>
+    <span class="quick-action-card__icon"><slot name="icon" /></span>
+    <span class="quick-action-card__label">{{ label }}</span>
   </RouterLink>
 </template>
 
@@ -37,13 +37,13 @@ defineProps({
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.quick-action-icon :deep(svg) {
+.quick-action-card__icon :deep(svg) {
   width: 32px;
   height: 32px;
   stroke: var(--primary);
 }
 
-.quick-action-label {
+.quick-action-card__label {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-primary);

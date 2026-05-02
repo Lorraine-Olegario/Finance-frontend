@@ -6,17 +6,17 @@
   >
     <SvgIcon
       :name="iconMap[type]"
-      class="alert-icon"
+      class="alert-msg__icon"
     />
 
-    <div class="alert-content">
+    <div class="alert-msg__content">
       <h4
         v-if="title"
-        class="alert-title"
+        class="alert-msg__title"
       >
         {{ title }}
       </h4>
-      <p class="alert-text">
+      <p class="alert-msg__text">
         {{ message }}
       </p>
     </div>
@@ -24,7 +24,7 @@
     <button
       v-if="dismissible"
       type="button"
-      class="alert-close"
+      class="alert-msg__close"
       aria-label="Fechar"
       @click="$emit('dismiss')"
     >
@@ -91,33 +91,33 @@ const iconMap = {
   color: var(--accent-blue);
 }
 
-.alert-icon {
+.alert-msg__icon {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
   margin-top: 1px;
 }
 
-.alert-content {
+.alert-msg__content {
   flex: 1;
   min-width: 0;
 }
 
-.alert-title {
+.alert-msg__title {
   font-size: 1rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
   color: inherit;
 }
 
-.alert-text {
+.alert-msg__text {
   font-size: 0.9375rem;
   line-height: 1.5;
   margin: 0;
   color: inherit;
 }
 
-.alert-close {
+.alert-msg__close {
   width: 28px;
   height: 28px;
   border: none;
@@ -133,10 +133,10 @@ const iconMap = {
   padding: 0;
 }
 
-.alert-close:hover {
+.alert-msg__close:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.alert-close svg {
+.alert-msg__close svg {
   width: 16px;
   height: 16px;
 }

@@ -1,7 +1,7 @@
 <template>
   <!-- Atoms group header -->
-  <div class="ds-group-header">
-    <span class="ds-group-pill ds-group-pill--atoms">Atoms</span>
+  <div class="ds-group__header">
+    <span class="ds-group__pill ds-group__pill--atoms">Atoms</span>
     <p>
       Unidades indivisíveis — não dependem de outros componentes do projeto.
     </p>
@@ -12,9 +12,9 @@
     id="svg-icon"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">SvgIcon</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">SvgIcon</h1>
+      <p class="ds-section__desc">
         Renderiza ícones do registro
         <code>src/assets/icons/index.js</code>
         . Todos os ícones usam
@@ -26,76 +26,76 @@
         .
       </p>
     </div>
-    <h3 class="ds-subsection-title">Ícones disponíveis</h3>
+    <h3 class="ds-section__subsection-title">Ícones disponíveis</h3>
     <div class="ds-showcase ds-showcase--row">
       <div
         v-for="name in iconGallery"
         :key="name"
-        class="ds-showcase-item"
+        class="ds-showcase__item"
       >
         <SvgIcon
           :name="name"
           size="22"
         />
-        <span class="ds-showcase-caption">{{ name }}</span>
+        <span class="ds-showcase__caption">{{ name }}</span>
       </div>
     </div>
-    <h3 class="ds-subsection-title">Tamanhos e espessura</h3>
+    <h3 class="ds-section__subsection-title">Tamanhos e espessura</h3>
     <div
       class="ds-showcase ds-showcase--row"
       style="align-items: flex-end"
     >
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="16"
         />
-        <span class="ds-showcase-caption">16px</span>
+        <span class="ds-showcase__caption">16px</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="20"
         />
-        <span class="ds-showcase-caption">20px</span>
+        <span class="ds-showcase__caption">20px</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="24"
         />
-        <span class="ds-showcase-caption">24px (padrão)</span>
+        <span class="ds-showcase__caption">24px (padrão)</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="32"
         />
-        <span class="ds-showcase-caption">32px</span>
+        <span class="ds-showcase__caption">32px</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="24"
           :stroke-width="1"
         />
-        <span class="ds-showcase-caption">sw=1</span>
+        <span class="ds-showcase__caption">sw=1</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="24"
           :stroke-width="2"
         />
-        <span class="ds-showcase-caption">sw=2</span>
+        <span class="ds-showcase__caption">sw=2</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <SvgIcon
           name="search"
           size="24"
           :stroke-width="3"
         />
-        <span class="ds-showcase-caption">sw=3</span>
+        <span class="ds-showcase__caption">sw=3</span>
       </div>
     </div>
     <div class="ds-props">
@@ -124,34 +124,34 @@
     id="app-spinner"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">AppSpinner</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">AppSpinner</h1>
+      <p class="ds-section__desc">
         Spinner inline para usar dentro de botões e áreas de conteúdo. Use
         <code>LoadingSpinner</code>
         para loading de página inteira.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Tamanhos</h3>
+    <h3 class="ds-section__subsection-title">Tamanhos</h3>
     <div class="ds-showcase ds-showcase--row">
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <AppSpinner size="16px" />
-        <span class="ds-showcase-caption">16px</span>
+        <span class="ds-showcase__caption">16px</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <AppSpinner size="20px" />
-        <span class="ds-showcase-caption">20px (padrão)</span>
+        <span class="ds-showcase__caption">20px (padrão)</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <AppSpinner size="32px" />
-        <span class="ds-showcase-caption">32px</span>
+        <span class="ds-showcase__caption">32px</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <AppSpinner size="48px" />
-        <span class="ds-showcase-caption">48px</span>
+        <span class="ds-showcase__caption">48px</span>
       </div>
     </div>
-    <h3 class="ds-subsection-title">Invertido (fundo escuro)</h3>
+    <h3 class="ds-section__subsection-title">Invertido (fundo escuro)</h3>
     <div class="ds-showcase ds-showcase--dark ds-showcase--row">
       <AppSpinner
         size="24px"
@@ -177,22 +177,22 @@
     id="base-button"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">BaseButton</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">BaseButton</h1>
+      <p class="ds-section__desc">
         Botão com 4 variantes e 3 tamanhos. Inclui loading state com
         <code>AppSpinner</code>
         integrado.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Variantes</h3>
+    <h3 class="ds-section__subsection-title">Variantes</h3>
     <div class="ds-showcase ds-showcase--row">
       <BaseButton variant="primary">Primary</BaseButton>
       <BaseButton variant="secondary">Secondary</BaseButton>
       <BaseButton variant="ghost">Ghost</BaseButton>
       <BaseButton variant="danger">Danger</BaseButton>
     </div>
-    <h3 class="ds-subsection-title">Tamanhos</h3>
+    <h3 class="ds-section__subsection-title">Tamanhos</h3>
     <div
       class="ds-showcase ds-showcase--row"
       style="align-items: flex-end"
@@ -216,7 +216,7 @@
         Large
       </BaseButton>
     </div>
-    <h3 class="ds-subsection-title">Estados</h3>
+    <h3 class="ds-section__subsection-title">Estados</h3>
     <div class="ds-showcase ds-showcase--row">
       <BaseButton
         variant="primary"
@@ -270,9 +270,9 @@
     id="base-input"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">BaseInput</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">BaseInput</h1>
+      <p class="ds-section__desc">
         Input base com v-model. Estilos de foco, disabled e readonly via CSS
         variables.
       </p>
@@ -333,9 +333,9 @@
     id="base-select"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">BaseSelect</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">BaseSelect</h1>
+      <p class="ds-section__desc">
         Select com array de opções
         <code>[{value, label}]</code>
         e placeholder opcional.
@@ -379,13 +379,13 @@
     id="badge"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">Badge</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">Badge</h1>
+      <p class="ds-section__desc">
         Badge de categoria com mapa de cores built-in.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Categorias padrão</h3>
+    <h3 class="ds-section__subsection-title">Categorias padrão</h3>
     <div class="ds-showcase ds-showcase--row">
       <Badge label="Ações" />
       <Badge label="FII" />
@@ -394,7 +394,7 @@
       <Badge label="Cripto" />
       <Badge label="Renda Fixa" />
     </div>
-    <h3 class="ds-subsection-title">Cor customizada</h3>
+    <h3 class="ds-section__subsection-title">Cor customizada</h3>
     <div class="ds-showcase ds-showcase--row">
       <Badge
         label="Custom"
@@ -423,29 +423,29 @@
     id="status-badge"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">StatusBadge</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">StatusBadge</h1>
+      <p class="ds-section__desc">
         Badge de status de ativo. Cores definidas no style-guide —
         exclusivamente para estado de ativos.
       </p>
     </div>
     <div class="ds-showcase ds-showcase--row">
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <StatusBadge status="ativo" />
-        <span class="ds-showcase-caption">ativo</span>
+        <span class="ds-showcase__caption">ativo</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <StatusBadge status="observando" />
-        <span class="ds-showcase-caption">observando</span>
+        <span class="ds-showcase__caption">observando</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <StatusBadge status="inativo" />
-        <span class="ds-showcase-caption">inativo</span>
+        <span class="ds-showcase__caption">inativo</span>
       </div>
-      <div class="ds-showcase-item">
+      <div class="ds-showcase__item">
         <StatusBadge status="pausado" />
-        <span class="ds-showcase-caption">pausado</span>
+        <span class="ds-showcase__caption">pausado</span>
       </div>
     </div>
     <div class="ds-props">
@@ -460,20 +460,20 @@
     id="action-button"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">ActionButton</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">ActionButton</h1>
+      <p class="ds-section__desc">
         Botão quadrado 36×36px para ícones de ação em tabelas. Use
         <code>SvgIcon</code>
         no slot.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Variantes (hover para ver)</h3>
+    <h3 class="ds-section__subsection-title">Variantes (hover para ver)</h3>
     <div class="ds-showcase ds-showcase--row">
       <div
         v-for="v in actionVariants"
         :key="v.name"
-        class="ds-showcase-item"
+        class="ds-showcase__item"
       >
         <ActionButton
           :variant="v.name"
@@ -484,10 +484,10 @@
             size="18"
           />
         </ActionButton>
-        <span class="ds-showcase-caption">{{ v.name }}</span>
+        <span class="ds-showcase__caption">{{ v.name }}</span>
       </div>
     </div>
-    <h3 class="ds-subsection-title">Disabled</h3>
+    <h3 class="ds-section__subsection-title">Disabled</h3>
     <div class="ds-showcase ds-showcase--row">
       <ActionButton
         variant="edit"
@@ -532,9 +532,9 @@
     id="filter-label"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">FilterLabel</h1>
-      <p class="ds-section-desc">Wrapper de label para campos de filtro.</p>
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">FilterLabel</h1>
+      <p class="ds-section__desc">Wrapper de label para campos de filtro.</p>
     </div>
     <div
       class="ds-showcase ds-showcase--col"
@@ -585,9 +585,9 @@
     id="loading-spinner"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">LoadingSpinner</h1>
-      <p class="ds-section-desc">Spinner de carregamento de seção ou página.</p>
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">LoadingSpinner</h1>
+      <p class="ds-section__desc">Spinner de carregamento de seção ou página.</p>
     </div>
     <div
       class="ds-showcase ds-showcase--row"
@@ -622,18 +622,18 @@
     id="empty-state"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">EmptyState</h1>
-      <p class="ds-section-desc">Estado vazio com slots de ícone e ação.</p>
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">EmptyState</h1>
+      <p class="ds-section__desc">Estado vazio com slots de ícone e ação.</p>
     </div>
-    <h3 class="ds-subsection-title">Padrão</h3>
+    <h3 class="ds-section__subsection-title">Padrão</h3>
     <div class="ds-showcase">
       <EmptyState
         title="Nenhum ativo encontrado"
         description="Adicione ativos para começar a acompanhar sua carteira."
       />
     </div>
-    <h3 class="ds-subsection-title">Com ícone e ação customizados</h3>
+    <h3 class="ds-section__subsection-title">Com ícone e ação customizados</h3>
     <div class="ds-showcase">
       <EmptyState
         title="Sem alertas ativos"
@@ -671,9 +671,9 @@
     id="alert-message"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">AlertMessage</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">AlertMessage</h1>
+      <p class="ds-section__desc">
         Alert contextual com 4 tipos. Suporta título opcional e dismiss.
       </p>
     </div>
@@ -723,15 +723,15 @@
     id="pagination"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">Pagination</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">Pagination</h1>
+      <p class="ds-section__desc">
         Paginação com cálculo automático de páginas visíveis e ellipsis.
       </p>
     </div>
     <div class="ds-showcase ds-showcase--col">
       <div>
-        <p class="ds-preview-label">Poucas páginas</p>
+        <p class="ds-showcase__preview-label">Poucas páginas</p>
         <Pagination
           :current-page="2"
           :last-page="5"
@@ -739,7 +739,7 @@
         />
       </div>
       <div>
-        <p class="ds-preview-label">Muitas páginas (ellipsis)</p>
+        <p class="ds-showcase__preview-label">Muitas páginas (ellipsis)</p>
         <Pagination
           :current-page="6"
           :last-page="20"
@@ -747,7 +747,7 @@
         />
       </div>
       <div>
-        <p class="ds-preview-label">Com info de página</p>
+        <p class="ds-showcase__preview-label">Com info de página</p>
         <Pagination
           :current-page="3"
           :last-page="8"
@@ -786,13 +786,13 @@
     id="stat-card"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">StatCard</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">StatCard</h1>
+      <p class="ds-section__desc">
         Card de métrica com barra lateral colorida. 4 variantes.
       </p>
     </div>
-    <div class="ds-showcase ds-stat-grid">
+    <div class="ds-showcase ds-stats__grid">
       <StatCard
         label="Total investido"
         value="R$ 48.250"
@@ -866,9 +866,9 @@
     id="dashboard-card"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">DashboardCard</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">DashboardCard</h1>
+      <p class="ds-section__desc">
         Container genérico para seções do dashboard.
       </p>
     </div>
@@ -932,9 +932,9 @@
     id="quick-action-card"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">QuickActionCard</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">QuickActionCard</h1>
+      <p class="ds-section__desc">
         Card de navegação rápida — renderiza um
         <code>&lt;RouterLink&gt;</code>
         .
@@ -991,9 +991,9 @@
     id="category-list-item"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">CategoryListItem</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">CategoryListItem</h1>
+      <p class="ds-section__desc">
         Linha de item de categoria com dot colorido, nome, contagem e
         percentual.
       </p>

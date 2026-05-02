@@ -3,23 +3,23 @@
     class="stat-card"
     :class="`stat-card--${variant}`"
   >
-    <div class="stat-header">
-      <div class="stat-icon">
+    <div class="stat-card__header">
+      <div class="stat-card__icon">
         <slot name="icon" />
       </div>
-      <div class="stat-meta">
-        <p class="stat-label">
+      <div class="stat-card__meta">
+        <p class="stat-card__label">
           {{ label }}
         </p>
-        <p class="stat-value">
+        <p class="stat-card__value">
           {{ value }}
         </p>
       </div>
     </div>
     <p
       v-if="subtitle || $slots['subtitle-icon']"
-      class="stat-change"
-      :class="{ positive: isPositive }"
+      class="stat-card__change"
+      :class="{ 'stat-card__change--positive': isPositive }"
     >
       <slot name="subtitle-icon" />
       {{ subtitle }}
@@ -85,19 +85,19 @@ defineProps({
   color: var(--accent-yellow);
 }
 
-.stat-header {
+.stat-card__header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
 }
 
-.stat-meta {
+.stat-card__meta {
   display: flex;
   flex-direction: column;
 }
 
-.stat-icon {
+.stat-card__icon {
   width: 48px;
   height: 48px;
   border-radius: 10px;
@@ -107,7 +107,7 @@ defineProps({
   position: relative;
 }
 
-.stat-icon::before {
+.stat-card__icon::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -116,7 +116,7 @@ defineProps({
   opacity: 0.1;
 }
 
-.stat-icon :deep(svg) {
+.stat-card__icon :deep(svg) {
   width: 22px;
   height: 22px;
   stroke: currentColor;
@@ -124,7 +124,7 @@ defineProps({
   z-index: 1;
 }
 
-.stat-label {
+.stat-card__label {
   font-size: 0.875rem;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -134,7 +134,7 @@ defineProps({
   z-index: 2;
 }
 
-.stat-value {
+.stat-card__value {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -142,7 +142,7 @@ defineProps({
   margin: 0 0 0.4rem;
 }
 
-.stat-change {
+.stat-card__change {
   font-size: 0.85rem;
   color: var(--text-secondary);
   display: flex;
@@ -151,10 +151,10 @@ defineProps({
   margin: 0;
 }
 
-.stat-change.positive {
+.stat-card__change--positive {
   color: var(--accent-green);
 }
-.stat-change :deep(svg) {
+.stat-card__change :deep(svg) {
   width: 14px;
   height: 14px;
 }

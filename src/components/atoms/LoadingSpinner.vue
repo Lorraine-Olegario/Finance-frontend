@@ -1,15 +1,15 @@
 <template>
   <div
-    class="loading-container"
-    :class="{ 'loading-container--fullscreen': fullscreen }"
+    class="loading-spinner"
+    :class="{ 'loading-spinner--fullscreen': fullscreen }"
   >
     <div
-      class="spinner"
+      class="loading-spinner__spinner"
       :style="{ width: size, height: size }"
     />
     <p
       v-if="message"
-      class="loading-message"
+      class="loading-spinner__message"
     >
       {{ message }}
     </p>
@@ -25,12 +25,12 @@ defineProps({
 </script>
 
 <style scoped>
-.loading-container {
+.loading-spinner {
   text-align: center;
   padding: 4rem 2rem;
 }
 
-.loading-container--fullscreen {
+.loading-spinner--fullscreen {
   position: fixed;
   inset: 0;
   background: rgba(255, 255, 255, 0.95);
@@ -41,7 +41,7 @@ defineProps({
   z-index: 9999;
 }
 
-.spinner {
+.loading-spinner__spinner {
   border: 4px solid var(--border);
   border-top-color: var(--primary);
   border-radius: 50%;
@@ -49,7 +49,7 @@ defineProps({
   animation: spin 0.8s linear infinite;
 }
 
-.loading-message {
+.loading-spinner__message {
   color: var(--text-secondary);
   font-size: 1.125rem;
   margin: 0;

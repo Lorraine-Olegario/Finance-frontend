@@ -1,23 +1,23 @@
 <template>
-  <div class="d-card">
-    <div class="d-card-header">
+  <div class="dashboard-card">
+    <div class="dashboard-card__header">
       <span
         v-if="$slots.icon"
-        class="d-card-icon"
+        class="dashboard-card__icon"
       >
         <slot name="icon" />
       </span>
-      <h3 class="d-card-title">
+      <h3 class="dashboard-card__title">
         {{ title }}
       </h3>
       <div
         v-if="$slots.actions"
-        class="d-card-actions"
+        class="dashboard-card__actions"
       >
         <slot name="actions" />
       </div>
     </div>
-    <div class="d-card-body">
+    <div class="dashboard-card__body">
       <slot />
     </div>
   </div>
@@ -30,7 +30,7 @@ defineProps({
 </script>
 
 <style scoped>
-.d-card {
+.dashboard-card {
   background: var(--surface);
   border-radius: 16px;
   border: 1px solid var(--border-color);
@@ -38,7 +38,7 @@ defineProps({
   overflow: hidden;
 }
 
-.d-card-header {
+.dashboard-card__header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -46,13 +46,13 @@ defineProps({
   border-bottom: 1px solid var(--border);
 }
 
-.d-card-icon :deep(svg) {
+.dashboard-card__icon :deep(svg) {
   width: 20px;
   height: 20px;
   color: var(--primary);
 }
 
-.d-card-title {
+.dashboard-card__title {
   flex: 1;
   font-size: 1.125rem;
   font-weight: 600;
@@ -60,11 +60,11 @@ defineProps({
   margin: 0;
 }
 
-.d-card-actions {
+.dashboard-card__actions {
   margin-left: auto;
 }
 
-.d-card-body {
+.dashboard-card__body {
   padding: 1.5rem;
 }
 </style>

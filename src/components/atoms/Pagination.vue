@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="lastPage > 1 || showTotal"
-    class="pagination-wrap"
+    class="pagination"
   >
     <div
       v-if="showTotal"
-      class="total-section"
+      class="pagination__total"
     >
       <slot
         name="totalLabel"
@@ -18,10 +18,10 @@
 
     <div
       v-if="lastPage > 1"
-      class="pagination-controls"
+      class="pagination__controls"
     >
       <button
-        class="pagination-btn"
+        class="pagination__btn"
         :disabled="currentPage <= 1"
         aria-label="Página anterior"
         @click="emit('page-change', currentPage - 1)"
@@ -39,22 +39,22 @@
       >
         <button
           v-if="page !== '...'"
-          class="pagination-page"
-          :class="{ active: page === currentPage }"
+          class="pagination__page"
+          :class="{ 'pagination__page--active': page === currentPage }"
           @click="emit('page-change', page)"
         >
           {{ page }}
         </button>
         <span
           v-else
-          class="pagination-page ellipsis"
+          class="pagination__page pagination__page--ellipsis"
         >
           …
         </span>
       </template>
 
       <button
-        class="pagination-btn"
+        class="pagination__btn"
         :disabled="currentPage >= lastPage"
         aria-label="Próxima página"
         @click="emit('page-change', currentPage + 1)"
@@ -69,7 +69,7 @@
 
     <div
       v-if="showPageInfo"
-      class="page-info"
+      class="pagination__info"
     >
       {{ startItem }}–{{ endItem }} de {{ total }}
     </div>
@@ -115,7 +115,7 @@ const endItem = computed(() =>
 </script>
 
 <style scoped>
-.pagination-wrap {
+.pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -123,24 +123,24 @@ const endItem = computed(() =>
   flex-wrap: wrap;
 }
 
-.total-section {
+.pagination__total {
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
-.total-section strong {
+.pagination__total strong {
   color: var(--primary);
   font-weight: 600;
 }
 
-.pagination-controls {
+.pagination__controls {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.pagination-btn,
-.pagination-page {
+.pagination__btn,
+.pagination__page {
   width: 32px;
   height: 32px;
   min-width: 32px;
@@ -158,39 +158,39 @@ const endItem = computed(() =>
   transition: all 0.15s;
 }
 
-.pagination-btn svg {
+.pagination__btn svg {
   width: 16px;
   height: 16px;
 }
 
-.pagination-btn:not(:disabled):hover,
-.pagination-page:not(.active):not(.ellipsis):hover {
+.pagination__btn:not(:disabled):hover,
+.pagination__page:not(.pagination__page--active):not(.pagination__page--ellipsis):hover {
   background: var(--primary);
   color: white;
   border-color: var(--primary);
   transform: scale(1.05);
 }
 
-.pagination-btn:disabled {
+.pagination__btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
 
-.pagination-page.active {
+.pagination__page--active {
   background: var(--primary);
   border-color: var(--primary);
   color: white;
   font-weight: 600;
 }
 
-.pagination-page.ellipsis {
+.pagination__page--ellipsis {
   background: transparent;
   border: none;
   color: var(--text-secondary);
   cursor: default;
 }
 
-.page-info {
+.pagination__info {
   color: var(--text-secondary);
   font-size: 0.85rem;
 }

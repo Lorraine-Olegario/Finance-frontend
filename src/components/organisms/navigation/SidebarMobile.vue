@@ -1,33 +1,33 @@
 <template>
-  <div class="sidebar-mobile-wrapper">
+  <div class="mobile-sidebar">
     <div
-      class="sidebar-overlay"
-      :class="{ active: !isCollapsed }"
+      class="mobile-sidebar__overlay"
+      :class="{ 'mobile-sidebar__overlay--active': !isCollapsed }"
       @click="closeSidebar"
     />
     <aside
-      class="sidebar-mobile"
-      :class="{ collapsed: isCollapsed }"
+      class="mobile-sidebar__panel"
+      :class="{ 'mobile-sidebar__panel--collapsed': isCollapsed }"
     >
-      <div class="sidebar-header">
-        <h2 class="logo">Finance</h2>
+      <div class="mobile-sidebar__header">
+        <h2 class="mobile-sidebar__logo">Finance</h2>
       </div>
 
-      <nav class="sidebar-nav">
+      <nav class="mobile-sidebar__nav">
         <router-link
           v-for="item in visibleMenuItems"
           :key="item.id"
           :to="item.to"
-          class="nav-item"
-          :exact-active-class="item.exact ? 'active' : ''"
-          :active-class="!item.exact ? 'active' : ''"
+          class="mobile-sidebar__nav-item"
+          :exact-active-class="item.exact ? 'mobile-sidebar__nav-item--active' : ''"
+          :active-class="!item.exact ? 'mobile-sidebar__nav-item--active' : ''"
           @click="handleNavClick"
         >
           <div
-            class="nav-icon"
+            class="mobile-sidebar__nav-icon"
             v-html="item.icon"
           />
-          <span class="label">{{ item.label }}</span>
+          <span class="mobile-sidebar__nav-label">{{ item.label }}</span>
         </router-link>
       </nav>
     </aside>
@@ -94,12 +94,12 @@ export default {
 
 <style scoped>
 /* Wrapper e overlay */
-.sidebar-mobile-wrapper {
+.mobile-sidebar {
   position: relative;
   z-index: 1000;
 }
 
-.sidebar-overlay {
+.mobile-sidebar__overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -110,13 +110,13 @@ export default {
   display: none;
 }
 
-.sidebar-overlay.active {
+.mobile-sidebar__overlay--active {
   opacity: 1;
   pointer-events: auto;
 }
 
 /* Sidebar mobile */
-.sidebar-mobile {
+.mobile-sidebar__panel {
   position: fixed;
   left: 0;
   top: 0;
@@ -131,15 +131,15 @@ export default {
   flex-direction: column;
 }
 
-.sidebar-mobile.collapsed {
+.mobile-sidebar__panel--collapsed {
   transform: translateX(-100%);
 }
 
-.sidebar-mobile:not(.collapsed) {
+.mobile-sidebar__panel:not(.mobile-sidebar__panel--collapsed) {
   transform: translateX(0);
 }
 
-.sidebar-header {
+.mobile-sidebar__header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -148,20 +148,20 @@ export default {
   flex-shrink: 0;
 }
 
-.logo {
+.mobile-sidebar__logo {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
   margin: 0;
 }
 
-.sidebar-nav {
+.mobile-sidebar__nav {
   flex: 1;
   padding: 1rem 0;
   overflow-y: auto;
 }
 
-.nav-item {
+.mobile-sidebar__nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -173,53 +173,53 @@ export default {
   cursor: pointer;
 }
 
-.nav-icon {
+.mobile-sidebar__nav-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
 
-.nav-icon :deep(svg) {
+.mobile-sidebar__nav-icon :deep(svg) {
   width: 100%;
   height: 100%;
   stroke: currentColor;
 }
 
-.nav-item:hover {
+.mobile-sidebar__nav-item:hover {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
 
-.nav-item.active {
+.mobile-sidebar__nav-item--active {
   background-color: rgba(98, 0, 238, 0.05);
   color: var(--primary);
   border-left-color: var(--primary);
   font-weight: 600;
 }
 
-.nav-item.active .nav-icon :deep(svg) {
+.mobile-sidebar__nav-item--active .mobile-sidebar__nav-icon :deep(svg) {
   stroke: var(--primary);
 }
 
-.label {
+.mobile-sidebar__nav-label {
   font-size: 0.9rem;
   font-weight: 500;
 }
 
 /* Mostrar apenas no mobile */
 @media (max-width: 768px) {
-  .sidebar-mobile {
+  .mobile-sidebar__panel {
     display: flex;
   }
 
-  .sidebar-overlay {
+  .mobile-sidebar__overlay {
     display: block;
   }
 }
 
 /* Ocultar no desktop */
 @media (min-width: 769px) {
-  .sidebar-mobile-wrapper {
+  .mobile-sidebar {
     display: none;
   }
 }
