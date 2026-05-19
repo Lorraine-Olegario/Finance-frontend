@@ -1,0 +1,130 @@
+.mobile-sidebar {
+  position: relative;
+  z-index: 1000;
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: none;
+
+    &--active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &__panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: var(--sidebar-width);
+    background-color: var(--bg-primary);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+
+    &--collapsed {
+      transform: translateX(-100%);
+    }
+
+    &:not(&--collapsed) {
+      transform: translateX(0);
+    }
+  }
+
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  &__nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+  }
+
+  &__nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.875rem 1.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    &--active {
+      background-color: rgba(98, 0, 238, 0.05);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+
+      .mobile-sidebar__nav-icon {
+        :deep(svg) {
+          stroke: var(--primary);
+        }
+      }
+    }
+  }
+
+  &__nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+
+    :deep(svg) {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+    }
+  }
+
+  &__nav-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-sidebar {
+    &__panel {
+      display: flex;
+    }
+
+    &__overlay {
+      display: block;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-sidebar {
+    display: none;
+  }
+}

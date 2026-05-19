@@ -292,28 +292,33 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import MainLayout from '@/components/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import StatsGrid from '@/components/molecules/StatsGrid.vue'
-import StatCard from '@/components/atoms/StatCard.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
-import Badge from '@/components/atoms/Badge.vue'
-import StatusBadge from '@/components/atoms/StatusBadge.vue'
-import ActionButton from '@/components/atoms/ActionButton.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import EmptyState from '@/components/atoms/EmptyState.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
-import Pagination from '@/components/atoms/Pagination.vue'
-import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
-import ObservedAssetsFilterDrawer from '@/components/organisms/observed/ObservedAssetsFilterDrawer.vue'
-import EditAlertModal from '@/components/organisms/observed/EditAlertModal.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
+import StatCard from '@/components/atoms/StatCard/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import Badge from '@/components/atoms/Badge/index.vue'
+import StatusBadge from '@/components/atoms/StatusBadge/index.vue'
+import ActionButton from '@/components/atoms/ActionButton/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import EmptyState from '@/components/atoms/EmptyState/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import Pagination from '@/components/atoms/Pagination/index.vue'
+import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
+import ObservedAssetsFilterDrawer from '@/components/organisms/observed/ObservedAssetsFilterDrawer/index.vue'
+import EditAlertModal from '@/components/organisms/observed/EditAlertModal/index.vue'
 import assetService from '@/services/assetService'
+import categoryService from '@/services/categoryService'
+import { useAuthStore } from '@/stores/auth'
 
 // ── State ──────────────────────────────────────────────────────────────────────
+const authStore = useAuthStore()
 const observedAssets = ref([])
 const alerts = ref([])
+const categories = ref([])
 const prices = ref({})
 const loading = ref(false)
 const error = ref('')
@@ -339,13 +344,6 @@ const mergedAssets = computed(() => {
       alert: alert ?? null
     }
   })
-})
-
-const categories = computed(() => {
-  const cats = [
-    ...new Set(mergedAssets.value.map(a => a.categoria).filter(Boolean))
-  ]
-  return cats.sort()
 })
 
 const filteredAssets = computed(() => {
@@ -434,11 +432,23 @@ async function fetchAlerts() {
   }
 }
 
+async function fetchCategories() {
+  try {
+    const res = await categoryService.getAll()
+    if (res.data && Array.isArray(res.data.data)) {
+      categories.value = res.data.data.map(cat => cat.nome || cat.name || String(cat))
+    }
+  } catch {
+    // erro opcional — categorias derivam do fallback vazio
+  }
+}
+
 async function loadPage() {
+  if (!authStore.user?.id) return
   loading.value = true
   error.value = ''
   try {
-    await Promise.all([fetchObservedAssets(), fetchAlerts()])
+    await Promise.all([fetchObservedAssets(), fetchAlerts(), fetchCategories()])
     await fetchAssetPrices()
   } catch {
     error.value = 'Erro ao carregar ativos observados. Tente novamente.'
@@ -459,7 +469,7 @@ async function fetchAssetPrices() {
       }
     })
   } catch (err) {
-    console.error('Erro ao buscar cotações:', err)
+    console.error('[ObservedAssets] Erro ao buscar cotações:', err)
   }
 }
 

@@ -68,13 +68,15 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import BaseInput from '@/components/atoms/BaseInput.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
+import BaseInput from '@/components/atoms/BaseInput/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -83,12 +85,14 @@ const password = ref('')
 const loading = ref(false)
 const error = ref('')
 
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(() => {
   if (authStore.isAuthenticated) {
     router.push('/')
   }
 })
 
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function handleLogin() {
   loading.value = true
   error.value = ''

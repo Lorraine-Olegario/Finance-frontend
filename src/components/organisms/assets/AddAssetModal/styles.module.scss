@@ -1,0 +1,62 @@
+.add-asset-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__label-hint {
+    font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.08);
+      background: var(--bg-primary);
+    }
+  }
+
+  &__hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+
+    &--warning {
+      color: var(--accent-yellow);
+    }
+  }
+}

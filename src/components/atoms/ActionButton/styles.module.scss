@@ -1,0 +1,71 @@
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+
+  :deep(svg) {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
+  }
+
+  &--default:not(:disabled):hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &--edit:not(:disabled):hover {
+    background: rgba(98, 0, 238, 0.08);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  &--delete:not(:disabled):hover {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  &--play:not(:disabled):hover {
+    background: rgba(0, 200, 83, 0.08);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  &--pause:not(:disabled):hover {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+  }
+
+  &--observe:not(:disabled):hover {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+
+  &--info:not(:disabled):hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+}

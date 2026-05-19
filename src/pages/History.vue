@@ -6,19 +6,19 @@
         subtitle="Consulte o histórico de preços de um ativo pelo seu código"
       />
 
-      <div class="history-page__form card">
+      <div class="history-page__form">
         <div class="history-page__search">
           <SearchBar
             v-model="searchCode"
             placeholder="Digite o código do ativo (ex: PETR4)"
             :disabled="loading"
-            @search="searchHistory"
+            @search="handleSearch"
           />
           <BaseButton
             variant="primary"
             :disabled="!searchCode || loading"
             :loading="loading"
-            @click="searchHistory"
+            @click="handleSearch"
           >
             Buscar
           </BaseButton>
@@ -40,7 +40,7 @@
 
       <div
         v-if="historyData.length"
-        class="history-page__results card"
+        class="history-page__results"
       >
         <h3 class="history-page__results-title">
           Histórico de {{ lastSearchCode }}
@@ -118,17 +118,19 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import SearchBar from '@/components/molecules/SearchBar.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import EmptyState from '@/components/atoms/EmptyState.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import SearchBar from '@/components/molecules/SearchBar/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import EmptyState from '@/components/atoms/EmptyState/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import assetService from '@/services/assetService'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const searchCode = ref('')
 const lastSearchCode = ref('')
 const historyData = ref([])
@@ -136,7 +138,19 @@ const loading = ref(false)
 const error = ref('')
 const hasSearched = ref(false)
 
-async function searchHistory() {
+// ── Computed ───────────────────────────────────────────────────────────────────
+
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+
+// ── Functions ─────────────────────────────────────────────────────────────────
+async function fetchHistory(codigo) {
+  const response = await assetService.getAssetHistory(codigo)
+  historyData.value = response.data
+}
+
+async function handleSearch() {
   if (!searchCode.value) return
 
   loading.value = true
@@ -146,13 +160,9 @@ async function searchHistory() {
   lastSearchCode.value = searchCode.value.toUpperCase()
 
   try {
-    const response = await assetService.getAssetHistory(
-      searchCode.value.toUpperCase()
-    )
-    historyData.value = response.data
+    await fetchHistory(searchCode.value.toUpperCase())
   } catch (err) {
-    error.value = err.response?.data?.message || 'Erro ao buscar histórico'
-    console.error(err)
+    error.value = 'Erro ao buscar histórico. Tente novamente.'
   } finally {
     loading.value = false
   }
@@ -183,9 +193,6 @@ function getChangeClass(changePercent) {
 </script>
 
 <style scoped>
-.history-page {
-  max-width: 1200px;
-}
 
 .history-page__form {
   margin-bottom: 1.5rem;

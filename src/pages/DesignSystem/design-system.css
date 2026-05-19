@@ -21,7 +21,7 @@
   flex-direction: column;
 }
 
-.ds-sidebar-header {
+.ds-sidebar__header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -33,26 +33,29 @@
 .ds-logo {
   color: var(--primary);
 }
-.ds-logo-title {
+
+.ds-logo__title {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
 }
-.ds-logo-sub {
+
+.ds-logo__sub {
   font-size: 0.7rem;
   color: var(--text-secondary);
   margin: 0;
   line-height: 1;
 }
 
+/* ── Nav ────────────────────────────────── */
 .ds-nav {
   padding: 0 0.75rem;
   flex: 1;
 }
 
-.ds-nav-group-label {
+.ds-nav__group-label {
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -62,7 +65,7 @@
   margin: 0 0 0.375rem;
 }
 
-.ds-nav-link {
+.ds-nav__link {
   display: block;
   padding: 0.4rem 0.5rem;
   font-size: 0.8rem;
@@ -72,17 +75,19 @@
   transition: all 0.15s;
   margin-bottom: 2px;
 }
-.ds-nav-link:hover {
+
+.ds-nav__link:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
-.ds-nav-link.active {
+
+.ds-nav__link--active {
   background: rgba(98, 0, 238, 0.08);
   color: var(--primary);
   font-weight: 600;
 }
 
-.ds-nav-soon {
+.ds-nav__soon {
   display: block;
   padding: 0.3rem 0.5rem;
   font-size: 0.75rem;
@@ -104,25 +109,25 @@
   scroll-margin-top: 2rem;
 }
 
-.ds-section-header {
+.ds-section__header {
   margin-bottom: 1.5rem;
 }
 
-.ds-section-title {
+.ds-section__title {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.5rem;
 }
 
-.ds-section-desc {
+.ds-section__desc {
   font-size: 0.9375rem;
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.6;
 }
 
-.ds-section-desc code {
+.ds-section__desc code {
   background: rgba(98, 0, 238, 0.08);
   color: var(--primary);
   padding: 1px 5px;
@@ -130,7 +135,7 @@
   font-size: 0.875em;
 }
 
-.ds-subsection-title {
+.ds-section__subsection-title {
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -140,7 +145,7 @@
 }
 
 /* ── Group header ───────────────────────── */
-.ds-group-header {
+.ds-group__header {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -151,7 +156,7 @@
   font-size: 0.875rem;
 }
 
-.ds-group-pill {
+.ds-group__pill {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -161,17 +166,17 @@
   white-space: nowrap;
 }
 
-.ds-group-pill--atoms {
+.ds-group__pill--atoms {
   background: rgba(98, 0, 238, 0.08);
   color: var(--primary);
 }
 
-.ds-group-pill--molecules {
+.ds-group__pill--molecules {
   background: rgba(16, 185, 129, 0.1);
   color: var(--accent-green);
 }
 
-.ds-group-pill--organisms {
+.ds-group__pill--organisms {
   background: rgba(245, 158, 11, 0.1);
   color: var(--accent-yellow);
 }
@@ -206,20 +211,20 @@
   border-color: #2a2a4a;
 }
 
-.ds-showcase-item {
+.ds-showcase__item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
 
-.ds-showcase-caption {
+.ds-showcase__caption {
   font-size: 0.7rem;
   color: var(--text-secondary);
   font-family: monospace;
 }
 
-.ds-preview-label {
+.ds-showcase__preview-label {
   font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0 0 0.5rem;
@@ -246,25 +251,25 @@
 }
 
 /* ── Token swatches ─────────────────────── */
-.ds-token-grid {
+.ds-token__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 0.875rem;
 }
 
-.ds-token-swatch {
+.ds-token__swatch {
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
 }
 
-.ds-swatch-color {
+.ds-token__swatch-color {
   height: 64px;
   width: 100%;
 }
 
-.ds-swatch-var {
+.ds-token__swatch-var {
   font-size: 0.65rem;
   font-family: monospace;
   color: var(--primary);
@@ -274,7 +279,7 @@
   word-break: break-all;
 }
 
-.ds-swatch-hex {
+.ds-token__swatch-hex {
   font-size: 0.7rem;
   font-family: monospace;
   color: var(--text-secondary);
@@ -282,7 +287,7 @@
   margin: 0;
 }
 
-.ds-swatch-label {
+.ds-token__swatch-label {
   font-size: 0.7rem;
   color: var(--text-secondary);
   padding: 0 0.625rem 0.625rem;
@@ -291,7 +296,7 @@
 }
 
 /* ── StatCard grid ──────────────────────── */
-.ds-stat-grid {
+.ds-stats__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -315,7 +320,7 @@
   .ds-main {
     padding: 1.5rem 1.25rem 3rem;
   }
-  .ds-stat-grid {
+  .ds-stats__grid {
     grid-template-columns: 1fr;
   }
 }

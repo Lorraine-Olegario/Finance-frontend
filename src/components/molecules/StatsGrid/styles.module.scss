@@ -1,0 +1,10 @@
+.stats-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -2,7 +2,7 @@
   <div class="ds-root">
     <!-- Sidebar -->
     <aside class="ds-sidebar">
-      <div class="ds-sidebar-header">
+      <div class="ds-sidebar__header">
         <div class="ds-logo">
           <SvgIcon
             name="logo-grid"
@@ -10,26 +10,26 @@
           />
         </div>
         <div>
-          <p class="ds-logo-title">Finance UI</p>
-          <p class="ds-logo-sub">Design System</p>
+          <p class="ds-logo__title">Finance UI</p>
+          <p class="ds-logo__sub">Design System</p>
         </div>
       </div>
 
       <nav class="ds-nav">
-        <p class="ds-nav-group-label">Fundamentos</p>
+        <p class="ds-nav__group-label">Fundamentos</p>
         <a
           v-for="item in navItems.tokens"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem"
         >
           Atoms
@@ -38,15 +38,15 @@
           v-for="item in navItems.atoms"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem"
         >
           Molecules
@@ -55,20 +55,20 @@
           v-for="item in navItems.molecules"
           :key="item.id"
           :href="`#${item.id}`"
-          class="ds-nav-link"
-          :class="{ active: activeSection === item.id }"
+          class="ds-nav__link"
+          :class="{ 'ds-nav__link--active': activeSection === item.id }"
           @click.prevent="scrollTo(item.id)"
         >
           {{ item.label }}
         </a>
 
         <p
-          class="ds-nav-group-label"
+          class="ds-nav__group-label"
           style="margin-top: 1.25rem; opacity: 0.5"
         >
           Organisms
         </p>
-        <span class="ds-nav-soon">Em breve…</span>
+        <span class="ds-nav__soon">Em breve…</span>
       </nav>
     </aside>
 
@@ -86,15 +86,17 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted, onUnmounted } from 'vue'
 
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import TokensSection from './sections/TokensSection.vue'
 import AtomsSection from './sections/AtomsSection.vue'
 import MoleculesSection from './sections/MoleculesSection.vue'
 
 defineOptions({ name: 'DesignSystemPage' })
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const activeSection = ref('cores')
 
 const navItems = {
@@ -130,13 +132,9 @@ const navItems = {
   ]
 }
 
-function scrollTo(id) {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  activeSection.value = id
-}
-
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
 let observer = null
+
 onMounted(() => {
   const sections = document.querySelectorAll('.ds-section')
   observer = new IntersectionObserver(
@@ -149,7 +147,15 @@ onMounted(() => {
   )
   sections.forEach(s => observer.observe(s))
 })
+
 onUnmounted(() => observer?.disconnect())
+
+// ── Functions ─────────────────────────────────────────────────────────────────
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  activeSection.value = id
+}
 </script>
 
 <style>

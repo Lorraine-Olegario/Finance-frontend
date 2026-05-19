@@ -66,8 +66,6 @@
         :category-colors="categoryColors"
       />
 
-      <QuickActionsPanel />
-
       <LoadingSpinner
         v-if="loading"
         fullscreen
@@ -77,22 +75,22 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
-import StatCard from '@/components/atoms/StatCard.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
-import StatsGrid from '@/components/molecules/StatsGrid.vue'
-import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome.vue'
-import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts.vue'
-import QuickActionsPanel from '@/components/organisms/dashboard/QuickActionsPanel.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import StatCard from '@/components/atoms/StatCard/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
+import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome/index.vue'
+import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import userService from '@/services/userService'
 import assetService from '@/services/assetService'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
-// ── Estado ─────────────────────────────────────────────────────────────────
 const loading = ref(true)
 const userCount = ref(0)
 const userAssetsCount = ref(0)
@@ -100,7 +98,6 @@ const alertsCount = ref(0)
 const assetsByType = ref({})
 const categoryColors = ref({})
 
-// ── Computed ───────────────────────────────────────────────────────────────
 const currentDate = computed(() =>
   new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -112,25 +109,21 @@ const currentDate = computed(() =>
 
 const categoriesCount = computed(() => Object.keys(assetsByType.value).length)
 
-// ── Funções de busca ───────────────────────────────────────────────────────
+onMounted(loadDashboard)
 
 /** Busca resumo de ativos e cores personalizadas de categoria */
 async function fetchAssetsSummary() {
   const res = await assetService.getUserAssetsSummary()
-  userAssetsCount.value = res.data?.total || 0
 
   const categorias = res.data?.categorias
   if (Array.isArray(categorias)) {
     assetsByType.value = Object.fromEntries(
       categorias.map(item => [item.categoria, item.quantidade])
     )
-  }
-
-  try {
-    const colorsRes = await assetService.getCategoryColors(authStore.user?.id)
-    categoryColors.value = colorsRes.data?.colors || {}
-  } catch {
-    categoryColors.value = {}
+    categoryColors.value = Object.fromEntries(
+      categorias.map(item => [item.categoria, item.color])
+    )
+    userAssetsCount.value = res.data?.total ?? categorias.reduce((acc, item) => acc + item.quantidade, 0)
   }
 }
 
@@ -172,8 +165,6 @@ async function loadDashboard() {
     loading.value = false
   }
 }
-
-onMounted(loadDashboard)
 </script>
 
 <style scoped>

@@ -3,65 +3,65 @@
     id="cores"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">Cores</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">Cores</h1>
+      <p class="ds-section__desc">
         Variáveis CSS globais definidas em
         <code>src/style.css</code>
         . Nunca use valores hex diretos nos componentes.
       </p>
     </div>
 
-    <h3 class="ds-subsection-title">Paleta principal</h3>
-    <div class="ds-token-grid">
+    <h3 class="ds-section__subsection-title">Paleta principal</h3>
+    <div class="ds-token__grid">
       <div
         v-for="c in colorTokens"
         :key="c.var"
-        class="ds-token-swatch"
+        class="ds-token__swatch"
       >
         <div
-          class="ds-swatch-color"
+          class="ds-token__swatch-color"
           :style="{
             background: `var(${c.var})`,
             border: c.border ? '1px solid var(--border)' : 'none'
           }"
         />
-        <p class="ds-swatch-var">
+        <p class="ds-token__swatch-var">
           {{ c.var }}
         </p>
-        <p class="ds-swatch-hex">
+        <p class="ds-token__swatch-hex">
           {{ c.hex }}
         </p>
-        <p class="ds-swatch-label">
+        <p class="ds-token__swatch-label">
           {{ c.label }}
         </p>
       </div>
     </div>
 
     <h3
-      class="ds-subsection-title"
+      class="ds-section__subsection-title"
       style="margin-top: 2.5rem"
     >
       Status de ativos
     </h3>
-    <div class="ds-token-grid">
+    <div class="ds-token__grid">
       <div
         v-for="c in statusTokens"
         :key="c.label"
-        class="ds-token-swatch"
+        class="ds-token__swatch"
       >
         <div
-          class="ds-swatch-color"
+          class="ds-token__swatch-color"
           :style="{ background: c.bg, border: `1px solid ${c.border}` }"
         />
         <p
-          class="ds-swatch-var"
+          class="ds-token__swatch-var"
           :style="{ color: c.color }"
         >
           {{ c.label }}
         </p>
-        <p class="ds-swatch-hex">bg: {{ c.bg }}</p>
-        <p class="ds-swatch-label">
+        <p class="ds-token__swatch-hex">bg: {{ c.bg }}</p>
+        <p class="ds-token__swatch-label">
           {{ c.usage }}
         </p>
       </div>
@@ -72,9 +72,9 @@
     id="tipografia"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">Tipografia</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">Tipografia</h1>
+      <p class="ds-section__desc">
         Escala de texto usada nos componentes. Sem font-family customizada — usa
         a fonte padrão do Bootstrap.
       </p>

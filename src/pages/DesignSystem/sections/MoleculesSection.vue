@@ -1,7 +1,7 @@
 <template>
   <!-- Molecules group header -->
-  <div class="ds-group-header">
-    <span class="ds-group-pill ds-group-pill--molecules">Molecules</span>
+  <div class="ds-group__header">
+    <span class="ds-group__pill ds-group__pill--molecules">Molecules</span>
     <p>Combinam 2+ átomos para formar um bloco funcional reutilizável.</p>
   </div>
 
@@ -10,9 +10,9 @@
     id="search-bar"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">SearchBar</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">SearchBar</h1>
+      <p class="ds-section__desc">
         Campo de busca com ícone integrado, botão de limpar e foco estilizado.
         Usa
         <code>v-model</code>
@@ -21,7 +21,7 @@
         ao pressionar Enter.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Padrão</h3>
+    <h3 class="ds-section__subsection-title">Padrão</h3>
     <div
       class="ds-showcase"
       style="max-width: 360px"
@@ -31,7 +31,7 @@
         placeholder="Buscar ativo..."
       />
     </div>
-    <h3 class="ds-subsection-title">Com texto (botão limpar visível)</h3>
+    <h3 class="ds-section__subsection-title">Com texto (botão limpar visível)</h3>
     <div
       class="ds-showcase"
       style="max-width: 360px"
@@ -41,7 +41,7 @@
         placeholder="Buscar..."
       />
     </div>
-    <h3 class="ds-subsection-title">Disabled</h3>
+    <h3 class="ds-section__subsection-title">Disabled</h3>
     <div
       class="ds-showcase"
       style="max-width: 360px"
@@ -74,14 +74,14 @@
     id="form-field"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">FormField</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">FormField</h1>
+      <p class="ds-section__desc">
         Wrapper de campo de formulário com label, hint e mensagem de erro. O
         slot padrão recebe qualquer input ou select.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Variações</h3>
+    <h3 class="ds-section__subsection-title">Variações</h3>
     <div
       class="ds-showcase ds-showcase--col"
       style="max-width: 360px"
@@ -152,9 +152,9 @@
     id="stats-grid"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">StatsGrid</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">StatsGrid</h1>
+      <p class="ds-section__desc">
         Grid responsivo para agrupar
         <code>StatCard</code>
         s. Colunas auto-fit com
@@ -164,7 +164,7 @@
         .
       </p>
     </div>
-    <h3 class="ds-subsection-title">Auto-fit (padrão — minWidth 220px)</h3>
+    <h3 class="ds-section__subsection-title">Auto-fit (padrão — minWidth 220px)</h3>
     <div class="ds-showcase">
       <StatsGrid>
         <StatCard
@@ -196,7 +196,7 @@
         </StatCard>
       </StatsGrid>
     </div>
-    <h3 class="ds-subsection-title">2 colunas fixas</h3>
+    <h3 class="ds-section__subsection-title">2 colunas fixas</h3>
     <div class="ds-showcase">
       <StatsGrid :cols="2">
         <StatCard
@@ -239,18 +239,18 @@
     id="page-header"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">PageHeader</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">PageHeader</h1>
+      <p class="ds-section__desc">
         Cabeçalho de página com título, subtítulo opcional e slot de ações.
         Responsivo — empilha em telas estreitas.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Somente título</h3>
+    <h3 class="ds-section__subsection-title">Somente título</h3>
     <div class="ds-showcase">
       <PageHeader title="Meus Ativos" />
     </div>
-    <h3 class="ds-subsection-title">Com subtítulo e ações</h3>
+    <h3 class="ds-section__subsection-title">Com subtítulo e ações</h3>
     <div class="ds-showcase">
       <PageHeader
         title="Meus Ativos"
@@ -289,15 +289,15 @@
     id="table-actions"
     class="ds-section"
   >
-    <div class="ds-section-header">
-      <h1 class="ds-section-title">TableActions</h1>
-      <p class="ds-section-desc">
+    <div class="ds-section__header">
+      <h1 class="ds-section__title">TableActions</h1>
+      <p class="ds-section__desc">
         Container flex para agrupamento de
         <code>ActionButton</code>
         s em linhas de tabela. Alinhamento configurável.
       </p>
     </div>
-    <h3 class="ds-subsection-title">Ações de linha (center)</h3>
+    <h3 class="ds-section__subsection-title">Ações de linha (center)</h3>
     <div class="ds-showcase">
       <TableActions>
         <ActionButton
@@ -329,7 +329,7 @@
         </ActionButton>
       </TableActions>
     </div>
-    <h3 class="ds-subsection-title">Alinhado à direita (end)</h3>
+    <h3 class="ds-section__subsection-title">Alinhado à direita (end)</h3>
     <div class="ds-showcase">
       <TableActions align="end">
         <ActionButton
@@ -369,18 +369,18 @@
 <script setup>
 import { ref } from 'vue'
 
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import BaseInput from '@/components/atoms/BaseInput.vue'
-import BaseSelect from '@/components/atoms/BaseSelect.vue'
-import ActionButton from '@/components/atoms/ActionButton.vue'
-import StatCard from '@/components/atoms/StatCard.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import BaseInput from '@/components/atoms/BaseInput/index.vue'
+import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
+import ActionButton from '@/components/atoms/ActionButton/index.vue'
+import StatCard from '@/components/atoms/StatCard/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 
-import SearchBar from '@/components/molecules/SearchBar.vue'
-import FormField from '@/components/molecules/FormField.vue'
-import StatsGrid from '@/components/molecules/StatsGrid.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import TableActions from '@/components/molecules/TableActions.vue'
+import SearchBar from '@/components/molecules/SearchBar/index.vue'
+import FormField from '@/components/molecules/FormField/index.vue'
+import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import TableActions from '@/components/molecules/TableActions/index.vue'
 
 const demoSearch = ref('')
 const demoSearchFilled = ref('PETR4')

@@ -9,12 +9,12 @@ export const useAssetStore = defineStore('assets', () => {
   const loading = ref(false)
   const error = ref(null)
 
-  async function fetchObservedAssets(userId) {
+  async function fetchObservedAssets() {
     loading.value = true
     error.value = null
 
     try {
-      const response = await assetService.getObservedAssets(userId)
+      const response = await assetService.getObservedAssets()
       assets.value = response.data
       return response.data
     } catch (err) {

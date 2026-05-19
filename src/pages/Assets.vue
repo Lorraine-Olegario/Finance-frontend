@@ -56,6 +56,13 @@
         message="Carregando ativos..."
       />
 
+      <AlertMessage
+        v-else-if="fetchError"
+        type="error"
+        :message="fetchError"
+        class="assets-page__error"
+      />
+
       <EmptyState
         v-else-if="filteredAssets.length === 0"
         title="Nenhum ativo encontrado"
@@ -133,8 +140,8 @@
               </td>
               <td class="assets-page__td">
                 <Badge
-                  :label="asset.categoria"
-                  :color="getCategoryColor(asset.categoria)"
+                  :label="asset.categoria?.nome"
+                  :color="asset.categoria?.color"
                 />
               </td>
               <td class="assets-page__td">
@@ -233,7 +240,6 @@
       <EditAssetModal
         :is-open="modals.edit"
         :asset="selectedAsset"
-        :category-color="editCategoryColor"
         @close="closeModal('edit')"
         @submit="handleUpdateAsset"
       />
@@ -290,34 +296,34 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import AssetsFilterDrawer from '@/components/organisms/assets/AssetsFilterDrawer.vue'
-import AddAssetModal from '@/components/organisms/assets/AddAssetModal.vue'
-import EditAssetModal from '@/components/my-assets/EditAssetModal.vue'
-import ConfirmationModal from '@/components/organisms/ConfirmationModal.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import SvgIcon from '@/components/atoms/SvgIcon.vue'
-import ActionButton from '@/components/atoms/ActionButton.vue'
-import Badge from '@/components/atoms/Badge.vue'
-import StatusBadge from '@/components/atoms/StatusBadge.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import EmptyState from '@/components/atoms/EmptyState.vue'
-import Pagination from '@/components/atoms/Pagination.vue'
-import { useAuthStore } from '@/stores/auth'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import AssetsFilterDrawer from '@/components/organisms/assets/AssetsFilterDrawer/index.vue'
+import AddAssetModal from '@/components/organisms/assets/AddAssetModal/index.vue'
+import EditAssetModal from '@/components/organisms/assets/EditAssetModal/index.vue'
+import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import ActionButton from '@/components/atoms/ActionButton/index.vue'
+import Badge from '@/components/atoms/Badge/index.vue'
+import StatusBadge from '@/components/atoms/StatusBadge/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import EmptyState from '@/components/atoms/EmptyState/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import Pagination from '@/components/atoms/Pagination/index.vue'
 import assetService from '@/services/assetService'
 import categoryService from '@/services/categoryService'
 
-const authStore = useAuthStore()
-
 const assets = ref([])
 const categorias = ref([])
-const categoryColors = ref({})
 const loading = ref(false)
+const fetchError = ref('')
 const filterOpen = ref(false)
 const currentPage = ref(1)
 const perPage = 10
+const selectedAsset = ref(null)
 
 const filters = ref({
   search: '',
@@ -334,9 +340,7 @@ const modals = ref({
   observe: false
 })
 
-const selectedAsset = ref(null)
-const editCategoryColor = ref('')
-
+// ── Computed ──────────────────────────────────────────────────────────────────
 const filteredAssets = computed(() => {
   let result = assets.value
 
@@ -377,82 +381,58 @@ const activeFiltersCount = computed(() => {
   return count
 })
 
-watch(
-  filters,
-  () => {
-    currentPage.value = 1
-  },
-  { deep: true }
-)
+// ── Watchers ──────────────────────────────────────────────────────────────────
+watch(filters, () => { currentPage.value = 1 }, { deep: true })
 
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadPage)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
 async function fetchAssets() {
-  loading.value = true
   try {
-    const response = await assetService.getUserAssets()
-    const data = response.data
+    const normalizar = list =>
+      list.map(a => ({ ...a, categoria: a.tipo || a.categoria || '' }))
 
-    if (data?.ativos_por_categoria?.data) {
-      const ativosPorCategoria = data.ativos_por_categoria.data
+    const first = await assetService.getAllUserAssets(1, 100)
+    const paginator = first.data?.ativos
+
+    if (!paginator || !Array.isArray(paginator.data)) {
       assets.value = []
-      Object.keys(ativosPorCategoria).forEach(categoria => {
-        ativosPorCategoria[categoria].forEach(ativo => {
-          assets.value.push({ ...ativo, categoria })
-        })
+      return
+    }
+
+    let todos = [...paginator.data]
+
+    if (paginator.last_page > 1) {
+      const restantes = []
+      for (let p = 2; p <= paginator.last_page; p++) {
+        restantes.push(assetService.getAllUserAssets(p, 100))
+      }
+      const respostas = await Promise.all(restantes)
+      respostas.forEach(res => {
+        const d = res.data?.ativos?.data
+        if (Array.isArray(d)) todos = todos.concat(d)
       })
-    } else if (Array.isArray(data?.data)) {
-      assets.value = data.data
-    } else if (Array.isArray(data)) {
-      assets.value = data
-    } else {
-      assets.value = []
     }
-  } catch {
-    assets.value = []
-  } finally {
-    loading.value = false
-  }
-}
 
-async function fetchCategories() {
-  try {
-    const response = await categoryService.getAll()
-    if (response.data && Array.isArray(response.data.data)) {
-      categorias.value = response.data.data.map(cat => ({
-        id: cat.id,
-        nome: cat.nome || cat.name || String(cat)
-      }))
-    }
+    assets.value = normalizar(todos)
   } catch {
-    // silently fail
-  }
-}
-
-async function fetchCategoryColors() {
-  try {
-    const userId = authStore.user?.id
-    if (userId) {
-      const res = await assetService.getCategoryColors(userId)
-      categoryColors.value = res.data?.colors || {}
-    }
-  } catch {
-    categoryColors.value = {}
+    // erro opcional — não bloqueia a página
   }
 }
 
 async function loadPage() {
-  await Promise.all([fetchAssets(), fetchCategories()])
-  await fetchCategoryColors()
-}
+  loading.value = true
+  fetchError.value = ''
 
-function getCategoryColor(categoria) {
-  if (categoryColors.value[categoria]) {
-    return categoryColors.value[categoria]
+  try {
+    await Promise.all([fetchAssets()])
+  } catch (err) {
+    fetchError.value = 'Erro ao carregar ativos. Tente novamente.'
+    assets.value = []
+  } finally {
+    loading.value = false
   }
-  const defaults = {
-    Ações: '#ff6b35',
-    FIIs: '#004e89'
-  }
-  return defaults[categoria] || '#6200EE'
 }
 
 function openAddModal() {
@@ -461,7 +441,6 @@ function openAddModal() {
 
 function openEditModal(asset) {
   selectedAsset.value = { ...asset }
-  editCategoryColor.value = getCategoryColor(asset.categoria)
   modals.value.edit = true
 }
 
@@ -489,34 +468,39 @@ function closeModal(name) {
   modals.value[name] = false
 }
 
+function applyFilters(newFilters) {
+  filters.value = { ...newFilters }
+}
+
+function resetFilters() {
+  filters.value = { search: '', categoria: '', status: '' }
+}
+
 async function handleAddAssets({ categoria, codigos }) {
   try {
     await assetService.createUserAssets({ [categoria]: codigos })
     await fetchAssets()
   } catch (err) {
-    console.error('Erro ao adicionar ativos:', err)
+    console.error('[Assets] Erro ao adicionar ativos:', err)
   }
 }
 
-async function handleUpdateAsset(assetData) {
-  const userId = authStore.user?.id
-  if (!userId) return
+async function handleUpdateAsset({ category_id, color }) {
+  if (!category_id || !color) return
 
-  if (assetData.categoryColor && assetData.categoria) {
-    const currentColor = categoryColors.value[assetData.categoria]
-    if (assetData.categoryColor !== currentColor) {
-      const newColors = {
-        ...categoryColors.value,
-        [assetData.categoria]: assetData.categoryColor
-      }
-      await assetService.updateCategoryColors(userId, newColors)
-      categoryColors.value = newColors
-    }
-  }
+  try {
+    await categoryService.updateCategoryColor(category_id, color)
 
-  const index = assets.value.findIndex(a => a.id === assetData.id)
-  if (index !== -1) {
-    assets.value[index] = { ...assets.value[index], ...assetData }
+    assets.value
+      .filter(a => a.categoria?.id === category_id)
+      .forEach(a => {
+        a.color = color
+        if (a.categoria && typeof a.categoria === 'object') {
+          a.categoria.color = color
+        }
+      })
+  } catch (err) {
+    console.error('[Assets] Erro ao atualizar cor da categoria:', err)
   }
 }
 
@@ -586,18 +570,6 @@ async function handleDeleteAsset({ resolve, reject }) {
     reject(new Error(msg))
   }
 }
-
-function applyFilters(newFilters) {
-  filters.value = { ...newFilters }
-}
-
-function resetFilters() {
-  filters.value = { search: '', categoria: '', status: '' }
-}
-
-onMounted(() => {
-  loadPage()
-})
 </script>
 
 <style scoped>
@@ -647,6 +619,10 @@ onMounted(() => {
   height: 64px;
   color: var(--text-secondary);
   opacity: 0.5;
+}
+
+.assets-page__error {
+  margin-bottom: 1.5rem;
 }
 
 .assets-page__table-wrapper {

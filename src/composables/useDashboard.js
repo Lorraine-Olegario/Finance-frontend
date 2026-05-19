@@ -35,49 +35,17 @@ export function useDashboard() {
         name,
         count,
         percentage: ((count / userAssetsCount.value) * 100).toFixed(1),
-        color: getCategoryColor(name)
+        color: (name)
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
   })
 
-  const getCategoryColor = category => {
-    const defaultColors = {
-      Ações: '#3b82f6',
-      Acao: '#3b82f6',
-      Acoes: '#3b82f6',
-      FIIs: '#10b981',
-      FII: '#10b981',
-      Criptomoedas: '#8b5cf6',
-      Criptomoeda: '#8b5cf6',
-      Cripto: '#8b5cf6',
-      BDRs: '#f59e0b',
-      BDR: '#f59e0b',
-      Stocks: '#ec4899',
-      Stock: '#ec4899',
-      ETFs: '#06b6d4',
-      ETF: '#06b6d4'
-    }
-
-    return (
-      categoryColors.value[category] || defaultColors[category] || '#6b7280'
-    )
-  }
-
   const fetchData = async () => {
     loading.value = true
     try {
-      const userId = authStore.user?.id
+      const response = await assetService.getAssets()
 
-      if (!userId) {
-        console.error('Usuário não identificado')
-        return
-      }
-
-      // Buscar ativos do usuário
-      const response = await assetService.getAssets(userId)
-
-      // A API pode retornar os dados de duas formas diferentes
       let ativosPorCategoria = {}
 
       if (response.data?.ativos_por_categoria) {
@@ -97,19 +65,9 @@ export function useDashboard() {
         }
       })
 
-      // Buscar cores e alertas em paralelo
       await Promise.allSettled([
         assetService
-          .getCategoryColors(userId)
-          .then(res => {
-            categoryColors.value = res.data?.colors || {}
-          })
-          .catch(() => {
-            categoryColors.value = {}
-          }),
-
-        assetService
-          .getAssetAlerts(userId)
+          .getAssetAlerts()
           .then(res => {
             alertsCount.value = res.data?.length || 0
           })

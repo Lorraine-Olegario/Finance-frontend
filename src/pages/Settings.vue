@@ -76,15 +76,17 @@
 </template>
 
 <script setup>
+// ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, reactive, onMounted } from 'vue'
-import MainLayout from '@/components/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader.vue'
-import BaseButton from '@/components/atoms/BaseButton.vue'
-import LoadingSpinner from '@/components/atoms/LoadingSpinner.vue'
-import AlertMessage from '@/components/atoms/AlertMessage.vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
 const categoryColors = reactive({})
@@ -95,42 +97,38 @@ const hasChanges = ref(false)
 const message = ref('')
 const messageType = ref('success')
 
-const defaultColors = {
-  Ações: '#FF8C00',
-  FIIs: '#6200EE',
-  Criptomoedas: '#03DAC6',
-  BDRs: '#BB86FC',
-  Stocks: '#3700B3',
-  ETFs: '#018786'
+// ── Computed ───────────────────────────────────────────────────────────────────
+
+// ── Watchers ──────────────────────────────────────────────────────────────────
+
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
+onMounted(loadPage)
+
+// ── Functions ─────────────────────────────────────────────────────────────────
+async function fetchColors() {
+  const assetsResponse = await assetService.getAssets()
+  const ativosPorCategoria = assetsResponse.data?.ativos_por_categoria || {}
+
+  const colorsResponse = await assetService.getCategoryColors()
+  const savedColors = colorsResponse.data?.colors || {}
+
+  Object.keys(categoryColors).forEach(k => delete categoryColors[k])
+
+  Object.keys(ativosPorCategoria).forEach(categoria => {
+    categoryColors[categoria] = savedColors[categoria]
+  })
+
+  originalColors.value = { ...categoryColors }
+  hasChanges.value = false
 }
 
-async function fetchColors() {
+async function loadPage() {
+  if (!authStore.user?.id) return
   loading.value = true
-
   try {
-    const userId = authStore.user?.id
-    if (!userId) {
-      showMessage('Usuário não identificado', 'error')
-      return
-    }
-
-    const assetsResponse = await assetService.getAssets(userId)
-    const ativosPorCategoria = assetsResponse.data?.ativos_por_categoria || {}
-
-    const colorsResponse = await assetService.getCategoryColors(userId)
-    const savedColors = colorsResponse.data?.colors || {}
-
-    Object.keys(categoryColors).forEach(k => delete categoryColors[k])
-
-    Object.keys(ativosPorCategoria).forEach(categoria => {
-      categoryColors[categoria] =
-        savedColors[categoria] || defaultColors[categoria] || '#CF6679'
-    })
-
-    originalColors.value = { ...categoryColors }
-    hasChanges.value = false
+    await fetchColors()
   } catch (err) {
-    console.error('Erro ao carregar cores:', err)
+    console.error('[Settings] Erro ao carregar cores:', err)
     showMessage('Erro ao carregar configurações', 'error')
   } finally {
     loading.value = false
@@ -146,18 +144,12 @@ async function saveColors() {
   saving.value = true
 
   try {
-    const userId = authStore.user?.id
-    if (!userId) {
-      showMessage('Usuário não identificado', 'error')
-      return
-    }
-
-    await assetService.updateCategoryColors(userId, { ...categoryColors })
+    await assetService.updateCategoryColors({ ...categoryColors })
     originalColors.value = { ...categoryColors }
     hasChanges.value = false
     showMessage('Cores salvas com sucesso!', 'success')
   } catch (err) {
-    console.error('Erro ao salvar cores:', err)
+    console.error('[Settings] Erro ao salvar cores:', err)
     showMessage('Erro ao salvar cores', 'error')
   } finally {
     saving.value = false
@@ -179,8 +171,6 @@ function showMessage(text, type) {
     message.value = ''
   }, 3000)
 }
-
-onMounted(fetchColors)
 </script>
 
 <style scoped>
