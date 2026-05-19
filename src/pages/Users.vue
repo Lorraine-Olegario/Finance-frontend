@@ -58,6 +58,7 @@
                 <th class="users-page__th">Nome</th>
                 <th class="users-page__th">E-mail</th>
                 <th class="users-page__th">Perfil</th>
+                <th class="users-page__th">Status</th>
                 <th class="users-page__th users-page__th--actions">Ações</th>
               </tr>
             </thead>
@@ -81,6 +82,16 @@
                     ]"
                   >
                     {{ ROLE_LABELS[user.role] ?? 'Usuário' }}
+                  </span>
+                </td>
+                <td class="users-page__td">
+                  <span
+                    :class="[
+                      'users-page__status-badge',
+                      `users-page__status-badge--${getStatusModifier(user.status)}`
+                    ]"
+                  >
+                    {{ getStatusLabel(user.status) }}
                   </span>
                 </td>
                 <td class="users-page__td users-page__td--actions">
@@ -157,16 +168,16 @@
 
         <!-- Pagination -->
         <div
-          v-if="filteredUsers.length > PER_PAGE"
+          v-if="totalUsers > serverPerPage"
           class="users-page__pagination"
         >
           <Pagination
             :current-page="currentPage"
             :last-page="lastPage"
-            :total="filteredUsers.length"
-            :per-page="PER_PAGE"
+            :total="totalUsers"
+            :per-page="serverPerPage"
             :show-page-info="true"
-            @page-change="currentPage = $event"
+            @page-change="handlePageChange"
           />
         </div>
       </div>
@@ -233,6 +244,9 @@ const searchQuery = ref('')
 const loading = ref(false)
 const fetchError = ref('')
 const currentPage = ref(1)
+const totalUsers = ref(0)
+const serverLastPage = ref(1)
+const serverPerPage = ref(PER_PAGE)
 
 const formModalOpen = ref(false)
 const editingUser = ref(null)
@@ -243,33 +257,35 @@ const deleteModalOpen = ref(false)
 const userToDelete = ref(null)
 
 // ── Computed ──────────────────────────────────────────────────────────────────
-const filteredUsers = computed(() => {
-  if (!searchQuery.value.trim()) return users.value
-  const q = searchQuery.value.toLowerCase()
-  return users.value.filter(
-    u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-  )
-})
-
-const lastPage = computed(() =>
-  Math.max(1, Math.ceil(filteredUsers.value.length / PER_PAGE))
-)
-
-const paginatedUsers = computed(() => {
-  const start = (currentPage.value - 1) * PER_PAGE
-  return filteredUsers.value.slice(start, start + PER_PAGE)
-})
+// When backend provides paginated results, `users` already contains the current page.
+const filteredUsers = computed(() => users.value)
+const lastPage = computed(() => Math.max(1, serverLastPage.value))
+const paginatedUsers = computed(() => users.value)
 
 // ── Watchers ──────────────────────────────────────────────────────────────────
-watch(searchQuery, () => { currentPage.value = 1 })
+watch(searchQuery, () => {
+  currentPage.value = 1
+  loadUsers()
+})
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(loadUsers)
 
 // ── Functions ─────────────────────────────────────────────────────────────────
-async function fetchUsers() {
-  const response = await userService.getUsers()
-  users.value = response.data
+async function fetchUsers(page = 1) {
+  const params = {
+    page,
+    per_page: PER_PAGE,
+  }
+  if (searchQuery.value.trim()) params.q = searchQuery.value.trim()
+
+  const response = await userService.getUsers(params)
+
+  users.value = response.data.data || []
+  totalUsers.value = response.data.total ?? users.value.length
+  serverLastPage.value = response.data.last_page ?? 1
+  serverPerPage.value = response.data.per_page ?? PER_PAGE
+  currentPage.value = response.data.current_page ?? page
 }
 
 async function loadUsers() {
@@ -277,7 +293,7 @@ async function loadUsers() {
   loading.value = true
   fetchError.value = ''
   try {
-    await fetchUsers()
+    await fetchUsers(currentPage.value)
   } catch (err) {
     console.error('[Users] Erro ao carregar usuários:', err)
     fetchError.value = 'Erro ao carregar usuários. Tente novamente.'
@@ -315,6 +331,22 @@ function closeDeleteModal() {
   userToDelete.value = null
 }
 
+function getStatusLabel(status) {
+  if (status == null) return ''
+  if (typeof status === 'object') return status.label ?? String(status.value ?? '')
+  if (status === 1 || status === '1') return 'Ativo'
+  if (status === 0 || status === '0') return 'Inativo'
+  return String(status)
+}
+
+function getStatusModifier(status) {
+  if (status == null) return 'unknown'
+  if (typeof status === 'object') return status.value == 1 ? 'active' : 'inactive'
+  if (status === 1 || status === '1') return 'active'
+  if (status === 0 || status === '0') return 'inactive'
+  return 'unknown'
+}
+
 async function handleFormSubmit(formData) {
   formLoading.value = true
   formError.value = ''
@@ -328,7 +360,7 @@ async function handleFormSubmit(formData) {
     } else {
       await userService.createUser(formData)
     }
-    await fetchUsers()
+    await fetchUsers(currentPage.value)
     closeFormModal()
   } catch (err) {
     console.error('[Users] Erro ao salvar usuário:', err)
@@ -341,7 +373,7 @@ async function handleFormSubmit(formData) {
 async function handleDeleteConfirm({ resolve, reject }) {
   try {
     await userService.deleteUser(userToDelete.value.id)
-    await fetchUsers()
+    await fetchUsers(currentPage.value)
     userToDelete.value = null
     resolve()
   } catch (err) {
@@ -349,14 +381,14 @@ async function handleDeleteConfirm({ resolve, reject }) {
     reject(new Error(err.response?.data?.message ?? 'Erro ao excluir usuário'))
   }
 }
+
+function handlePageChange(page) {
+  if (page === currentPage.value) return
+  fetchUsers(page)
+}
 </script>
 
 <style scoped>
-.users-page {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 /* Card */
 .users-page__card {
   background: var(--bg-primary);
@@ -372,9 +404,6 @@ async function handleDeleteConfirm({ resolve, reject }) {
   border-bottom: 1px solid var(--border);
 }
 
-.users-page__search :deep(.search-bar) {
-  max-width: 420px;
-}
 
 /* Loading */
 .users-page__loading {
@@ -466,6 +495,35 @@ async function handleDeleteConfirm({ resolve, reject }) {
   background: var(--bg-secondary);
   color: var(--text-secondary);
   border: 1px solid var(--border);
+}
+
+/* Status badge */
+.users-page__status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.users-page__status-badge--active {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.users-page__status-badge--inactive {
+  background: rgba(220, 38, 38, 0.06);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.12);
+}
+
+.users-page__status-badge--unknown {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border);
 }
 
 /* Actions */

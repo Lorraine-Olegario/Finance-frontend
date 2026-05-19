@@ -75,11 +75,11 @@
           <label class="edit-asset-modal__label edit-asset-modal__label--with-icon">
             <!-- prettier-ignore -->
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="4" /> <line x1="21.17" y1="8" x2="12" y2="8" /> <line x1="3.95" y1="6.06" x2="8.54" y2="14" /> <line x1="10.88" y1="21.94" x2="15.46" y2="14" /> </svg>
-            Cor da Categoria: {{ formData.categoria }}
+            Cor da Categoria: {{ formData.categoria.nome }}
           </label>
           <div class="edit-asset-modal__color-row">
             <input
-              v-model="formData.categoryColor"
+              v-model="formData.color"
               type="color"
               class="edit-asset-modal__color-picker"
               :disabled="!formData.categoria"
@@ -87,12 +87,12 @@
             <div
               class="edit-asset-modal__color-preview"
               :style="{
-                backgroundColor: formData.categoryColor,
+                backgroundColor: formData.color,
                 color: 'white',
                 textShadow: '0 1px 3px rgba(0,0,0,0.3)'
               }"
             >
-              {{ formData.categoryColor }}
+              {{ formData.color }}
             </div>
             <button
               type="button"
@@ -154,10 +154,6 @@ export default {
     asset: {
       type: Object,
       default: () => ({})
-    },
-    categoryColor: {
-      type: String,
-      default: '#6200EE'
     }
   },
   emits: ['close', 'submit'],
@@ -169,7 +165,7 @@ export default {
         nome: '',
         status: 'ativo',
         categoria: '',
-        categoryColor: '#6200EE'
+        color: '#6200EE'
       },
       saving: false,
       error: '',
@@ -185,15 +181,10 @@ export default {
           nome: this.asset.nome || '',
           status: this.asset.status || 'ativo',
           categoria: this.asset.categoria || '',
-          categoryColor: this.categoryColor
+          color: this.asset.color || '#6200EE'
         }
       } else {
         this.resetForm()
-      }
-    },
-    categoryColor(newVal) {
-      if (newVal) {
-        this.formData.categoryColor = newVal
       }
     }
   },
@@ -208,7 +199,7 @@ export default {
       this.saving = false
     },
     resetColor() {
-      this.formData.categoryColor = '#6200EE'
+      this.formData.color = '#6200EE'
     },
     async handleSubmit() {
       this.error = ''
@@ -217,8 +208,8 @@ export default {
 
       try {
         this.$emit('submit', {
-          categoria: this.formData.categoria,
-          categoryColor: this.formData.categoryColor
+          category_id: this.formData.categoria?.id,
+          color: this.formData.color
         })
 
         this.success = 'Cor atualizada com sucesso!'

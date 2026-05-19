@@ -1,9 +1,9 @@
 import apiClient from './api'
 
 export default {
-  // Get all users
-  getUsers() {
-    return apiClient.get('/users')
+  // Get all users (supports query params: page, per_page, q...)
+  getUsers(params = {}) {
+    return apiClient.get('/users', { params })
   },
 
   // Get single user

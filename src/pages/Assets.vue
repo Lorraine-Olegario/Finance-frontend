@@ -140,8 +140,8 @@
               </td>
               <td class="assets-page__td">
                 <Badge
-                  :label="asset.categoria"
-                  :color="getCategoryColor(asset.categoria)"
+                  :label="asset.categoria?.nome"
+                  :color="asset.categoria?.color"
                 />
               </td>
               <td class="assets-page__td">
@@ -240,7 +240,6 @@
       <EditAssetModal
         :is-open="modals.edit"
         :asset="selectedAsset"
-        :category-color="editCategoryColor"
         @close="closeModal('edit')"
         @submit="handleUpdateAsset"
       />
@@ -314,23 +313,17 @@ import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
 import EmptyState from '@/components/atoms/EmptyState/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
-import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
 import categoryService from '@/services/categoryService'
 
-// ── State ─────────────────────────────────────────────────────────────────────
-const authStore = useAuthStore()
-
 const assets = ref([])
 const categorias = ref([])
-const categoryColors = ref({})
 const loading = ref(false)
 const fetchError = ref('')
 const filterOpen = ref(false)
 const currentPage = ref(1)
 const perPage = 10
 const selectedAsset = ref(null)
-const editCategoryColor = ref('')
 
 const filters = ref({
   search: '',
@@ -428,31 +421,12 @@ async function fetchAssets() {
   }
 }
 
-async function fetchCategories() {
-  const response = await categoryService.getAll()
-  if (response.data && Array.isArray(response.data.data)) {
-    categorias.value = response.data.data.map(cat => ({
-      id: cat.id,
-      nome: cat.nome || cat.name || String(cat)
-    }))
-  }
-}
-
-async function fetchCategoryColors() {
-  try {
-    const res = await assetService.getCategoryColors()
-    categoryColors.value = res.data?.colors || {}
-  } catch {
-    categoryColors.value = {}
-  }
-}
-
 async function loadPage() {
   loading.value = true
   fetchError.value = ''
 
   try {
-    await Promise.all([fetchAssets(), fetchCategories(), fetchCategoryColors()])
+    await Promise.all([fetchAssets()])
   } catch (err) {
     fetchError.value = 'Erro ao carregar ativos. Tente novamente.'
     assets.value = []
@@ -461,23 +435,12 @@ async function loadPage() {
   }
 }
 
-function getCategoryColor(categoria) {
-  if (!categoria) return null
-
-  return (
-    categoryColors.value[categoria] ||
-    categoryColors.value[categoria?.toUpperCase()] ||
-    null
-  )
-}
-
 function openAddModal() {
   modals.value.add = true
 }
 
 function openEditModal(asset) {
   selectedAsset.value = { ...asset }
-  editCategoryColor.value = getCategoryColor(asset.categoria)
   modals.value.edit = true
 }
 
@@ -522,22 +485,22 @@ async function handleAddAssets({ categoria, codigos }) {
   }
 }
 
-async function handleUpdateAsset(assetData) {
-  if (assetData.categoryColor && assetData.categoria) {
-    const currentColor = categoryColors.value[assetData.categoria]
-    if (assetData.categoryColor !== currentColor) {
-      const newColors = {
-        ...categoryColors.value,
-        [assetData.categoria]: assetData.categoryColor
-      }
-      await assetService.updateCategoryColors(newColors)
-      categoryColors.value = newColors
-    }
-  }
+async function handleUpdateAsset({ category_id, color }) {
+  if (!category_id || !color) return
 
-  const index = assets.value.findIndex(a => a.id === assetData.id)
-  if (index !== -1) {
-    assets.value[index] = { ...assets.value[index], ...assetData }
+  try {
+    await categoryService.updateCategoryColor(category_id, color)
+
+    assets.value
+      .filter(a => a.categoria?.id === category_id)
+      .forEach(a => {
+        a.color = color
+        if (a.categoria && typeof a.categoria === 'object') {
+          a.categoria.color = color
+        }
+      })
+  } catch (err) {
+    console.error('[Assets] Erro ao atualizar cor da categoria:', err)
   }
 }
 

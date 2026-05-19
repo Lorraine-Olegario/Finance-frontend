@@ -98,7 +98,6 @@ const alertsCount = ref(0)
 const assetsByType = ref({})
 const categoryColors = ref({})
 
-// ── Computed ──────────────────────────────────────────────────────────────────
 const currentDate = computed(() =>
   new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -110,12 +109,7 @@ const currentDate = computed(() =>
 
 const categoriesCount = computed(() => Object.keys(assetsByType.value).length)
 
-// ── Watchers ──────────────────────────────────────────────────────────────────
-
-// ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(loadDashboard)
-
-// ── Functions ─────────────────────────────────────────────────────────────────
 
 /** Busca resumo de ativos e cores personalizadas de categoria */
 async function fetchAssetsSummary() {
@@ -126,13 +120,10 @@ async function fetchAssetsSummary() {
     assetsByType.value = Object.fromEntries(
       categorias.map(item => [item.categoria, item.quantidade])
     )
-  }
-
-  try {
-    const colorsRes = await assetService.getCategoryColors()
-    categoryColors.value = colorsRes.data?.colors || {}
-  } catch {
-    categoryColors.value = {}
+    categoryColors.value = Object.fromEntries(
+      categorias.map(item => [item.categoria, item.color])
+    )
+    userAssetsCount.value = res.data?.total ?? categorias.reduce((acc, item) => acc + item.quantidade, 0)
   }
 }
 

@@ -79,10 +79,10 @@
             </div>
             <div class="categories-page__card-info">
               <h3 class="categories-page__card-name">
-                {{ category.nome }}
+                {{ category.name }}
               </h3>
               <span class="categories-page__card-count">
-                {{ category.ativos_count || 0 }} ativo(s)
+                {{ category.assets_count || 0 }} ativo(s)
               </span>
             </div>
           </div>
@@ -101,11 +101,11 @@
             <ActionButton
               variant="delete"
               :title="
-                category.ativos_count > 0
+                category.assets_count > 0
                   ? 'Não é possível excluir categoria com ativos'
                   : 'Excluir'
               "
-              :disabled="category.ativos_count > 0"
+              :disabled="category.assets_count > 0"
               @click="openDelete(category)"
             >
               <SvgIcon
@@ -128,9 +128,9 @@
         :is-open="showDeleteModal"
         type="danger"
         title="Confirmar Exclusão"
-        :message="`Tem certeza que deseja excluir a categoria ${selectedCategory?.nome || ''}?`"
+        :message="`Tem certeza que deseja excluir a categoria ${selectedCategory?.name || ''}?`"
         :warning-message="
-          (selectedCategory?.ativos_count || 0) > 0
+          (selectedCategory?.assets_count || 0) > 0
             ? 'Esta categoria possui ativos vinculados e não pode ser excluída.'
             : 'Esta ação não pode ser desfeita.'
         "
@@ -157,10 +157,7 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 import CategoryFormModal from '@/components/organisms/categories/CategoryFormModal/index.vue'
 import categoryService from '@/services/categoryService'
-import { useAuthStore } from '@/stores/auth'
 
-// ── State ─────────────────────────────────────────────────────────────────────
-const authStore = useAuthStore()
 const categories = ref([])
 const loading = ref(false)
 const showFormModal = ref(false)
@@ -168,42 +165,7 @@ const showDeleteModal = ref(false)
 const selectedCategory = ref(null)
 const alert = ref({ type: 'success', message: '' })
 
-// ── Computed ───────────────────────────────────────────────────────────────────
-
-// ── Watchers ──────────────────────────────────────────────────────────────────
-
-// ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(loadCategories)
-
-// ── Functions ─────────────────────────────────────────────────────────────────
-async function fetchCategories() {
-  const response = await categoryService.getAll()
-  if (response.data?.data?.data && Array.isArray(response.data.data.data)) {
-    return response.data.data.data
-  }
-  if (response.data?.data && Array.isArray(response.data.data)) {
-    return response.data.data
-  }
-  if (Array.isArray(response.data)) {
-    return response.data
-  }
-  return []
-}
-
-async function loadCategories() {
-  if (!authStore.user?.id) return
-  loading.value = true
-  try {
-    categories.value = await fetchCategories()
-  } catch (err) {
-    showAlert(
-      'error',
-      err.response?.data?.message || 'Erro ao carregar categorias'
-    )
-  } finally {
-    loading.value = false
-  }
-}
 
 function showAlert(type, message) {
   alert.value = { type, message }
@@ -237,13 +199,33 @@ function closeDeleteModal() {
   selectedCategory.value = null
 }
 
-async function handleSubmit({ nome, color, resolve, reject }) {
+async function loadCategories() {
+  loading.value = true
+
+  try {
+    const response = await categoryService.getAll()
+    categories.value = []
+
+    if (response.data?.categories && Array.isArray(response.data.categories)) {
+      categories.value = response.data.categories
+    }
+  } catch (err) {
+    showAlert(
+      'error',
+      err.response?.data?.message || 'Erro ao carregar categorias'
+    )
+  } finally {
+    loading.value = false
+  }
+}
+
+async function handleSubmit({ id, name, default_color, resolve, reject }) {
   try {
     if (selectedCategory.value) {
-      await categoryService.update(selectedCategory.value.id, { nome, color })
+      await categoryService.update(selectedCategory.value.id, { id, name, default_color })
       showAlert('success', 'Categoria atualizada com sucesso!')
     } else {
-      await categoryService.create({ nome, color })
+      await categoryService.create({ name, default_color })
       showAlert('success', 'Categoria criada com sucesso!')
     }
     await loadCategories()

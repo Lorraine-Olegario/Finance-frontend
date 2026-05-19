@@ -35,23 +35,17 @@ export function useDashboard() {
         name,
         count,
         percentage: ((count / userAssetsCount.value) * 100).toFixed(1),
-        color: getCategoryColor(name)
+        color: (name)
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
   })
 
-  const getCategoryColor = category => {
-    return categoryColors.value[category] || categoryColors.value[category?.toUpperCase()] || null
-  }
-
   const fetchData = async () => {
     loading.value = true
     try {
-      // Buscar ativos do usuário
       const response = await assetService.getAssets()
 
-      // A API pode retornar os dados de duas formas diferentes
       let ativosPorCategoria = {}
 
       if (response.data?.ativos_por_categoria) {
@@ -71,17 +65,7 @@ export function useDashboard() {
         }
       })
 
-      // Buscar cores e alertas em paralelo
       await Promise.allSettled([
-        assetService
-          .getCategoryColors()
-          .then(res => {
-            categoryColors.value = res.data?.colors || {}
-          })
-          .catch(() => {
-            categoryColors.value = {}
-          }),
-
         assetService
           .getAssetAlerts()
           .then(res => {
