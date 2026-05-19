@@ -1,0 +1,85 @@
+.user-form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &__alert {
+    margin-bottom: 0.5rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  &__btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    &--cancel {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+
+      &:hover:not(:disabled) {
+        background: var(--bg-hover);
+      }
+    }
+
+    &--submit {
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+      &:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(98, 0, 238, 0.4);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: ufm-spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes ufm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,41 @@
+.dashboard-card {
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+
+    :deep(svg) {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+    }
+  }
+
+  &__icon {
+    // slot wrapper — sizing handled via :deep(svg) in &__header
+  }
+
+  &__title {
+    flex: 1;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__actions {
+    margin-left: auto;
+  }
+
+  &__body {
+    padding: 1.5rem;
+  }
+}

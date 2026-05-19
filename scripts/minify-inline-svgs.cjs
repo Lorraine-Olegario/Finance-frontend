@@ -3,7 +3,7 @@ const path = require('path')
 
 function walkDir(dir, filelist = []) {
   const files = fs.readdirSync(dir)
-  files.forEach((file) => {
+  files.forEach(file => {
     const filepath = path.join(dir, file)
     const stat = fs.statSync(filepath)
     if (stat.isDirectory()) {
@@ -16,12 +16,17 @@ function walkDir(dir, filelist = []) {
 }
 
 function compressSvgBlocks(content) {
-  return content.replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, (match) => {
-    // Remove newlines and collapse multiple spaces, preserve single spaces between attributes
+  // Remove existing prettier-ignore comments before SVGs to avoid duplicates
+  let result = content.replace(/<!--\s*prettier-ignore\s*-->\s*(<svg\b)/gi, '$1')
+
+  // Compress each SVG block to one line and prepend prettier-ignore
+  result = result.replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, match => {
     let s = match.replace(/\r?\n\s*/g, ' ')
     s = s.replace(/\s{2,}/g, ' ')
-    return s.trim()
+    return '<!-- prettier-ignore -->\n' + s.trim()
   })
+
+  return result
 }
 
 function main() {
@@ -34,7 +39,7 @@ function main() {
   const vueFiles = walkDir(srcDir)
   let changed = 0
 
-  vueFiles.forEach((file) => {
+  vueFiles.forEach(file => {
     const content = fs.readFileSync(file, 'utf8')
     const newContent = compressSvgBlocks(content)
     if (newContent !== content) {

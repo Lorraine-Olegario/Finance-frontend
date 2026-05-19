@@ -7,10 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
     "minify:inline-svgs": "node scripts/minify-inline-svgs.cjs",
-    "format": "prettier --write \"src/**/*.{vue,js,css,html}\""
+    "format": "prettier --write \"src/**/*.{vue,js,css,html}\"",
+    "fix": "npm run minify:inline-svgs && npm run format"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -28,9 +27,10 @@
     "eslint-plugin-vue": "^10.6.2",
     "globals": "^17.0.0",
     "pinia": "^3.0.4",
+    "prettier": "^3.8.0",
+    "sass": "^1.99.0",
     "vite": "^7.1.7",
     "vue-chartjs": "^5.3.3",
-    "vue-eslint-parser": "^10.0.0",
-    "prettier": "^3.8.0"
+    "vue-eslint-parser": "^10.0.0"
   }
 }

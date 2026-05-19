@@ -1,0 +1,61 @@
+.category-form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  &__color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    :deep(.base-input) {
+      flex: 1;
+    }
+  }
+
+  &__swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+  }
+
+  &__color-picker {
+    width: 44px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    flex-shrink: 0;
+    outline: none;
+  }
+
+  &__error {
+    padding: 0.75rem 1rem;
+    background: rgba(176, 0, 32, 0.08);
+    border: 1px solid rgba(176, 0, 32, 0.25);
+    border-radius: 8px;
+    color: var(--error);
+    font-size: 0.875rem;
+  }
+
+  &__footer-btn {
+    flex: 1;
+  }
+}
