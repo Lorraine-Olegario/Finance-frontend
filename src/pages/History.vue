@@ -25,10 +25,7 @@
         </div>
       </div>
 
-      <LoadingSpinner
-        v-if="loading"
-        message="Buscando histórico..."
-      />
+      <LoadingSpinner v-if="loading" message="Buscando histórico..." />
 
       <AlertMessage
         v-if="error"
@@ -38,55 +35,86 @@
         @dismiss="error = ''"
       />
 
-      <div
-        v-if="historyData.length"
-        class="history-page__results"
-      >
-        <h3 class="history-page__results-title">
-          Histórico de {{ lastSearchCode }}
-        </h3>
+      <template v-if="stockData && !loading">
+        <div class="history-page__header">
+          <div class="history-page__asset-info">
+            <img
+              v-if="stockData.logoUrl"
+              :src="stockData.logoUrl"
+              :alt="stockData.symbol"
+              class="history-page__logo"
+            />
+            <div>
+              <h3 class="history-page__symbol">{{ stockData.symbol }}</h3>
+              <span class="history-page__name">{{ stockData.shortName }}</span>
+            </div>
+          </div>
+
+          <div class="history-page__metrics">
+            <div class="history-page__metric">
+              <span class="history-page__metric-label">Preço atual</span>
+              <span class="history-page__metric-value">
+                {{ stockData.currency }} {{ formatPrice(stockData.currentPrice) }}
+              </span>
+            </div>
+            <div class="history-page__metric">
+              <span class="history-page__metric-label">Variação</span>
+              <span
+                class="history-page__metric-value"
+                :class="getChangeClass(stockData.currentChangePercent)"
+              >
+                {{ formatChangePercent(stockData.currentChangePercent) }}
+              </span>
+            </div>
+            <div class="history-page__metric">
+              <span class="history-page__metric-label">Mín. 52 sem.</span>
+              <span class="history-page__metric-value">
+                {{ formatPrice(stockData.fiftyTwoWeekLow) }}
+              </span>
+            </div>
+            <div class="history-page__metric">
+              <span class="history-page__metric-label">Máx. 52 sem.</span>
+              <span class="history-page__metric-value">
+                {{ formatPrice(stockData.fiftyTwoWeekHigh) }}
+              </span>
+            </div>
+          </div>
+        </div>
 
         <div class="history-page__table-wrapper">
           <table class="history-page__table">
             <thead>
               <tr>
-                <th>Data/Hora</th>
-                <th>Símbolo</th>
-                <th>Nome</th>
-                <th>Preço</th>
-                <th>Variação %</th>
+                <th>Data</th>
+                <th>Abertura</th>
+                <th>Máxima</th>
+                <th>Mínima</th>
+                <th>Fechamento</th>
+                <th>Aj. Fechamento</th>
+                <th>Volume</th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="(record, index) in historyData"
+                v-for="(item, index) in stockData.history"
                 :key="index"
               >
-                <td>{{ formatDate(record.created_at || record.timestamp) }}</td>
-                <td>{{ record.symbol }}</td>
-                <td>{{ record.shortName || record.name }}</td>
+                <td>{{ formatDate(item.date) }}</td>
+                <td>{{ formatPrice(item.open) }}</td>
+                <td>{{ formatPrice(item.high) }}</td>
+                <td>{{ formatPrice(item.low) }}</td>
                 <td>
-                  {{ record.currency }}
-                  {{ formatPrice(record.price || record.regularMarketPrice) }}
+                  <span :class="getChangeClass(item.close - item.open)">
+                    {{ formatPrice(item.close) }}
+                  </span>
                 </td>
-                <td
-                  :class="
-                    getChangeClass(
-                      record.changePercent || record.regularMarketChangePercent
-                    )
-                  "
-                >
-                  {{
-                    formatChangePercent(
-                      record.changePercent || record.regularMarketChangePercent
-                    )
-                  }}
-                </td>
+                <td>{{ formatPrice(item.adjustedClose) }}</td>
+                <td>{{ formatVolume(item.volume) }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </template>
 
       <EmptyState
         v-else-if="!loading && !error && hasSearched"
@@ -94,10 +122,7 @@
         description="Não foram encontrados registros para este ativo"
       >
         <template #icon>
-          <SvgIcon
-            name="search"
-            :size="48"
-          />
+          <SvgIcon name="search" :size="48" />
         </template>
       </EmptyState>
 
@@ -107,10 +132,7 @@
         description="Digite um código de ativo para ver seu histórico"
       >
         <template #icon>
-          <SvgIcon
-            name="activity"
-            :size="48"
-          />
+          <SvgIcon name="activity" :size="48" />
         </template>
       </EmptyState>
     </div>
@@ -118,8 +140,7 @@
 </template>
 
 <script setup>
-// ── Imports ───────────────────────────────────────────────────────────────────
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import SearchBar from '@/components/molecules/SearchBar/index.vue'
@@ -130,37 +151,23 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import assetService from '@/services/assetService'
 
-// ── State ─────────────────────────────────────────────────────────────────────
-const searchCode = ref('')
-const lastSearchCode = ref('')
-const historyData = ref([])
-const loading = ref(false)
-const error = ref('')
-const hasSearched = ref(false)
-
-// ── Computed ───────────────────────────────────────────────────────────────────
-
-// ── Watchers ──────────────────────────────────────────────────────────────────
-
-// ── Lifecycle ─────────────────────────────────────────────────────────────────
-
-// ── Functions ─────────────────────────────────────────────────────────────────
-async function fetchHistory(codigo) {
-  const response = await assetService.getAssetHistory(codigo)
-  historyData.value = response.data
-}
+const searchCode   = ref('')
+const loading      = ref(false)
+const error        = ref('')
+const hasSearched  = ref(false)
+const stockData    = ref(null)
 
 async function handleSearch() {
   if (!searchCode.value) return
 
-  loading.value = true
-  error.value = ''
-  historyData.value = []
+  loading.value    = true
+  error.value      = ''
+  stockData.value  = null
   hasSearched.value = true
-  lastSearchCode.value = searchCode.value.toUpperCase()
 
   try {
-    await fetchHistory(searchCode.value.toUpperCase())
+    const response = await assetService.getAssetHistory(searchCode.value.toUpperCase())
+    stockData.value = response.data[0] ?? null
   } catch (err) {
     error.value = 'Erro ao buscar histórico. Tente novamente.'
   } finally {
@@ -170,30 +177,33 @@ async function handleSearch() {
 
 function formatDate(dateString) {
   if (!dateString) return '-'
-  const date = new Date(dateString)
-  return date.toLocaleString('pt-BR')
+  const [year, month, day] = dateString.split('-')
+  return `${day}/${month}/${year}`
 }
 
 function formatPrice(price) {
-  return price ? price.toFixed(2) : '0.00'
+  if (price == null) return '-'
+  return price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
-function formatChangePercent(changePercent) {
-  if (!changePercent) return '-'
-  const prefix = changePercent >= 0 ? '+' : ''
-  return `${prefix}${changePercent.toFixed(2)}%`
+function formatVolume(volume) {
+  if (volume == null) return '-'
+  return volume.toLocaleString('pt-BR')
 }
 
-function getChangeClass(changePercent) {
-  if (!changePercent) return ''
-  return changePercent >= 0
-    ? 'history-page__change--positive'
-    : 'history-page__change--negative'
+function formatChangePercent(value) {
+  if (value == null) return '-'
+  const prefix = value >= 0 ? '+' : ''
+  return `${prefix}${value.toFixed(2)}%`
+}
+
+function getChangeClass(value) {
+  if (!value) return ''
+  return value >= 0 ? 'history-page__change--positive' : 'history-page__change--negative'
 }
 </script>
 
 <style scoped>
-
 .history-page__form {
   margin-bottom: 1.5rem;
 }
@@ -208,13 +218,62 @@ function getChangeClass(changePercent) {
   flex: 1;
 }
 
-.history-page__results {
-  margin-top: 1.5rem;
+.history-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
 
-.history-page__results-title {
-  margin: 0 0 1.25rem;
+.history-page__asset-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.history-page__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.history-page__symbol {
+  margin: 0;
   font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-page__name {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.history-page__metrics {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.history-page__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.history-page__metric-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.history-page__metric-value {
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -260,6 +319,11 @@ function getChangeClass(changePercent) {
   .history-page__search {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .history-page__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>
