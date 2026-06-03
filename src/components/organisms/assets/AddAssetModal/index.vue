@@ -106,8 +106,8 @@ const success = ref('')
 
 const categoriaOptions = computed(() =>
   props.categorias.map(cat => ({
-    value: cat.nome ?? cat,
-    label: cat.nome ?? cat
+    value: cat.name,
+    label: cat.name
   }))
 )
 

@@ -421,12 +421,23 @@ async function fetchAssets() {
   }
 }
 
+async function fetchCategorias() {
+  try {
+    const res = await categoryService.getAll()
+    if (Array.isArray(res.data?.categories)) {
+      categorias.value = res.data.categories
+    }
+  } catch {
+    // erro opcional — não bloqueia a página
+  }
+}
+
 async function loadPage() {
   loading.value = true
   fetchError.value = ''
 
   try {
-    await Promise.all([fetchAssets()])
+    await Promise.all([fetchAssets(), fetchCategorias()])
   } catch (err) {
     fetchError.value = 'Erro ao carregar ativos. Tente novamente.'
     assets.value = []
