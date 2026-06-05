@@ -66,6 +66,10 @@ jobs:
           host: 72.61.27.84
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: 22
+          debug: true
+          source: "."
+          target: "/var/www/projetos/finance/Finance-frontend"
           script: |
             cd /var/www/projetos/finance/Finance-frontend
             docker compose down
