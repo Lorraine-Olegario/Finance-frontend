@@ -54,6 +54,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           host: 72.61.27.84
+          port: 22
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "."
@@ -70,6 +71,7 @@ jobs:
           debug: true
           source: "."
           target: "/var/www/projetos/finance/Finance-frontend"
+          strip_components: 0
           script: |
             cd /var/www/projetos/finance/Finance-frontend
             docker compose down
