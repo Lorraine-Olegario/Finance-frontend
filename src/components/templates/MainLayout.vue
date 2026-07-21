@@ -182,9 +182,9 @@ export default {
 }
 
 .main-layout__header {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   padding: 1rem 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -250,8 +250,8 @@ export default {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: var(--primary-contrast);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -264,17 +264,17 @@ export default {
 
 .main-layout__user-avatar:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--primary-muted);
 }
 
 .main-layout__dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: var(--surface, #ffffff);
-  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-elevated);
   min-width: 240px;
   z-index: 99999;
   overflow: visible;
@@ -295,8 +295,8 @@ export default {
 
 .main-layout__dropdown-header {
   padding: 16px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: var(--primary-contrast);
 }
 
 .main-layout__dropdown-user-info {
@@ -317,7 +317,7 @@ export default {
 
 .main-layout__dropdown-divider {
   height: 1px;
-  background: var(--border-color);
+  background: var(--border-subtle);
   margin: 0;
 }
 
@@ -348,18 +348,18 @@ export default {
 }
 
 .main-layout__dropdown-item--logout {
-  color: var(--danger);
-  border-top: 1px solid var(--border-color);
+  color: var(--status-danger);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .main-layout__dropdown-item--logout:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--status-danger-bg);
 }
 
 .main-layout__content {
   flex: 1;
   padding: 2rem;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   overflow: visible;
   position: relative;
 }
@@ -374,7 +374,7 @@ export default {
   }
 
   .main-layout__mobile-menu-btn:hover {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-elevated-hover);
     border-radius: 4px;
   }
 

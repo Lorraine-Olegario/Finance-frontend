@@ -16,10 +16,10 @@
   --text-muted: #6b6b6b;
 
   /* ── Marca / Primária ── */
-  --primary: #6200ee;
-  --primary-hover: #7722ff;
-  --primary-active: #4f00c4;
-  --primary-muted: rgba(98, 0, 238, 0.14);
+  --primary: #4f46e5;
+  --primary-hover: #6366f1;
+  --primary-active: #4338ca;
+  --primary-muted: rgba(79, 70, 229, 0.14);
   --primary-contrast: #ffffff; /* texto sobre --primary */
 
   /* ── Status (uso exclusivo — status de ativos, não mexer) ── */
@@ -30,10 +30,12 @@
   --status-warning: #facc15;
   --status-warning-bg: rgba(250, 204, 21, 0.12);
 
-  /* ── Dados/gráficos (não é status) ── */
+  /* ── Dados/gráficos e categorias decorativas (não é status) ── */
   --chart-blue: #5b8def;
   --chart-blue-light: #a8c5f7;
-  --chart-primary: #6200ee;
+  --chart-primary: #4f46e5;
+  --chart-green: #34d399;
+  --chart-amber: #fbbf24;
 
   /* ── Elevação (sem box-shadow preto — usar borda) ── */
   --shadow-elevated: 0 0 0 1px var(--border-subtle);
@@ -52,8 +54,8 @@
   --success: var(--status-success);
   --danger: var(--status-danger);
   --primary-dark: var(--primary-active);
-  --accent-yellow: var(--status-warning);
-  --accent-green: var(--status-success);
+  --accent-yellow: var(--chart-amber);
+  --accent-green: var(--chart-green);
   --accent-blue: var(--chart-blue);
 
   --sidebar-width: 260px;
@@ -150,7 +152,7 @@ button:hover,
 .btn:hover {
   /* background-color: var(--secondary); */
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
 }
 
 button:active,
@@ -207,7 +209,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.1);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .card {

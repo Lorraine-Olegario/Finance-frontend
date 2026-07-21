@@ -611,7 +611,7 @@ function formatPrice(value) {
 }
 
 .observed-assets-page__empty-link:hover {
-  box-shadow: 0 4px 12px rgba(98, 0, 238, 0.35);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
   transform: translateY(-1px);
 }
 

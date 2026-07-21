@@ -386,7 +386,7 @@ async function updatePassword() {
   border-radius: 16px;
   padding: 1.75rem 2rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px rgba(98, 0, 238, 0.2);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.2);
 }
 
 .user-profile-page__avatar {

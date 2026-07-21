@@ -1,8 +1,8 @@
 .stat-card {
-  background: var(--surface);
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-default);
   position: relative;
   overflow: hidden;
   transition:
@@ -11,7 +11,7 @@
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px color-mix(in srgb, currentColor 20%, transparent);
   }
 
   &::before {
@@ -26,19 +26,19 @@
   }
 
   &--primary {
-    color: var(--accent-blue);
+    color: var(--primary);
   }
 
   &--success {
-    color: var(--accent-green);
+    color: var(--chart-green);
   }
 
   &--info {
-    color: var(--accent);
+    color: var(--primary-hover);
   }
 
   &--warning {
-    color: var(--accent-yellow);
+    color: var(--chart-amber);
   }
 
   &__header {
@@ -107,7 +107,7 @@
     margin: 0;
 
     &--positive {
-      color: var(--accent-green);
+      color: var(--status-success);
     }
 
     :deep(svg) {

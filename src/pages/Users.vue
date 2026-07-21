@@ -486,9 +486,9 @@ function handlePageChange(page) {
 }
 
 .users-page__role-badge--admin {
-  background: rgba(98, 0, 238, 0.1);
+  background: rgba(79, 70, 229, 0.1);
   color: var(--primary);
-  border: 1px solid rgba(98, 0, 238, 0.2);
+  border: 1px solid rgba(79, 70, 229, 0.2);
 }
 
 .users-page__role-badge--user {

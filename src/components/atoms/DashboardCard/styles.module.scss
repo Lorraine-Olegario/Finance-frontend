@@ -1,8 +1,7 @@
 .dashboard-card {
-  background: var(--surface);
+  background: var(--bg-elevated);
   border-radius: 16px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-elevated);
   overflow: hidden;
 
   &__header {
@@ -10,7 +9,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
 
     :deep(svg) {
       width: 20px;

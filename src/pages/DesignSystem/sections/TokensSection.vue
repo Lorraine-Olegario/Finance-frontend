@@ -169,7 +169,7 @@
 
 <script setup>
 const colorTokens = [
-  { var: '--primary', hex: '#6200ee', label: 'Ações principais, botões' },
+  { var: '--primary', hex: '#4f46e5', label: 'Ações principais, botões' },
   { var: '--primary-dark', hex: '#5000d0', label: 'Hover do primário' },
   { var: '--secondary', hex: '#3700b3', label: 'Ações secundárias' },
   { var: '--accent', hex: '#bb86fc', label: 'Destaques' },

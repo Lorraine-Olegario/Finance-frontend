@@ -8,7 +8,10 @@
 
 - **Tema:** dark único — sem toggle claro/escuro. Substitui todas as cores atuais.
 - **Fundo base:** `#141414`
-- **Cor primária/marca:** `#6200ee`
+- **Cor primária/marca:** ~~`#6200ee`~~ → `#4f46e5` (índigo profundo). Trocada
+  porque o roxo Material Design original lia como "template genérico"; índigo
+  aproxima de referências tech-finance (Stripe, Linear, Revolut). Hover
+  `#6366f1`, active `#4338ca`.
 - **Regra de ouro:** toda cor global vive em `src/style.css`. Nenhum componente,
   página ou organism pode hardcodar cor. Verde/amarelo/vermelho seguem
   reservados exclusivamente para status de ativos. Gradientes só em ícones e
@@ -35,10 +38,10 @@
   --text-muted: #6b6b6b;
 
   /* ── Marca / Primária ── */
-  --primary: #6200ee;
-  --primary-hover: #7722ff;
-  --primary-active: #4f00c4;
-  --primary-muted: rgba(98, 0, 238, 0.14);
+  --primary: #4f46e5;
+  --primary-hover: #6366f1;
+  --primary-active: #4338ca;
+  --primary-muted: rgba(79, 70, 229, 0.14);
   --primary-contrast: #ffffff; /* texto sobre --primary */
 
   /* ── Status (uso exclusivo — não mexer) ── */
@@ -49,10 +52,12 @@
   --status-warning: #facc15;
   --status-warning-bg: rgba(250, 204, 21, 0.12);
 
-  /* ── Dados/gráficos (não é status) ── */
+  /* ── Dados/gráficos e categorias decorativas (não é status) ── */
   --chart-blue: #5b8def;
   --chart-blue-light: #a8c5f7;
-  --chart-primary: #6200ee;
+  --chart-primary: #4f46e5;
+  --chart-green: #34d399;
+  --chart-amber: #fbbf24;
 
   /* ── Elevação (sem box-shadow preto — usar borda) ── */
   --shadow-elevated: 0 0 0 1px var(--border-subtle);
@@ -117,11 +122,17 @@ nomes semânticos novos.
 
 ### Fase 5 — Organisms
 > Maior impacto visual percebido — pode ser adiantada logo após a Fase 1.
-- [ ] **Sidebar** (menu principal) — mostrar preview antes de aplicar
-- [ ] **Header** — logo nova + área de usuário
+- [x] **Sidebar** (desktop + mobile) — fundo `--bg-secondary`, borda em vez de
+      box-shadow preto, hover/active com `--bg-elevated-hover`/`--primary-muted`
+- [x] **Header** (`MainLayout`) — fundo `--bg-secondary`, borda em vez de
+      box-shadow preto, avatar/dropdown com tokens novos
 - [ ] `DataTable` — zebra, hover, ordenação, contraste em dark
-- [ ] `AddAssetModal` e demais modais — fundo elevado, overlay escuro
-- [ ] **Cards** de ativos/dashboard — sombra/borda/hierarquia
+- [ ] `AddAssetModal` e demais modais — fundo elevado, overlay escuro (só
+      tiveram o glow de foco/hover realinhado para a nova cor primária, ainda
+      não passaram por revisão completa de dark)
+- [x] **Cards** — `DashboardCard`, `QuickActionCard`, `StatCard`, `QuoteCard`:
+      fundo `--bg-elevated`, borda/sombra sem preto, variants do `StatCard`
+      migrados para tokens decorativos (não mais status)
 
 ### Fase 6 — Templates
 - [ ] `MainLayout`
@@ -161,3 +172,9 @@ nomes semânticos novos.
   final e gera retrabalho.
 - **Menu (Sidebar):** exibir preview visual antes de aplicar no código, por
   combinado com o time.
+- **Rebrand da cor primária (`#6200ee` → `#4f46e5`):** ao trocar `--primary`,
+  todos os `rgba(98, 0, 238, X)` hardcoded fora do `style.css` (glow de
+  botões/inputs/modais em ~20 arquivos) tiveram que ser atualizados junto —
+  eram literalmente o roxo antigo em decimal. Isso é um lembrete de que
+  qualquer ajuste futuro na cor de marca precisa desse mesmo grep, até essas
+  ocorrências virarem `var(--primary-muted)` de fato nas Fases 3/5.

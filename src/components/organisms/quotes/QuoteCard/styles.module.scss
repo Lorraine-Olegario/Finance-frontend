@@ -1,13 +1,13 @@
 .quote-card {
-  background: var(--bg-primary);
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 1.25rem;
-  border: 2px solid var(--border);
+  border: 2px solid var(--border-default);
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px var(--primary-muted);
     border-color: var(--primary);
   }
 
@@ -17,7 +17,7 @@
     gap: 0.875rem;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--border);
+    border-bottom: 2px solid var(--border-subtle);
   }
 
   &__logo {
@@ -34,7 +34,7 @@
   &__logo-placeholder {
     width: 40px;
     height: 40px;
-    background: var(--bg-secondary);
+    background: var(--bg-elevated-hover);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -108,13 +108,13 @@
     font-size: 0.875rem;
 
     &--positive {
-      background: color-mix(in srgb, var(--accent-green) 12%, transparent);
-      color: var(--accent-green);
+      background: var(--status-success-bg);
+      color: var(--status-success);
     }
 
     &--negative {
-      background: color-mix(in srgb, var(--danger) 12%, transparent);
-      color: var(--danger);
+      background: var(--status-danger-bg);
+      color: var(--status-danger);
     }
   }
 
