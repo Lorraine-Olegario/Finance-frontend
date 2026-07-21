@@ -39,6 +39,7 @@ jobs:
   deploy:
     name: Deploy Frontend
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout código
@@ -58,7 +59,6 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "."
           target: "/var/www/projetos/finance/Finance-frontend"
-          strip_components: 0
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -66,6 +66,8 @@ jobs:
           host: 72.61.27.84
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: 22
+          debug: true
           script: |
             cd /var/www/projetos/finance/Finance-frontend
             docker compose down
