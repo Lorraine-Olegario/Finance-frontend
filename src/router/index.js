@@ -5,6 +5,7 @@ import Login from '../pages/Login.vue'
 import Dashboard from '../pages/Dashboard.vue'
 import Users from '../pages/Users.vue'
 import Assets from '../pages/Assets.vue'
+import Portfolio from '../pages/Portfolio.vue'
 import Quotes from '../pages/Quotes.vue'
 import History from '../pages/History.vue'
 import ObservedAssets from '../pages/ObservedAssets.vue'
@@ -41,6 +42,12 @@ const routes = [
     path: '/my-assets',
     name: 'Assets',
     component: Assets,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/portfolio',
+    name: 'Portfolio',
+    component: Portfolio,
     meta: { requiresAuth: true }
   },
   {

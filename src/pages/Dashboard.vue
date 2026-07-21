@@ -4,58 +4,62 @@
       <DashboardWelcome
         :user-name="authStore.user?.name || 'Usuário'"
         :date="currentDate"
-      />
-
-      <StatsGrid style="margin-bottom: 2rem">
-        <StatCard
-          label="Meus Ativos"
-          :value="userAssetsCount"
-          variant="primary"
-          :subtitle="userAssetsCount > 0 ? 'Ativos observados' : ''"
-          :is-positive="userAssetsCount > 0"
-        >
-          <template #icon>
-            <SvgIcon name="bar-chart" />
-          </template>
-          <template
-            v-if="userAssetsCount > 0"
-            #subtitle-icon
+      >
+        <template #actions>
+          <RouterLink
+            to="/portfolio"
+            class="dashboard-page__cta"
           >
-            <SvgIcon name="trending-up" />
-          </template>
-        </StatCard>
+            <SvgIcon
+              name="plus"
+              :size="14"
+            />
+            Nova Transação
+          </RouterLink>
+        </template>
+      </DashboardWelcome>
 
+      <StatsGrid
+        :cols="3"
+        style="margin-bottom: 1.5rem"
+      >
         <StatCard
-          label="Alertas Configurados"
-          :value="alertsCount"
-          variant="success"
-          subtitle="Monitorando preços"
+          label="Patrimônio Total"
+          :value="formatCurrency(portfolioSummary.total_current_value)"
+          variant="primary"
+          :subtitle="patrimonioSubtitle"
         >
           <template #icon>
-            <SvgIcon name="alert-triangle" />
+            <SvgIcon name="dollar" />
           </template>
         </StatCard>
 
         <StatCard
-          label="Categorias"
-          :value="categoriesCount"
+          label="Lucro Total"
+          :value="formatCurrency(portfolioSummary.profit_loss)"
+          :variant="portfolioProfitVariant"
+          :subtitle="formatPercent(portfolioSummary.profit_loss_percent)"
+          :is-positive="portfolioSummary.profit_loss >= 0"
+        >
+          <template #icon>
+            <SvgIcon
+              :name="
+                portfolioSummary.profit_loss >= 0
+                  ? 'trending-up'
+                  : 'trending-down'
+              "
+            />
+          </template>
+        </StatCard>
+
+        <StatCard
+          label="Proventos Recebidos"
+          value="—"
           variant="info"
-          subtitle="Tipos de ativos"
+          subtitle="Em breve"
         >
           <template #icon>
-            <SvgIcon name="grid" />
-          </template>
-        </StatCard>
-
-        <StatCard
-          v-if="authStore.isAdmin"
-          label="Usuários"
-          :value="userCount"
-          variant="warning"
-          subtitle="Cadastrados no sistema"
-        >
-          <template #icon>
-            <SvgIcon name="users" />
+            <SvgIcon name="activity" />
           </template>
         </StatCard>
       </StatsGrid>
@@ -77,6 +81,7 @@
 <script setup>
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
 import MainLayout from '@/components/templates/MainLayout.vue'
 import StatCard from '@/components/atoms/StatCard/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
@@ -85,18 +90,25 @@ import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome/index.vue'
 import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/index.vue'
 import { useAuthStore } from '@/stores/auth'
-import userService from '@/services/userService'
 import assetService from '@/services/assetService'
+import portfolioService from '@/services/portfolioService'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatPercent } from '@/utils/formatPercent'
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 
 const loading = ref(true)
-const userCount = ref(0)
 const userAssetsCount = ref(0)
-const alertsCount = ref(0)
 const assetsByType = ref({})
 const categoryColors = ref({})
+const portfolioSummary = ref({
+  total_invested: 0,
+  total_current_value: 0,
+  profit_loss: 0,
+  profit_loss_percent: null,
+  assets_count: 0
+})
 
 const currentDate = computed(() =>
   new Date().toLocaleDateString('pt-BR', {
@@ -107,7 +119,13 @@ const currentDate = computed(() =>
   })
 )
 
-const categoriesCount = computed(() => Object.keys(assetsByType.value).length)
+const portfolioProfitVariant = computed(() =>
+  portfolioSummary.value.profit_loss >= 0 ? 'success' : 'danger'
+)
+const patrimonioSubtitle = computed(
+  () =>
+    `Investido: ${formatCurrency(portfolioSummary.value.total_invested)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
+)
 
 onMounted(loadDashboard)
 
@@ -123,28 +141,25 @@ async function fetchAssetsSummary() {
     categoryColors.value = Object.fromEntries(
       categorias.map(item => [item.categoria, item.color])
     )
-    userAssetsCount.value = res.data?.total ?? categorias.reduce((acc, item) => acc + item.quantidade, 0)
+    userAssetsCount.value =
+      res.data?.total ??
+      categorias.reduce((acc, item) => acc + item.quantidade, 0)
   }
 }
 
-/** Busca quantidade de alertas configurados pelo usuário */
-async function fetchAlerts() {
+/** Busca resumo de patrimônio e posições da carteira */
+async function fetchPortfolioSummary() {
   try {
-    const res = await assetService.getAssetAlerts()
-    alertsCount.value = res.data?.total || 0
+    const res = await portfolioService.getSummary()
+    portfolioSummary.value = {
+      total_invested: res.data?.total_invested ?? 0,
+      total_current_value: res.data?.total_current_value ?? 0,
+      profit_loss: res.data?.profit_loss ?? 0,
+      profit_loss_percent: res.data?.profit_loss_percent ?? null,
+      assets_count: res.data?.assets_count ?? 0
+    }
   } catch {
-    alertsCount.value = 0
-  }
-}
-
-/** Busca dados exclusivos de admin (total de usuários) */
-async function fetchAdminData() {
-  if (!authStore.isAdmin) return
-  try {
-    const res = await userService.getUsers()
-    userCount.value = res.data?.length || 0
-  } catch {
-    userCount.value = 0
+    // erro opcional — não bloqueia o dashboard
   }
 }
 
@@ -158,7 +173,7 @@ async function loadDashboard() {
 
   loading.value = true
   try {
-    await Promise.all([fetchAssetsSummary(), fetchAlerts(), fetchAdminData()])
+    await Promise.all([fetchAssetsSummary(), fetchPortfolioSummary()])
   } catch (err) {
     console.error('[Dashboard] Erro ao carregar dados:', err)
   } finally {
@@ -171,5 +186,26 @@ async function loadDashboard() {
 .dashboard-page {
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.dashboard-page__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.dashboard-page__cta:hover {
+  background: var(--primary-hover);
+  color: var(--primary-contrast);
+  transform: translateY(-1px);
 }
 </style>

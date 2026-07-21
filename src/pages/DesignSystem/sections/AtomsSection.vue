@@ -310,7 +310,7 @@
       <code>modelValue</code>
       ·
       <code>type</code>
-      text|email|password|number|search|color ·
+      text|email|password|number|search|color|date ·
       <code>placeholder</code>
       ·
       <code>disabled</code>
@@ -850,7 +850,7 @@
       <code>subtitle</code>
       ·
       <code>variant</code>
-      primary|success|info|warning ·
+      primary|success|info|warning|danger ·
       <code>isPositive</code>
       Boolean
       <br />

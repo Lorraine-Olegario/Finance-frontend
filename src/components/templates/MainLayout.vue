@@ -28,7 +28,9 @@
           class="main-layout__header-user"
         >
           <div class="main-layout__user-info">
-            <span class="main-layout__user-name">{{ authStore.user.name }}</span>
+            <span class="main-layout__user-name">
+              {{ authStore.user.name }}
+            </span>
           </div>
           <div
             ref="userMenu"
@@ -48,7 +50,9 @@
               <div class="main-layout__dropdown-header">
                 <div class="main-layout__dropdown-user-info">
                   <strong>{{ authStore.user.name }}</strong>
-                  <span class="main-layout__user-email">{{ authStore.user.email }}</span>
+                  <span class="main-layout__user-email">
+                    {{ authStore.user.email }}
+                  </span>
                 </div>
               </div>
               <div class="main-layout__dropdown-divider" />
@@ -183,7 +187,7 @@ export default {
 
 .main-layout__header {
   background-color: var(--bg-secondary);
-  padding: 1rem 2rem;
+  padding: 0.875rem 1.75rem;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -213,7 +217,7 @@ export default {
 
 .main-layout__page-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -247,8 +251,8 @@ export default {
 }
 
 .main-layout__user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: var(--primary-contrast);

@@ -31,25 +31,26 @@
 defineProps({
   label: {
     type: String,
-    required: true,
+    required: true
   },
   value: {
     type: [String, Number],
-    required: true,
+    required: true
   },
   subtitle: {
     type: String,
-    default: '',
+    default: ''
   },
   variant: {
     type: String,
     default: 'primary',
-    validator: v => ['primary', 'success', 'info', 'warning'].includes(v),
+    validator: v =>
+      ['primary', 'success', 'info', 'warning', 'danger'].includes(v)
   },
   isPositive: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 })
 </script>
 

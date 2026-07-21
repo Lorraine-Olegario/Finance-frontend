@@ -1,0 +1,912 @@
+<template>
+  <MainLayout page-title="Carteira">
+    <div class="portfolio-page">
+      <PageHeader
+        title="Carteira"
+        subtitle="Acompanhe suas posições, transações e patrimônio"
+      >
+        <template #actions>
+          <BaseButton
+            variant="primary"
+            @click="openAddModal"
+          >
+            <template #icon-left>
+              <SvgIcon
+                name="plus"
+                :size="16"
+              />
+            </template>
+            Nova Transação
+          </BaseButton>
+        </template>
+      </PageHeader>
+
+      <StatsGrid
+        :cols="3"
+        style="margin-bottom: 1.5rem"
+      >
+        <StatCard
+          label="Patrimônio Total"
+          :value="formatCurrency(summary.total_current_value)"
+          variant="primary"
+          :subtitle="patrimonioSubtitle"
+        >
+          <template #icon>
+            <SvgIcon name="dollar" />
+          </template>
+        </StatCard>
+
+        <StatCard
+          label="Lucro Total"
+          :value="formatCurrency(summary.profit_loss)"
+          :variant="profitVariant"
+          :subtitle="formatPercent(summary.profit_loss_percent)"
+          :is-positive="summary.profit_loss >= 0"
+        >
+          <template #icon>
+            <SvgIcon
+              :name="summary.profit_loss >= 0 ? 'trending-up' : 'trending-down'"
+            />
+          </template>
+        </StatCard>
+
+        <StatCard
+          label="Proventos Recebidos"
+          value="—"
+          variant="info"
+          subtitle="Em breve"
+        >
+          <template #icon>
+            <SvgIcon name="activity" />
+          </template>
+        </StatCard>
+      </StatsGrid>
+
+      <div class="portfolio-page__toolbar">
+        <div class="portfolio-page__tabs">
+          <button
+            type="button"
+            class="portfolio-page__tab"
+            :class="{
+              'portfolio-page__tab--active': activeTab === 'positions'
+            }"
+            @click="activeTab = 'positions'"
+          >
+            <SvgIcon
+              name="bar-chart"
+              :size="16"
+            />
+            Posições
+          </button>
+          <button
+            type="button"
+            class="portfolio-page__tab"
+            :class="{ 'portfolio-page__tab--active': activeTab === 'history' }"
+            @click="activeTab = 'history'"
+          >
+            <SvgIcon
+              name="calendar"
+              :size="16"
+            />
+            Extrato
+          </button>
+        </div>
+
+        <div class="portfolio-page__filters">
+          <BaseSelect
+            v-model="categoryFilter"
+            class="portfolio-page__category-select"
+            :options="categoryOptions"
+            placeholder="Todas as categorias"
+          />
+          <SearchBar
+            v-model="search"
+            placeholder="Buscar por código..."
+          />
+        </div>
+      </div>
+
+      <LoadingSpinner
+        v-if="loading"
+        message="Carregando carteira..."
+      />
+
+      <AlertMessage
+        v-else-if="fetchError"
+        type="error"
+        :message="fetchError"
+        class="portfolio-page__error"
+      />
+
+      <template v-else-if="activeTab === 'positions'">
+        <EmptyState
+          v-if="filteredPositions.length === 0"
+          title="Nenhuma posição encontrada"
+          description="Registre uma transação de compra para começar a montar sua carteira"
+        >
+          <template #icon>
+            <SvgIcon
+              name="bar-chart"
+              class="portfolio-page__empty-icon"
+            />
+          </template>
+          <template #action>
+            <BaseButton
+              variant="primary"
+              @click="openAddModal"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="plus"
+                  :size="16"
+                />
+              </template>
+              Registrar Transação
+            </BaseButton>
+          </template>
+        </EmptyState>
+
+        <div
+          v-else
+          class="portfolio-page__table-wrapper"
+        >
+          <table class="portfolio-page__table">
+            <thead>
+              <tr>
+                <th class="portfolio-page__th">Código</th>
+                <th class="portfolio-page__th">Nome</th>
+                <th class="portfolio-page__th">Categoria</th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Qtd.
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Preço Médio
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Preço Atual
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Valor Total
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Variação
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Rentabilidade
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="position in paginatedPositions"
+                :key="position.asset_id"
+                class="portfolio-page__row"
+              >
+                <td class="portfolio-page__td portfolio-page__td--code">
+                  {{ position.code }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--muted">
+                  {{ position.name || '-' }}
+                </td>
+                <td class="portfolio-page__td">
+                  <Badge
+                    v-if="resolveCategory(position.code).nome"
+                    :label="resolveCategory(position.code).nome"
+                    :color="resolveCategory(position.code).color"
+                  />
+                  <span v-else>-</span>
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatQuantity(position.quantity) }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatCurrency(position.average_price) }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{
+                    position.current_price != null
+                      ? formatCurrency(position.current_price)
+                      : '—'
+                  }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatCurrency(position.current_value) }}
+                </td>
+                <td
+                  class="portfolio-page__td portfolio-page__td--right"
+                  :class="profitLossClass(position.daily_variation_percent)"
+                >
+                  {{ formatPercent(position.daily_variation_percent) }}
+                </td>
+                <td
+                  class="portfolio-page__td portfolio-page__td--right"
+                  :class="profitLossClass(position.profit_loss_percent)"
+                >
+                  {{ formatPercent(position.profit_loss_percent) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="portfolio-page__pagination">
+            <Pagination
+              :current-page="positionsPage"
+              :last-page="positionsTotalPages"
+              :total="filteredPositions.length"
+              :per-page="perPage"
+              :show-total="true"
+              :show-page-info="false"
+              @page-change="p => (positionsPage = p)"
+            >
+              <template #totalLabel="{ total }">
+                Total de posições:
+                <strong>{{ total }}</strong>
+              </template>
+            </Pagination>
+          </div>
+        </div>
+      </template>
+
+      <template v-else>
+        <EmptyState
+          v-if="filteredTransactions.length === 0"
+          title="Nenhuma transação encontrada"
+          description="Registre uma compra ou venda para ver o extrato aqui"
+        >
+          <template #icon>
+            <SvgIcon
+              name="calendar"
+              class="portfolio-page__empty-icon"
+            />
+          </template>
+          <template #action>
+            <BaseButton
+              variant="primary"
+              @click="openAddModal"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="plus"
+                  :size="16"
+                />
+              </template>
+              Registrar Transação
+            </BaseButton>
+          </template>
+        </EmptyState>
+
+        <div
+          v-else
+          class="portfolio-page__table-wrapper"
+        >
+          <table class="portfolio-page__table">
+            <thead>
+              <tr>
+                <th class="portfolio-page__th">Data</th>
+                <th class="portfolio-page__th">Código</th>
+                <th class="portfolio-page__th">Tipo</th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Qtd.
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Preço Unit.
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
+                  Valor Total
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--actions">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="transaction in paginatedTransactions"
+                :key="transaction.id"
+                class="portfolio-page__row"
+              >
+                <td class="portfolio-page__td portfolio-page__td--muted">
+                  {{ formatDate(transaction.transaction_date) }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--code">
+                  {{ transaction.asset_code }}
+                </td>
+                <td class="portfolio-page__td">
+                  <Badge
+                    :label="transaction.type === 'buy' ? 'Compra' : 'Venda'"
+                    :color="
+                      transaction.type === 'buy'
+                        ? 'var(--status-success)'
+                        : 'var(--status-danger)'
+                    "
+                  />
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatQuantity(transaction.quantity) }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatCurrency(transaction.unit_price) }}
+                </td>
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  {{ formatCurrency(transaction.total_value) }}
+                </td>
+                <td class="portfolio-page__td">
+                  <TableActions>
+                    <ActionButton
+                      variant="edit"
+                      title="Editar transação"
+                      @click="openEditModal(transaction)"
+                    >
+                      <SvgIcon
+                        name="edit"
+                        :size="16"
+                      />
+                    </ActionButton>
+                    <ActionButton
+                      variant="delete"
+                      title="Excluir transação"
+                      @click="openDeleteModal(transaction)"
+                    >
+                      <SvgIcon
+                        name="trash"
+                        :size="16"
+                      />
+                    </ActionButton>
+                  </TableActions>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="portfolio-page__pagination">
+            <Pagination
+              :current-page="transactionsPage"
+              :last-page="transactionsTotalPages"
+              :total="filteredTransactions.length"
+              :per-page="perPage"
+              :show-total="true"
+              :show-page-info="false"
+              @page-change="p => (transactionsPage = p)"
+            >
+              <template #totalLabel="{ total }">
+                Total de transações:
+                <strong>{{ total }}</strong>
+              </template>
+            </Pagination>
+          </div>
+        </div>
+      </template>
+
+      <!-- Modals -->
+      <AddTransactionModal
+        :is-open="modals.add"
+        :transaction="editingTransaction"
+        @close="closeModal('add')"
+        @submit="handleSubmitTransaction"
+      />
+
+      <ConfirmationModal
+        :is-open="modals.delete"
+        type="danger"
+        title="Excluir Transação"
+        :message="`Deseja realmente excluir esta transação de ${selectedTransaction?.asset_code || ''}?`"
+        warning-message="A posição será recalculada a partir do histórico restante. Esta ação não pode ser desfeita."
+        confirm-text="Excluir"
+        loading-text="Excluindo..."
+        @close="closeModal('delete')"
+        @confirm="handleDeleteTransaction"
+      />
+    </div>
+  </MainLayout>
+</template>
+
+<script setup>
+// ── Imports ──────────────────────────────────────────────────────────────────
+import { ref, computed, watch, onMounted } from 'vue'
+import MainLayout from '@/components/templates/MainLayout.vue'
+import PageHeader from '@/components/molecules/PageHeader/index.vue'
+import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
+import SearchBar from '@/components/molecules/SearchBar/index.vue'
+import TableActions from '@/components/molecules/TableActions/index.vue'
+import AddTransactionModal from '@/components/organisms/portfolio/AddTransactionModal/index.vue'
+import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
+import StatCard from '@/components/atoms/StatCard/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import ActionButton from '@/components/atoms/ActionButton/index.vue'
+import Badge from '@/components/atoms/Badge/index.vue'
+import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
+import EmptyState from '@/components/atoms/EmptyState/index.vue'
+import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
+import Pagination from '@/components/atoms/Pagination/index.vue'
+import { useAuthStore } from '@/stores/auth'
+import portfolioService from '@/services/portfolioService'
+import assetService from '@/services/assetService'
+import categoryService from '@/services/categoryService'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatPercent } from '@/utils/formatPercent'
+
+// ── State ────────────────────────────────────────────────────────────────────
+const authStore = useAuthStore()
+
+const summary = ref({
+  total_invested: 0,
+  total_current_value: 0,
+  profit_loss: 0,
+  profit_loss_percent: null,
+  assets_count: 0
+})
+const positions = ref([])
+const transactions = ref([])
+const categories = ref([])
+const assetCategoryMap = ref({})
+
+const loading = ref(false)
+const fetchError = ref('')
+const activeTab = ref('positions')
+const search = ref('')
+const categoryFilter = ref('')
+
+const positionsPage = ref(1)
+const transactionsPage = ref(1)
+const perPage = 10
+
+const selectedTransaction = ref(null)
+const editingTransaction = ref(null)
+const modals = ref({ add: false, delete: false })
+
+// ── Computed ─────────────────────────────────────────────────────────────────
+const profitVariant = computed(() =>
+  summary.value.profit_loss >= 0 ? 'success' : 'danger'
+)
+
+const patrimonioSubtitle = computed(
+  () =>
+    `Investido: ${formatCurrency(summary.value.total_invested)} · ${formatPercent(summary.value.profit_loss_percent)}`
+)
+
+const categoryOptions = computed(() =>
+  categories.value.map(cat => ({ value: cat.nome, label: cat.nome }))
+)
+
+const filteredPositions = computed(() => {
+  let result = positions.value
+
+  if (search.value) {
+    const q = search.value.toLowerCase()
+    result = result.filter(
+      p =>
+        p.code.toLowerCase().includes(q) ||
+        (p.name && p.name.toLowerCase().includes(q))
+    )
+  }
+
+  if (categoryFilter.value) {
+    result = result.filter(
+      p => resolveCategory(p.code).nome === categoryFilter.value
+    )
+  }
+
+  return result
+})
+
+const sortedTransactions = computed(() =>
+  [...transactions.value].sort((a, b) => {
+    if (a.transaction_date !== b.transaction_date) {
+      return b.transaction_date.localeCompare(a.transaction_date)
+    }
+    return b.id - a.id
+  })
+)
+
+const filteredTransactions = computed(() => {
+  let result = sortedTransactions.value
+
+  if (search.value) {
+    const q = search.value.toLowerCase()
+    result = result.filter(t => t.asset_code.toLowerCase().includes(q))
+  }
+
+  if (categoryFilter.value) {
+    result = result.filter(
+      t => resolveCategory(t.asset_code).nome === categoryFilter.value
+    )
+  }
+
+  return result
+})
+
+const paginatedPositions = computed(() => {
+  const start = (positionsPage.value - 1) * perPage
+  return filteredPositions.value.slice(start, start + perPage)
+})
+
+const paginatedTransactions = computed(() => {
+  const start = (transactionsPage.value - 1) * perPage
+  return filteredTransactions.value.slice(start, start + perPage)
+})
+
+const positionsTotalPages = computed(() =>
+  Math.max(1, Math.ceil(filteredPositions.value.length / perPage))
+)
+
+const transactionsTotalPages = computed(() =>
+  Math.max(1, Math.ceil(filteredTransactions.value.length / perPage))
+)
+
+// ── Watchers ─────────────────────────────────────────────────────────────────
+watch([search, categoryFilter], () => {
+  positionsPage.value = 1
+  transactionsPage.value = 1
+})
+
+watch(activeTab, () => {
+  search.value = ''
+})
+
+// ── Lifecycle ────────────────────────────────────────────────────────────────
+onMounted(loadPage)
+
+// ── Functions ────────────────────────────────────────────────────────────────
+async function fetchSummary() {
+  const res = await portfolioService.getSummary()
+  summary.value = {
+    total_invested: res.data?.total_invested ?? 0,
+    total_current_value: res.data?.total_current_value ?? 0,
+    profit_loss: res.data?.profit_loss ?? 0,
+    profit_loss_percent: res.data?.profit_loss_percent ?? null,
+    assets_count: res.data?.assets_count ?? 0
+  }
+  positions.value = Array.isArray(res.data?.positions) ? res.data.positions : []
+}
+
+async function fetchTransactions() {
+  try {
+    const res = await portfolioService.getTransactions()
+    transactions.value = Array.isArray(res.data?.transactions)
+      ? res.data.transactions
+      : []
+  } catch {
+    transactions.value = []
+  }
+}
+
+/** Busca as categorias disponíveis para popular o filtro */
+async function fetchCategories() {
+  try {
+    const res = await categoryService.getAll()
+    if (Array.isArray(res.data?.categories)) {
+      categories.value = res.data.categories
+    }
+  } catch {
+    categories.value = []
+  }
+}
+
+/**
+ * A API da carteira não retorna categoria por posição/transação — por isso
+ * cruzamos o código do ativo com a listagem de ativos do usuário para
+ * descobrir a categoria de cada código.
+ */
+async function fetchAssetCategories() {
+  try {
+    const first = await assetService.getAllUserAssets(1, 100)
+    const paginator = first.data?.ativos
+    if (!paginator || !Array.isArray(paginator.data)) return
+
+    let all = [...paginator.data]
+    if (paginator.last_page > 1) {
+      const rest = []
+      for (let p = 2; p <= paginator.last_page; p++) {
+        rest.push(assetService.getAllUserAssets(p, 100))
+      }
+      const responses = await Promise.all(rest)
+      responses.forEach(res => {
+        const d = res.data?.ativos?.data
+        if (Array.isArray(d)) all = all.concat(d)
+      })
+    }
+
+    assetCategoryMap.value = Object.fromEntries(
+      all.map(a => [a.codigo, extractCategory(a)])
+    )
+  } catch {
+    assetCategoryMap.value = {}
+  }
+}
+
+function extractCategory(asset) {
+  if (asset.categoria && typeof asset.categoria === 'object') {
+    return {
+      nome: asset.categoria.nome || '',
+      color: asset.categoria.color || null
+    }
+  }
+  return { nome: asset.categoria || asset.tipo || '', color: null }
+}
+
+function resolveCategory(code) {
+  return assetCategoryMap.value[code] || { nome: '', color: null }
+}
+
+async function loadPage() {
+  if (!authStore.user?.id) return
+
+  loading.value = true
+  fetchError.value = ''
+  try {
+    await Promise.all([
+      fetchSummary(),
+      fetchTransactions(),
+      fetchCategories(),
+      fetchAssetCategories()
+    ])
+  } catch (err) {
+    console.error('[Portfolio] Erro ao carregar carteira:', err)
+    fetchError.value =
+      err?.response?.data?.message ||
+      'Erro ao carregar carteira. Tente novamente.'
+  } finally {
+    loading.value = false
+  }
+}
+
+function openAddModal() {
+  editingTransaction.value = null
+  modals.value.add = true
+}
+
+function openEditModal(transaction) {
+  editingTransaction.value = transaction
+  modals.value.add = true
+}
+
+function openDeleteModal(transaction) {
+  selectedTransaction.value = transaction
+  modals.value.delete = true
+}
+
+function closeModal(name) {
+  modals.value[name] = false
+  selectedTransaction.value = null
+  editingTransaction.value = null
+}
+
+function profitLossClass(value) {
+  if (value === null || value === undefined) return ''
+  return value >= 0
+    ? 'portfolio-page__td--positive'
+    : 'portfolio-page__td--negative'
+}
+
+function formatQuantity(value) {
+  return Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 4 })
+}
+
+function formatDate(value) {
+  if (!value) return '-'
+  const [year, month, day] = value.split('-')
+  return `${day}/${month}/${year}`
+}
+
+async function handleSubmitTransaction(payload, resolve, reject) {
+  try {
+    // Cria a nova transação antes de excluir a antiga (modo edição) — evita
+    // perda de dados caso o registro falhe (ex: 422 de quantidade insuficiente).
+    await portfolioService.registerTransaction(payload)
+    if (editingTransaction.value) {
+      await portfolioService.deleteTransaction(editingTransaction.value.id)
+    }
+    await Promise.all([fetchSummary(), fetchTransactions()])
+    resolve()
+  } catch (err) {
+    console.error('[Portfolio] Erro ao salvar transação:', err)
+    const data = err.response?.data
+    const fieldErrors = data?.errors
+      ? Object.fromEntries(
+          Object.entries(data.errors).map(([field, msgs]) => [field, msgs[0]])
+        )
+      : null
+    const wrapped = new Error(data?.message || 'Erro ao salvar transação.')
+    wrapped.fieldErrors = fieldErrors
+    reject(wrapped)
+  }
+}
+
+async function handleDeleteTransaction({ resolve, reject }) {
+  try {
+    await portfolioService.deleteTransaction(selectedTransaction.value.id)
+    await Promise.all([fetchSummary(), fetchTransactions()])
+    resolve()
+  } catch (err) {
+    const msg =
+      err.response?.data?.message ||
+      err.message ||
+      'Erro ao excluir a transação'
+    reject(new Error(msg))
+  }
+}
+</script>
+
+<style scoped>
+.portfolio-page {
+  max-width: 100%;
+  animation: portfolio-fade-in 0.3s ease;
+}
+
+@keyframes portfolio-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.portfolio-page__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.portfolio-page__category-select {
+  width: auto;
+  min-width: 180px;
+}
+
+.portfolio-page__tabs {
+  display: inline-flex;
+  gap: 0.375rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 0.25rem;
+}
+
+.portfolio-page__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.portfolio-page__tab:hover {
+  color: var(--text-primary);
+}
+
+.portfolio-page__tab--active {
+  background: var(--primary-muted);
+  color: var(--primary);
+}
+
+.portfolio-page__empty-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.portfolio-page__error {
+  margin-bottom: 1.5rem;
+}
+
+.portfolio-page__table-wrapper {
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+.portfolio-page__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.portfolio-page__table thead {
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-default);
+}
+
+.portfolio-page__th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.portfolio-page__th--right {
+  text-align: right;
+}
+
+.portfolio-page__th--actions {
+  width: 1%;
+  text-align: center;
+}
+
+.portfolio-page__row {
+  border-bottom: 1px solid var(--border-default);
+  transition: background 0.15s;
+}
+
+.portfolio-page__row:hover {
+  background: var(--bg-secondary);
+}
+
+.portfolio-page__row:last-child {
+  border-bottom: none;
+}
+
+.portfolio-page__td {
+  padding: 1rem 1.25rem;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.portfolio-page__td--right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.portfolio-page__td--code {
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  color: var(--text-primary);
+}
+
+.portfolio-page__td--muted {
+  color: var(--text-secondary);
+  white-space: normal;
+}
+
+.portfolio-page__td--positive {
+  color: var(--status-success);
+}
+
+.portfolio-page__td--negative {
+  color: var(--status-danger);
+}
+
+.portfolio-page__pagination {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-default);
+  background: var(--bg-secondary);
+}
+
+@media (max-width: 768px) {
+  .portfolio-page__table-wrapper {
+    overflow-x: auto;
+  }
+
+  .portfolio-page__table {
+    min-width: 900px;
+  }
+}
+</style>

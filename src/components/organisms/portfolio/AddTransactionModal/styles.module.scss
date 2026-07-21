@@ -1,0 +1,70 @@
+.add-transaction-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__type-toggle {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  &__type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--text-secondary);
+    }
+
+    &--buy.add-transaction-modal__type-btn--active {
+      background: var(--status-success-bg);
+      border-color: var(--status-success);
+      color: var(--status-success);
+    }
+
+    &--sell.add-transaction-modal__type-btn--active {
+      background: var(--status-danger-bg);
+      border-color: var(--status-danger);
+      color: var(--status-danger);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  &__total {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: var(--bg-input);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+
+    strong {
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .add-transaction-modal__grid {
+    grid-template-columns: 1fr;
+  }
+}

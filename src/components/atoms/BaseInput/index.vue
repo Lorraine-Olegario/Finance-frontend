@@ -17,29 +17,38 @@
 <script setup lang="ts">
 defineProps({
   modelValue: {
-    default: '',
+    default: ''
   },
   type: {
     type: String,
     default: 'text',
-    validator: (v: string) => ['text', 'email', 'password', 'number', 'search', 'color'].includes(v),
+    validator: (v: string) =>
+      [
+        'text',
+        'email',
+        'password',
+        'number',
+        'search',
+        'color',
+        'date'
+      ].includes(v)
   },
   placeholder: {
     type: String,
-    default: '',
+    default: ''
   },
   disabled: {
     type: Boolean,
-    default: false,
+    default: false
   },
   readonly: {
     type: Boolean,
-    default: false,
+    default: false
   },
   required: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 })
 
 defineEmits<{
