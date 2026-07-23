@@ -14,6 +14,13 @@
         :dismissible="true"
         @dismiss="error = ''"
       />
+      <AlertMessage
+        v-if="success"
+        type="success"
+        :message="success"
+        :dismissible="true"
+        @dismiss="success = ''"
+      />
 
       <div class="add-transaction-modal__type-toggle">
         <button
@@ -54,10 +61,10 @@
         <template #default="{ fieldId }">
           <BaseInput
             :id="fieldId"
-            v-model="formData.asset_code"
+            :model-value="formData.asset_code"
             placeholder="Ex: PETR4"
             maxlength="10"
-            @input="formData.asset_code = formData.asset_code.toUpperCase()"
+            @update:model-value="val => (formData.asset_code = val.toUpperCase())"
           />
         </template>
       </FormField>
@@ -195,6 +202,7 @@ function defaultForm() {
 const formData = ref(defaultForm())
 const saving = ref(false)
 const error = ref('')
+const success = ref('')
 const fieldErrors = ref({})
 
 const estimatedTotal = computed(() => {
@@ -212,6 +220,7 @@ watch(
     if (!isOpen) return
     formData.value = defaultForm()
     error.value = ''
+    success.value = ''
     fieldErrors.value = {}
     saving.value = false
   }
@@ -245,6 +254,7 @@ function handleClose() {
 
 async function handleSubmit() {
   error.value = ''
+  success.value = ''
   if (!validateLocal()) return
 
   const payload = {
@@ -260,7 +270,13 @@ async function handleSubmit() {
     await new Promise((resolve, reject) => {
       emit('submit', payload, resolve, reject)
     })
-    handleClose()
+    if (props.transaction) {
+      handleClose()
+    } else {
+      formData.value = defaultForm()
+      fieldErrors.value = {}
+      success.value = 'Transação registrada com sucesso!'
+    }
   } catch (err) {
     error.value = err.message || 'Erro ao registrar transação.'
     if (err.fieldErrors) fieldErrors.value = err.fieldErrors

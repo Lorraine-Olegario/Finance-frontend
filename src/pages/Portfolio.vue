@@ -467,7 +467,7 @@ const patrimonioSubtitle = computed(
 )
 
 const categoryOptions = computed(() =>
-  categories.value.map(cat => ({ value: cat.nome, label: cat.nome }))
+  categories.value.map(cat => ({ value: cat.name, label: cat.name }))
 )
 
 const filteredPositions = computed(() => {
