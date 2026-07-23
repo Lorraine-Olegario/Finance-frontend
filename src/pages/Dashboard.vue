@@ -66,8 +66,9 @@
 
       <DashboardCharts
         :assets-by-type="assetsByType"
-        :user-assets-count="userAssetsCount"
         :category-colors="categoryColors"
+        :category-values="categoryValues"
+        :total-category-value="portfolioSummary.total_current_value"
       />
 
       <LoadingSpinner
@@ -92,16 +93,18 @@ import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/in
 import { useAuthStore } from '@/stores/auth'
 import assetService from '@/services/assetService'
 import portfolioService from '@/services/portfolioService'
+import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatPercent } from '@/utils/formatPercent'
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
+const { assetCategoryMap, fetchAssetCategoryMap } = useAssetCategoryMap()
 
 const loading = ref(true)
-const userAssetsCount = ref(0)
 const assetsByType = ref({})
 const categoryColors = ref({})
+const positions = ref([])
 const portfolioSummary = ref({
   total_invested: 0,
   total_current_value: 0,
@@ -127,6 +130,16 @@ const patrimonioSubtitle = computed(
     `Investido: ${formatCurrency(portfolioSummary.value.total_invested)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
 )
 
+const categoryValues = computed(() => {
+  const totals = {}
+  for (const position of positions.value) {
+    const category = assetCategoryMap.value[position.code]?.nome
+    if (!category) continue
+    totals[category] = (totals[category] || 0) + (position.current_value || 0)
+  }
+  return totals
+})
+
 onMounted(loadDashboard)
 
 /** Busca resumo de ativos e cores personalizadas de categoria */
@@ -141,9 +154,6 @@ async function fetchAssetsSummary() {
     categoryColors.value = Object.fromEntries(
       categorias.map(item => [item.categoria, item.color])
     )
-    userAssetsCount.value =
-      res.data?.total ??
-      categorias.reduce((acc, item) => acc + item.quantidade, 0)
   }
 }
 
@@ -158,6 +168,7 @@ async function fetchPortfolioSummary() {
       profit_loss_percent: res.data?.profit_loss_percent ?? null,
       assets_count: res.data?.assets_count ?? 0
     }
+    positions.value = Array.isArray(res.data?.positions) ? res.data.positions : []
   } catch {
     // erro opcional — não bloqueia o dashboard
   }
@@ -173,7 +184,11 @@ async function loadDashboard() {
 
   loading.value = true
   try {
-    await Promise.all([fetchAssetsSummary(), fetchPortfolioSummary()])
+    await Promise.all([
+      fetchAssetsSummary(),
+      fetchPortfolioSummary(),
+      fetchAssetCategoryMap()
+    ])
   } catch (err) {
     console.error('[Dashboard] Erro ao carregar dados:', err)
   } finally {

@@ -422,8 +422,8 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import portfolioService from '@/services/portfolioService'
-import assetService from '@/services/assetService'
 import categoryService from '@/services/categoryService'
+import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatPercent } from '@/utils/formatPercent'
 
@@ -440,7 +440,8 @@ const summary = ref({
 const positions = ref([])
 const transactions = ref([])
 const categories = ref([])
-const assetCategoryMap = ref({})
+const { assetCategoryMap, fetchAssetCategoryMap, resolveCategory } =
+  useAssetCategoryMap()
 
 const loading = ref(false)
 const fetchError = ref('')
@@ -584,52 +585,6 @@ async function fetchCategories() {
   }
 }
 
-/**
- * A API da carteira não retorna categoria por posição/transação — por isso
- * cruzamos o código do ativo com a listagem de ativos do usuário para
- * descobrir a categoria de cada código.
- */
-async function fetchAssetCategories() {
-  try {
-    const first = await assetService.getAllUserAssets(1, 100)
-    const paginator = first.data?.ativos
-    if (!paginator || !Array.isArray(paginator.data)) return
-
-    let all = [...paginator.data]
-    if (paginator.last_page > 1) {
-      const rest = []
-      for (let p = 2; p <= paginator.last_page; p++) {
-        rest.push(assetService.getAllUserAssets(p, 100))
-      }
-      const responses = await Promise.all(rest)
-      responses.forEach(res => {
-        const d = res.data?.ativos?.data
-        if (Array.isArray(d)) all = all.concat(d)
-      })
-    }
-
-    assetCategoryMap.value = Object.fromEntries(
-      all.map(a => [a.codigo, extractCategory(a)])
-    )
-  } catch {
-    assetCategoryMap.value = {}
-  }
-}
-
-function extractCategory(asset) {
-  if (asset.categoria && typeof asset.categoria === 'object') {
-    return {
-      nome: asset.categoria.nome || '',
-      color: asset.categoria.color || null
-    }
-  }
-  return { nome: asset.categoria || asset.tipo || '', color: null }
-}
-
-function resolveCategory(code) {
-  return assetCategoryMap.value[code] || { nome: '', color: null }
-}
-
 async function loadPage() {
   if (!authStore.user?.id) return
 
@@ -640,7 +595,7 @@ async function loadPage() {
       fetchSummary(),
       fetchTransactions(),
       fetchCategories(),
-      fetchAssetCategories()
+      fetchAssetCategoryMap()
     ])
   } catch (err) {
     console.error('[Portfolio] Erro ao carregar carteira:', err)

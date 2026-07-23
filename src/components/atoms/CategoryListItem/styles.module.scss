@@ -11,17 +11,30 @@
     flex-shrink: 0;
   }
 
-  &__name {
+  &__info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  &__name {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-primary);
   }
 
-  &__count {
-    font-size: 1.25rem;
+  &__meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  &__value {
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text-primary);
+    white-space: nowrap;
   }
 
   &__percentage {
