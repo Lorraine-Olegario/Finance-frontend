@@ -62,6 +62,7 @@ import barChartRaw from "./bar-chart.svg?raw";
 import monitorRaw from "./monitor.svg?raw";
 import gridRaw from "./grid.svg?raw";
 import logoGridRaw from "./logo-grid.svg?raw";
+import menuRaw from "./menu.svg?raw";
 
 // ── Pessoas ────────────────────────────────────────────────────────────────
 import usersRaw from "./users.svg?raw";
@@ -131,6 +132,7 @@ export const icons = {
   monitor: inner(monitorRaw),
   grid: inner(gridRaw),
   "logo-grid": inner(logoGridRaw),
+  menu: inner(menuRaw),
 
   // ── Pessoas ────────────────────────────────────────────────────────────────
   users: inner(usersRaw),
