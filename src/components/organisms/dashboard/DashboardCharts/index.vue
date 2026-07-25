@@ -68,31 +68,36 @@ Chart.register(...registerables)
 const props = defineProps({
   assetsByType: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   categoryColors: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   categoryValues: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   totalCategoryValue: {
     type: Number,
-    default: 0,
-  },
+    default: 0
+  }
 })
 
 const chartCanvas = ref(null)
 let chartInstance = null
 
 function resolveColor(name) {
-  return props.categoryColors[name] || props.categoryColors[name?.toUpperCase()] || undefined
+  return (
+    props.categoryColors[name] ||
+    props.categoryColors[name?.toUpperCase()] ||
+    undefined
+  )
 }
 
 const hasData = computed(
-  () => props.totalCategoryValue > 0 && Object.keys(props.categoryValues).length > 0
+  () =>
+    props.totalCategoryValue > 0 && Object.keys(props.categoryValues).length > 0
 )
 
 const topCategories = computed(() => {
@@ -126,18 +131,22 @@ function buildChart() {
     chartInstance = null
   }
 
-  if (!chartCanvas.value || Object.keys(props.categoryValues).length === 0) return
+  if (!chartCanvas.value || Object.keys(props.categoryValues).length === 0)
+    return
 
   const labels = Object.keys(props.categoryValues)
   const data = Object.values(props.categoryValues)
   const colors = labels.map(label => resolveColor(label))
+  const cardBg = getComputedStyle(chartCanvas.value)
+    .getPropertyValue('--bg-elevated')
+    .trim()
 
   chartInstance = new Chart(chartCanvas.value.getContext('2d'), {
     type: 'doughnut',
     data: {
       labels,
       datasets: [
-        { data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }
+        { data, backgroundColor: colors, borderWidth: 2, borderColor: cardBg }
       ]
     },
     options: {
@@ -152,7 +161,8 @@ function buildChart() {
           callbacks: {
             label: ctx => {
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0)
-              const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : '0.0'
+              const pct =
+                total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : '0.0'
               return `${ctx.label}: ${formatCurrency(ctx.parsed)} (${pct}%)`
             }
           }

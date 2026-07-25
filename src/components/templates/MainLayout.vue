@@ -14,9 +14,13 @@
         <div class="main-layout__header-left">
           <button
             class="main-layout__mobile-menu-btn"
+            aria-label="Abrir menu"
             @click="toggleSidebar"
           >
-            ☰
+            <SvgIcon
+              name="menu"
+              :size="20"
+            />
           </button>
           <h1 class="main-layout__page-title">
             {{ pageTitle }}
@@ -27,21 +31,28 @@
           v-if="authStore.user"
           class="main-layout__header-user"
         >
-          <div class="main-layout__user-info">
-            <span class="main-layout__user-name">
-              {{ authStore.user.name }}
-            </span>
-          </div>
           <div
             ref="userMenu"
             class="main-layout__user-menu"
           >
-            <div
-              class="main-layout__user-avatar"
+            <button
+              type="button"
+              class="main-layout__user-trigger"
+              :class="{ 'main-layout__user-trigger--open': userMenuOpen }"
               @click.stop="toggleUserMenu"
             >
-              {{ userInitials }}
-            </div>
+              <div class="main-layout__user-avatar">
+                {{ userInitials }}
+              </div>
+              <span class="main-layout__user-name">
+                {{ authStore.user.name }}
+              </span>
+              <SvgIcon
+                name="chevron-down"
+                :size="16"
+                class="main-layout__user-chevron"
+              />
+            </button>
             <div
               v-if="userMenuOpen"
               class="main-layout__dropdown"
@@ -88,6 +99,7 @@
 <script>
 import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop/index.vue'
 import SidebarMobile from '@/components/organisms/navigation/SidebarMobile/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -96,7 +108,8 @@ export default {
   name: 'MainLayout',
   components: {
     SidebarDesktop,
-    SidebarMobile
+    SidebarMobile,
+    SvgIcon
   },
   props: {
     pageTitle: {
@@ -207,11 +220,13 @@ export default {
 
 .main-layout__mobile-menu-btn {
   display: none;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
+  border-radius: 6px;
   color: var(--text-primary);
 }
 
@@ -236,18 +251,34 @@ export default {
   z-index: 100;
 }
 
-.main-layout__user-info {
-  text-align: right;
+.main-layout__user-menu {
+  position: relative;
+}
+
+.main-layout__user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.625rem 0.375rem 0.375rem;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.main-layout__user-trigger:hover,
+.main-layout__user-trigger--open {
+  background-color: var(--bg-elevated-hover);
+  border-color: var(--border-subtle);
 }
 
 .main-layout__user-name {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-primary);
-}
-
-.main-layout__user-menu {
-  position: relative;
+  white-space: nowrap;
 }
 
 .main-layout__user-avatar {
@@ -261,14 +292,18 @@ export default {
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
-  transition: all 0.2s;
-  cursor: pointer;
+  flex-shrink: 0;
   user-select: none;
 }
 
-.main-layout__user-avatar:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px var(--primary-muted);
+.main-layout__user-chevron {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.main-layout__user-trigger--open .main-layout__user-chevron {
+  transform: rotate(180deg);
 }
 
 .main-layout__dropdown {
@@ -386,8 +421,13 @@ export default {
     padding: 1rem;
   }
 
-  .main-layout__user-info {
+  .main-layout__user-name {
     display: none;
+  }
+
+  .main-layout__user-trigger {
+    gap: 0;
+    padding: 0.25rem;
   }
 }
 </style>
