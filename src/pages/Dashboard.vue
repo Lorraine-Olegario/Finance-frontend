@@ -102,7 +102,6 @@ const authStore = useAuthStore()
 const { assetCategoryMap, fetchAssetCategoryMap } = useAssetCategoryMap()
 
 const loading = ref(true)
-const assetsByType = ref({})
 const categoryColors = ref({})
 const positions = ref([])
 const portfolioSummary = ref({
@@ -130,27 +129,46 @@ const patrimonioSubtitle = computed(
     `Investido: ${formatCurrency(portfolioSummary.value.total_invested)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
 )
 
-const categoryValues = computed(() => {
-  const totals = {}
+// Contagem e valor por categoria calculados a partir das posições da
+// carteira do usuário — nunca do catálogo geral de ativos do sistema.
+const categoryBreakdown = computed(() => {
+  const breakdown = {}
   for (const position of positions.value) {
     const category = assetCategoryMap.value[position.code]?.nome
     if (!category) continue
-    totals[category] = (totals[category] || 0) + (position.current_value || 0)
+    if (!breakdown[category]) breakdown[category] = { count: 0, value: 0 }
+    breakdown[category].count += 1
+    breakdown[category].value += position.current_value || 0
   }
-  return totals
+  return breakdown
 })
+
+const assetsByType = computed(() =>
+  Object.fromEntries(
+    Object.entries(categoryBreakdown.value).map(([name, { count }]) => [
+      name,
+      count
+    ])
+  )
+)
+
+const categoryValues = computed(() =>
+  Object.fromEntries(
+    Object.entries(categoryBreakdown.value).map(([name, { value }]) => [
+      name,
+      value
+    ])
+  )
+)
 
 onMounted(loadDashboard)
 
-/** Busca resumo de ativos e cores personalizadas de categoria */
+/** Busca cores personalizadas de categoria (contagem e valor vêm da carteira) */
 async function fetchAssetsSummary() {
   const res = await assetService.getUserAssetsSummary()
 
   const categorias = res.data?.categorias
   if (Array.isArray(categorias)) {
-    assetsByType.value = Object.fromEntries(
-      categorias.map(item => [item.categoria, item.quantidade])
-    )
     categoryColors.value = Object.fromEntries(
       categorias.map(item => [item.categoria, item.color])
     )
@@ -168,7 +186,9 @@ async function fetchPortfolioSummary() {
       profit_loss_percent: res.data?.profit_loss_percent ?? null,
       assets_count: res.data?.assets_count ?? 0
     }
-    positions.value = Array.isArray(res.data?.positions) ? res.data.positions : []
+    positions.value = Array.isArray(res.data?.positions)
+      ? res.data.positions
+      : []
   } catch {
     // erro opcional — não bloqueia o dashboard
   }
