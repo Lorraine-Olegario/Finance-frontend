@@ -25,7 +25,12 @@
       >
         <StatCard
           label="Patrimônio Total"
-          :value="formatCurrency(portfolioSummary.total_current_value)"
+          :value="
+            formatCurrency(
+              portfolioSummary.total_current_value,
+              visibilityStore.valuesHidden
+            )
+          "
           variant="primary"
           :subtitle="patrimonioSubtitle"
         >
@@ -36,7 +41,12 @@
 
         <StatCard
           label="Lucro Total"
-          :value="formatCurrency(portfolioSummary.profit_loss)"
+          :value="
+            formatCurrency(
+              portfolioSummary.profit_loss,
+              visibilityStore.valuesHidden
+            )
+          "
           :variant="portfolioProfitVariant"
           :subtitle="formatPercent(portfolioSummary.profit_loss_percent)"
           :is-positive="portfolioSummary.profit_loss >= 0"
@@ -91,6 +101,7 @@ import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome/index.vue'
 import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/index.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useVisibilityStore } from '@/stores/visibility'
 import assetService from '@/services/assetService'
 import portfolioService from '@/services/portfolioService'
 import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
@@ -99,6 +110,7 @@ import { formatPercent } from '@/utils/formatPercent'
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
+const visibilityStore = useVisibilityStore()
 const { assetCategoryMap, fetchAssetCategoryMap } = useAssetCategoryMap()
 
 const loading = ref(true)
@@ -127,7 +139,7 @@ const portfolioProfitVariant = computed(() =>
 )
 const patrimonioSubtitle = computed(
   () =>
-    `Investido: ${formatCurrency(portfolioSummary.value.total_invested)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
+    `Investido: ${formatCurrency(portfolioSummary.value.total_invested, visibilityStore.valuesHidden)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
 )
 
 const categoryValues = computed(() => {
@@ -168,7 +180,9 @@ async function fetchPortfolioSummary() {
       profit_loss_percent: res.data?.profit_loss_percent ?? null,
       assets_count: res.data?.assets_count ?? 0
     }
-    positions.value = Array.isArray(res.data?.positions) ? res.data.positions : []
+    positions.value = Array.isArray(res.data?.positions)
+      ? res.data.positions
+      : []
   } catch {
     // erro opcional — não bloqueia o dashboard
   }

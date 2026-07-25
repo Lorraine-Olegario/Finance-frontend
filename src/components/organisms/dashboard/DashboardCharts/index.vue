@@ -61,9 +61,12 @@ import DashboardCard from '@/components/atoms/DashboardCard/index.vue'
 import EmptyState from '@/components/atoms/EmptyState/index.vue'
 import CategoryListItem from '@/components/atoms/CategoryListItem/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import { useVisibilityStore } from '@/stores/visibility'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 Chart.register(...registerables)
+
+const visibilityStore = useVisibilityStore()
 
 const props = defineProps({
   assetsByType: {
@@ -113,7 +116,7 @@ const topCategories = computed(() => {
         name,
         count: props.assetsByType[name] || 0,
         value,
-        formattedValue: formatCurrency(value),
+        formattedValue: formatCurrency(value, visibilityStore.valuesHidden),
         percentage:
           props.totalCategoryValue > 0
             ? ((value / props.totalCategoryValue) * 100).toFixed(1)
@@ -163,7 +166,7 @@ function buildChart() {
               const total = ctx.dataset.data.reduce((a, b) => a + b, 0)
               const pct =
                 total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : '0.0'
-              return `${ctx.label}: ${formatCurrency(ctx.parsed)} (${pct}%)`
+              return `${ctx.label}: ${formatCurrency(ctx.parsed, visibilityStore.valuesHidden)} (${pct}%)`
             }
           }
         }

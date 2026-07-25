@@ -31,6 +31,27 @@
           v-if="authStore.user"
           class="main-layout__header-user"
         >
+          <button
+            type="button"
+            class="main-layout__visibility-btn"
+            :aria-label="
+              visibilityStore.valuesHidden
+                ? 'Exibir valores financeiros'
+                : 'Ocultar valores financeiros'
+            "
+            :title="
+              visibilityStore.valuesHidden
+                ? 'Exibir valores financeiros'
+                : 'Ocultar valores financeiros'
+            "
+            @click="visibilityStore.toggleValuesVisibility"
+          >
+            <SvgIcon
+              :name="visibilityStore.valuesHidden ? 'eye-off' : 'eye'"
+              :size="18"
+            />
+          </button>
+
           <div
             ref="userMenu"
             class="main-layout__user-menu"
@@ -101,6 +122,7 @@ import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop/ind
 import SidebarMobile from '@/components/organisms/navigation/SidebarMobile/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useVisibilityStore } from '@/stores/visibility'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -119,6 +141,7 @@ export default {
   },
   setup() {
     const authStore = useAuthStore()
+    const visibilityStore = useVisibilityStore()
     const router = useRouter()
 
     const userInitials = computed(() => {
@@ -133,6 +156,7 @@ export default {
 
     return {
       authStore,
+      visibilityStore,
       userInitials,
       router
     }
@@ -249,6 +273,27 @@ export default {
   gap: 0.75rem;
   position: relative;
   z-index: 100;
+}
+
+.main-layout__visibility-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.main-layout__visibility-btn:hover {
+  background-color: var(--bg-elevated-hover);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
 }
 
 .main-layout__user-menu {

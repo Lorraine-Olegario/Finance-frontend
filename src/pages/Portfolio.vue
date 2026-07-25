@@ -27,7 +27,12 @@
       >
         <StatCard
           label="Patrimônio Total"
-          :value="formatCurrency(summary.total_current_value)"
+          :value="
+            formatCurrency(
+              summary.total_current_value,
+              visibilityStore.valuesHidden
+            )
+          "
           variant="primary"
           :subtitle="patrimonioSubtitle"
         >
@@ -38,7 +43,9 @@
 
         <StatCard
           label="Lucro Total"
-          :value="formatCurrency(summary.profit_loss)"
+          :value="
+            formatCurrency(summary.profit_loss, visibilityStore.valuesHidden)
+          "
           :variant="profitVariant"
           :subtitle="formatPercent(summary.profit_loss_percent)"
           :is-positive="summary.profit_loss >= 0"
@@ -200,17 +207,30 @@
                   {{ formatQuantity(position.quantity) }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
-                  {{ formatCurrency(position.average_price) }}
+                  {{
+                    formatCurrency(
+                      position.average_price,
+                      visibilityStore.valuesHidden
+                    )
+                  }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
                   {{
                     position.current_price != null
-                      ? formatCurrency(position.current_price)
+                      ? formatCurrency(
+                          position.current_price,
+                          visibilityStore.valuesHidden
+                        )
                       : '—'
                   }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
-                  {{ formatCurrency(position.current_value) }}
+                  {{
+                    formatCurrency(
+                      position.current_value,
+                      visibilityStore.valuesHidden
+                    )
+                  }}
                 </td>
                 <td
                   class="portfolio-page__td portfolio-page__td--right"
@@ -325,10 +345,20 @@
                   {{ formatQuantity(transaction.quantity) }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
-                  {{ formatCurrency(transaction.unit_price) }}
+                  {{
+                    formatCurrency(
+                      transaction.unit_price,
+                      visibilityStore.valuesHidden
+                    )
+                  }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
-                  {{ formatCurrency(transaction.total_value) }}
+                  {{
+                    formatCurrency(
+                      transaction.total_value,
+                      visibilityStore.valuesHidden
+                    )
+                  }}
                 </td>
                 <td class="portfolio-page__td">
                   <TableActions>
@@ -421,6 +451,7 @@ import EmptyState from '@/components/atoms/EmptyState/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useVisibilityStore } from '@/stores/visibility'
 import portfolioService from '@/services/portfolioService'
 import categoryService from '@/services/categoryService'
 import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
@@ -429,6 +460,7 @@ import { formatPercent } from '@/utils/formatPercent'
 
 // ── State ────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
+const visibilityStore = useVisibilityStore()
 
 const summary = ref({
   total_invested: 0,
@@ -464,7 +496,7 @@ const profitVariant = computed(() =>
 
 const patrimonioSubtitle = computed(
   () =>
-    `Investido: ${formatCurrency(summary.value.total_invested)} · ${formatPercent(summary.value.profit_loss_percent)}`
+    `Investido: ${formatCurrency(summary.value.total_invested, visibilityStore.valuesHidden)} · ${formatPercent(summary.value.profit_loss_percent)}`
 )
 
 const categoryOptions = computed(() =>
