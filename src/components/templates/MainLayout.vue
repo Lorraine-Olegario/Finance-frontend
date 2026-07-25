@@ -281,6 +281,7 @@ export default {
   justify-content: center;
   width: 36px;
   height: 36px;
+  padding: 0;
   background: none;
   border: 1px solid transparent;
   border-radius: 50%;
