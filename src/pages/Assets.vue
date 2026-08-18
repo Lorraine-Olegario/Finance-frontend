@@ -261,7 +261,7 @@
         type="warning"
         title="Pausar Ativo"
         :message="`Deseja pausar o ativo ${selectedAsset?.codigo || ''}?`"
-        warning-message="O ativo será marcado como inativo."
+        warning-message="O ativo será marcado como pausado e sairá dos cálculos de patrimônio e distribuição no dashboard até ser reativado."
         confirm-text="Pausar"
         loading-text="Pausando..."
         @close="closeModal('deactivate')"
@@ -382,7 +382,13 @@ const activeFiltersCount = computed(() => {
 })
 
 // ── Watchers ──────────────────────────────────────────────────────────────────
-watch(filters, () => { currentPage.value = 1 }, { deep: true })
+watch(
+  filters,
+  () => {
+    currentPage.value = 1
+  },
+  { deep: true }
+)
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(loadPage)
