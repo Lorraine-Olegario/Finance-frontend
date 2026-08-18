@@ -261,7 +261,7 @@
         type="warning"
         title="Pausar Ativo"
         :message="`Deseja pausar o ativo ${selectedAsset?.codigo || ''}?`"
-        warning-message="O ativo será marcado como inativo."
+        warning-message="O ativo será marcado como pausado e sairá dos cálculos de patrimônio e distribuição no dashboard até ser reativado."
         confirm-text="Pausar"
         loading-text="Pausando..."
         @close="closeModal('deactivate')"
@@ -315,6 +315,7 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
 import assetService from '@/services/assetService'
 import categoryService from '@/services/categoryService'
+import { useToastStore } from '@/stores/toast'
 
 const assets = ref([])
 const categorias = ref([])
@@ -339,6 +340,8 @@ const modals = ref({
   deactivate: false,
   observe: false
 })
+
+const toastStore = useToastStore()
 
 // ── Computed ──────────────────────────────────────────────────────────────────
 const filteredAssets = computed(() => {
@@ -382,7 +385,13 @@ const activeFiltersCount = computed(() => {
 })
 
 // ── Watchers ──────────────────────────────────────────────────────────────────
-watch(filters, () => { currentPage.value = 1 }, { deep: true })
+watch(
+  filters,
+  () => {
+    currentPage.value = 1
+  },
+  { deep: true }
+)
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(loadPage)
@@ -510,8 +519,11 @@ async function handleUpdateAsset({ category_id, color }) {
           a.categoria.color = color
         }
       })
+
+    toastStore.success('Cor da categoria atualizada com sucesso.')
   } catch (err) {
     console.error('[Assets] Erro ao atualizar cor da categoria:', err)
+    toastStore.error('Erro ao atualizar a cor da categoria.')
   }
 }
 
@@ -523,9 +535,18 @@ async function handleActivateAsset({ resolve, reject }) {
     })
     const index = assets.value.findIndex(a => a.id === selectedAsset.value.id)
     if (index !== -1) assets.value[index].status = 'ativo'
+    toastStore.success(
+      `Ativo ${selectedAsset.value.codigo} ativado com sucesso.`
+    )
     resolve()
   } catch (err) {
-    reject(err)
+    const msg =
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      err.message ||
+      'Erro ao ativar o ativo'
+    toastStore.error(msg)
+    reject(new Error(msg))
   }
 }
 
@@ -537,6 +558,9 @@ async function handleDeactivateAsset({ resolve, reject }) {
     })
     const index = assets.value.findIndex(a => a.id === selectedAsset.value.id)
     if (index !== -1) assets.value[index].status = 'inativo'
+    toastStore.success(
+      `Ativo ${selectedAsset.value.codigo} pausado com sucesso.`
+    )
     resolve()
   } catch (err) {
     const msg =
@@ -544,6 +568,7 @@ async function handleDeactivateAsset({ resolve, reject }) {
       err.response?.data?.error ||
       err.message ||
       'Erro ao desativar o ativo'
+    toastStore.error(msg)
     reject(new Error(msg))
   }
 }
@@ -556,6 +581,9 @@ async function handleObserveAsset({ resolve, reject }) {
     })
     const index = assets.value.findIndex(a => a.id === selectedAsset.value.id)
     if (index !== -1) assets.value[index].status = 'observando'
+    toastStore.success(
+      `Ativo ${selectedAsset.value.codigo} está sendo observado.`
+    )
     resolve()
   } catch (err) {
     const msg =
@@ -563,14 +591,17 @@ async function handleObserveAsset({ resolve, reject }) {
       err.response?.data?.error ||
       err.message ||
       'Erro ao marcar ativo como observando'
+    toastStore.error(msg)
     reject(new Error(msg))
   }
 }
 
 async function handleDeleteAsset({ resolve, reject }) {
   try {
+    const codigo = selectedAsset.value.codigo
     await assetService.deleteAsset(selectedAsset.value.id)
     assets.value = assets.value.filter(a => a.id !== selectedAsset.value.id)
+    toastStore.success(`Ativo ${codigo} removido com sucesso.`)
     resolve()
   } catch (err) {
     const msg =
@@ -578,6 +609,7 @@ async function handleDeleteAsset({ resolve, reject }) {
       err.response?.data?.error ||
       err.message ||
       'Erro ao deletar o ativo'
+    toastStore.error(msg)
     reject(new Error(msg))
   }
 }
