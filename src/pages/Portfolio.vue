@@ -128,8 +128,8 @@
       <template v-else-if="activeTab === 'positions'">
         <EmptyState
           v-if="filteredPositions.length === 0"
-          title="Nenhuma posição encontrada"
-          description="Registre uma transação de compra para começar a montar sua carteira"
+          :title="positionsEmptyMessage.title"
+          :description="positionsEmptyMessage.description"
         >
           <template #icon>
             <SvgIcon
@@ -139,6 +139,20 @@
           </template>
           <template #action>
             <BaseButton
+              v-if="hasActiveFilters && positions.length > 0"
+              variant="secondary"
+              @click="clearFilters"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="refresh"
+                  :size="16"
+                />
+              </template>
+              Limpar filtros
+            </BaseButton>
+            <BaseButton
+              v-else
               variant="primary"
               @click="openAddModal"
             >
@@ -286,8 +300,8 @@
       <template v-else>
         <EmptyState
           v-if="filteredTransactions.length === 0"
-          title="Nenhuma transação encontrada"
-          description="Registre uma compra ou venda para ver o extrato aqui"
+          :title="transactionsEmptyMessage.title"
+          :description="transactionsEmptyMessage.description"
         >
           <template #icon>
             <SvgIcon
@@ -297,6 +311,20 @@
           </template>
           <template #action>
             <BaseButton
+              v-if="hasActiveFilters && transactions.length > 0"
+              variant="secondary"
+              @click="clearFilters"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="refresh"
+                  :size="16"
+                />
+              </template>
+              Limpar filtros
+            </BaseButton>
+            <BaseButton
+              v-else
               variant="primary"
               @click="openAddModal"
             >
@@ -524,6 +552,37 @@ const categoryOptions = computed(() =>
   categories.value.map(cat => ({ value: cat.name, label: cat.name }))
 )
 
+const hasActiveFilters = computed(
+  () => !!debouncedSearch.value || !!categoryFilter.value
+)
+
+const positionsEmptyMessage = computed(() => {
+  if (hasActiveFilters.value && positions.value.length > 0) {
+    return {
+      title: 'Nenhum resultado encontrado',
+      description: 'Tente ajustar a busca ou a categoria selecionada.'
+    }
+  }
+  return {
+    title: 'Nenhuma posição encontrada',
+    description:
+      'Registre uma transação de compra para começar a montar sua carteira'
+  }
+})
+
+const transactionsEmptyMessage = computed(() => {
+  if (hasActiveFilters.value && transactions.value.length > 0) {
+    return {
+      title: 'Nenhum resultado encontrado',
+      description: 'Tente ajustar a busca ou a categoria selecionada.'
+    }
+  }
+  return {
+    title: 'Nenhuma transação encontrada',
+    description: 'Registre uma compra ou venda para ver o extrato aqui'
+  }
+})
+
 const filteredPositions = computed(() => {
   let result = positions.value
 
@@ -693,6 +752,12 @@ function closeModal(name) {
   modals.value[name] = false
   selectedTransaction.value = null
   editingTransaction.value = null
+}
+
+function clearFilters() {
+  search.value = ''
+  debouncedSearch.value = ''
+  categoryFilter.value = ''
 }
 
 function hasValue(value) {
