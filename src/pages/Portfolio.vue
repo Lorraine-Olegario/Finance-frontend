@@ -455,6 +455,7 @@
       <AddTransactionModal
         :is-open="modals.add"
         :transaction="editingTransaction"
+        :positions="positions"
         @close="closeModal('add')"
         @submit="handleSubmitTransaction"
       />

@@ -64,7 +64,9 @@
             :model-value="formData.asset_code"
             placeholder="Ex: PETR4"
             maxlength="10"
-            @update:model-value="val => (formData.asset_code = val.toUpperCase())"
+            @update:model-value="
+              val => (formData.asset_code = val.toUpperCase())
+            "
           />
         </template>
       </FormField>
@@ -127,6 +129,21 @@
         Total estimado:
         <strong>{{ formattedTotal }}</strong>
       </p>
+
+      <template v-if="sellExceedsPosition">
+        <AlertMessage
+          type="warning"
+          :message="`Isso deixará sua posição de ${formData.asset_code} negativa em ${formatQuantity(negativeAmount)} unidades. Confirma mesmo assim?`"
+        />
+        <label class="add-transaction-modal__confirm">
+          <input
+            v-model="sellConfirmed"
+            type="checkbox"
+            class="add-transaction-modal__confirm-checkbox"
+          />
+          Sim, quero continuar mesmo assim
+        </label>
+      </template>
     </div>
 
     <template #footer>
@@ -140,6 +157,7 @@
       <BaseButton
         variant="primary"
         :loading="saving"
+        :disabled="sellExceedsPosition && !sellConfirmed"
         @click="handleSubmit"
       >
         {{ transaction ? 'Salvar Alterações' : 'Registrar' }}
@@ -166,6 +184,13 @@ const props = defineProps({
   transaction: {
     type: Object,
     default: null
+  },
+  // Posições atuais conhecidas no frontend (vindas de Portfolio.vue, que já
+  // carrega o resumo/posições da carteira) — usadas apenas para avisar o
+  // usuário quando uma venda excede a posição atual, ver `sellExceedsPosition`.
+  positions: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -204,6 +229,7 @@ const saving = ref(false)
 const error = ref('')
 const success = ref('')
 const fieldErrors = ref({})
+const sellConfirmed = ref(false)
 
 const estimatedTotal = computed(() => {
   const quantity = Number(formData.value.quantity)
@@ -214,6 +240,35 @@ const estimatedTotal = computed(() => {
 
 const formattedTotal = computed(() => formatCurrency(estimatedTotal.value))
 
+// Posição atual conhecida (frontend) para o código digitado — usada apenas
+// para o aviso de venda acima da posição, ver `sellExceedsPosition` abaixo.
+const currentPositionQuantity = computed(() => {
+  const code = formData.value.asset_code?.trim().toUpperCase()
+  if (!code) return 0
+  const found = props.positions.find(p => p.code?.toUpperCase() === code)
+  return found ? Number(found.quantity) : 0
+})
+
+// Regra de negócio (decisão de produto): venda maior que a posição atual não
+// é bloqueada, mas exige confirmação explícita do usuário (checkbox abaixo).
+// Limitação conhecida: esta checagem usa apenas os dados de posição já
+// carregados no frontend (prop `positions`). O backend é a fonte da verdade
+// e pode ainda assim rejeitar a venda com HTTP 422 (quantidade insuficiente)
+// mesmo com a confirmação marcada — isso é esperado e tratado normalmente
+// pelo fluxo de erro existente (fieldErrors/toast em Portfolio.vue), não é
+// um bug deste componente.
+const sellExceedsPosition = computed(() => {
+  if (formData.value.type !== 'sell') return false
+  const quantity = Number(formData.value.quantity)
+  if (!quantity || quantity <= 0) return false
+  return quantity > currentPositionQuantity.value
+})
+
+const negativeAmount = computed(() => {
+  if (!sellExceedsPosition.value) return 0
+  return Number(formData.value.quantity) - currentPositionQuantity.value
+})
+
 watch(
   () => props.isOpen,
   isOpen => {
@@ -223,6 +278,20 @@ watch(
     success.value = ''
     fieldErrors.value = {}
     saving.value = false
+    sellConfirmed.value = false
+  }
+)
+
+// Qualquer alteração relevante invalida uma confirmação de venda já dada —
+// o usuário precisa reconfirmar se mudar código, tipo ou quantidade.
+watch(
+  () => [
+    formData.value.asset_code,
+    formData.value.type,
+    formData.value.quantity
+  ],
+  () => {
+    sellConfirmed.value = false
   }
 )
 
@@ -247,6 +316,10 @@ function validateLocal() {
   return Object.keys(fieldErrors.value).length === 0
 }
 
+function formatQuantity(value) {
+  return Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 4 })
+}
+
 function handleClose() {
   if (saving.value) return
   emit('close')
@@ -256,6 +329,11 @@ async function handleSubmit() {
   error.value = ''
   success.value = ''
   if (!validateLocal()) return
+  if (sellExceedsPosition.value && !sellConfirmed.value) {
+    error.value =
+      'Confirme a venda acima da posição atual marcando a caixa de confirmação.'
+    return
+  }
 
   const payload = {
     asset_code: formData.value.asset_code.trim().toUpperCase(),
@@ -275,6 +353,7 @@ async function handleSubmit() {
     } else {
       formData.value = defaultForm()
       fieldErrors.value = {}
+      sellConfirmed.value = false
       success.value = 'Transação registrada com sucesso!'
     }
   } catch (err) {
