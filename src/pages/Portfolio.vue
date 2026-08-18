@@ -203,10 +203,10 @@
                   />
                   <span v-else>-</span>
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right num">
                   {{ formatQuantity(position.quantity) }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       position.average_price,
@@ -214,7 +214,7 @@
                     )
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     position.current_price != null
                       ? formatCurrency(
@@ -224,7 +224,7 @@
                       : '—'
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       position.current_value,
@@ -232,17 +232,33 @@
                     )
                   }}
                 </td>
-                <td
-                  class="portfolio-page__td portfolio-page__td--right"
-                  :class="profitLossClass(position.daily_variation_percent)"
-                >
-                  {{ formatPercent(position.daily_variation_percent) }}
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  <span
+                    v-if="hasValue(position.daily_variation_percent)"
+                    class="pill"
+                    :class="trendPillClass(position.daily_variation_percent)"
+                  >
+                    <SvgIcon
+                      :name="trendIcon(position.daily_variation_percent)"
+                      :size="10"
+                    />
+                    {{ formatPercent(position.daily_variation_percent) }}
+                  </span>
+                  <span v-else>—</span>
                 </td>
-                <td
-                  class="portfolio-page__td portfolio-page__td--right"
-                  :class="profitLossClass(position.profit_loss_percent)"
-                >
-                  {{ formatPercent(position.profit_loss_percent) }}
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  <span
+                    v-if="hasValue(position.profit_loss_percent)"
+                    class="pill"
+                    :class="trendPillClass(position.profit_loss_percent)"
+                  >
+                    <SvgIcon
+                      :name="trendIcon(position.profit_loss_percent)"
+                      :size="10"
+                    />
+                    {{ formatPercent(position.profit_loss_percent) }}
+                  </span>
+                  <span v-else>—</span>
                 </td>
               </tr>
             </tbody>
@@ -660,11 +676,16 @@ function closeModal(name) {
   editingTransaction.value = null
 }
 
-function profitLossClass(value) {
-  if (value === null || value === undefined) return ''
-  return value >= 0
-    ? 'portfolio-page__td--positive'
-    : 'portfolio-page__td--negative'
+function hasValue(value) {
+  return value !== null && value !== undefined && !Number.isNaN(Number(value))
+}
+
+function trendPillClass(value) {
+  return Number(value) >= 0 ? 'pill--up' : 'pill--down'
+}
+
+function trendIcon(value) {
+  return Number(value) >= 0 ? 'trending-up' : 'trending-down'
 }
 
 function formatQuantity(value) {
@@ -864,21 +885,13 @@ async function handleDeleteTransaction({ resolve, reject }) {
 
 .portfolio-page__td--code {
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   color: var(--text-primary);
 }
 
 .portfolio-page__td--muted {
   color: var(--text-secondary);
   white-space: normal;
-}
-
-.portfolio-page__td--positive {
-  color: var(--status-success);
-}
-
-.portfolio-page__td--negative {
-  color: var(--status-danger);
 }
 
 .portfolio-page__pagination {
