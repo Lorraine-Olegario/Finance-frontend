@@ -2,6 +2,7 @@
   display: inline-block;
   padding: 4px 12px;
   border-radius: 12px;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -10,26 +11,21 @@
   border: 1px solid transparent;
 
   &--ativo {
-    background: #d4edda;
-    color: #155724;
-    border-color: #c3e6cb;
+    background: var(--status-success-bg);
+    color: var(--status-success);
+    border-color: var(--status-success);
   }
 
   &--observando {
-    background: #fff3cd;
-    color: #856404;
-    border-color: #ffeaa7;
+    background: var(--status-warning-bg);
+    color: var(--status-warning);
+    border-color: var(--status-warning);
   }
 
-  &--inativo {
-    background: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
-  }
-
+  &--inativo,
   &--pausado {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--accent-yellow);
-    border-color: rgba(245, 158, 11, 0.3);
+    background: var(--bg-elevated-hover);
+    color: var(--text-muted);
+    border-color: var(--border-default);
   }
 }

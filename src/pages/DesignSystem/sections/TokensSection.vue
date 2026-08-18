@@ -75,20 +75,42 @@
     <div class="ds-section__header">
       <h1 class="ds-section__title">Tipografia</h1>
       <p class="ds-section__desc">
-        Escala de texto usada nos componentes. Sem font-family customizada — usa
-        a fonte padrão do Bootstrap.
+        Três famílias:
+        <code>--font-sans</code>
+        (texto corrido),
+        <code>--font-display</code>
+        (títulos) e
+        <code>--font-mono</code>
+        (números — sempre com
+        <code>.num</code>
+        /
+        <code>.money</code>
+        para alinhamento tabular).
       </p>
     </div>
     <div class="ds-showcase">
       <p
         style="
+          font-family: var(--font-mono);
+          font-variant-numeric: tabular-nums;
           font-size: 2.5rem;
-          font-weight: 700;
+          font-weight: 600;
           color: var(--text-primary);
           margin: 0;
         "
       >
-        2.5rem / 700 — Valor stat
+        R$ 12.480,90 — .num / .money
+      </p>
+      <p
+        style="
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 8px 0 0;
+        "
+      >
+        --font-display — Título de página
       </p>
       <p
         style="
@@ -169,59 +191,60 @@
 
 <script setup>
 const colorTokens = [
-  { var: '--primary', hex: '#4f46e5', label: 'Ações principais, botões' },
-  { var: '--primary-dark', hex: '#5000d0', label: 'Hover do primário' },
-  { var: '--secondary', hex: '#3700b3', label: 'Ações secundárias' },
-  { var: '--accent', hex: '#bb86fc', label: 'Destaques' },
+  { var: '--primary', hex: '#3ddc97', label: 'Ações principais, ganho' },
+  { var: '--primary-hover', hex: '#55e3a6', label: 'Hover do primário' },
+  { var: '--primary-active', hex: '#2fbe80', label: 'Active do primário' },
+  { var: '--gold', hex: '#e8c468', label: 'Categoria FIIs, alerta' },
+  { var: '--coral', hex: '#ff6b6b', label: 'Perda, ações destrutivas' },
   {
     var: '--bg-primary',
-    hex: '#ffffff',
+    hex: '#0a0e0d',
+    label: 'Background da aplicação',
+    border: true
+  },
+  {
+    var: '--bg-elevated',
+    hex: '#182420',
     label: 'Superfícies / cards',
     border: true
   },
   {
-    var: '--bg-secondary',
-    hex: '#f5f5f5',
-    label: 'Background da aplicação',
+    var: '--bg-elevated-hover',
+    hex: '#1e2d28',
+    label: 'Hover de itens',
     border: true
   },
-  { var: '--bg-hover', hex: '#eeeeee', label: 'Hover de itens', border: true },
-  { var: '--text-primary', hex: '#212121', label: 'Texto principal' },
+  { var: '--text-primary', hex: '#edf2ef', label: 'Texto principal' },
   {
     var: '--text-secondary',
-    hex: '#757575',
+    hex: '#8fa39c',
     label: 'Texto secundário / muted'
   },
-  { var: '--border', hex: '#e0e0e0', label: 'Bordas' },
-  { var: '--error', hex: '#b00020', label: 'Erros' },
-  { var: '--success', hex: '#00c853', label: 'Sucesso' },
-  { var: '--danger', hex: '#dc2626', label: 'Ações destrutivas' },
-  { var: '--accent-blue', hex: '#3b82f6', label: 'Destaque azul' },
-  { var: '--accent-green', hex: '#10b981', label: 'Destaque verde' },
-  { var: '--accent-yellow', hex: '#f59e0b', label: 'Destaque amarelo' }
+  { var: '--text-muted', hex: '#5a6c66', label: 'Texto terciário / faint' },
+  { var: '--border-default', hex: '#243330', label: 'Bordas' }
 ]
 
 const statusTokens = [
   {
     label: 'ativo',
-    bg: '#d4edda',
-    border: '#c3e6cb',
-    color: '#155724',
+    bg: 'var(--status-success-bg)',
+    border: 'var(--status-success)',
+    color: 'var(--status-success)',
     usage: 'Ativo e funcionando'
   },
   {
     label: 'observando',
-    bg: '#fff3cd',
-    border: '#ffeaa7',
-    color: '#856404',
+    bg: 'var(--status-warning-bg)',
+    border: 'var(--status-warning)',
+    color: 'var(--status-warning)',
     usage: 'Em monitoramento'
   },
   {
-    label: 'inativo',
-    bg: '#f8d7da',
-    border: '#f5c6cb',
-    color: '#721c24',
-    usage: 'Inativo / erro'
+    label: 'inativo / pausado',
+    bg: 'var(--bg-elevated-hover)',
+    border: 'var(--border-default)',
+    color: 'var(--text-muted)',
+    usage: 'Inativo, pausado — fora dos cálculos'
   }
 ]
 </script>

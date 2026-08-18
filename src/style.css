@@ -1,44 +1,57 @@
 :root {
-  /* ── Backgrounds ── */
-  --bg-primary: #141414;
-  --bg-secondary: #1a1a1a; /* sidebar, header */
-  --bg-elevated: #1e1e1e; /* cards, modais */
-  --bg-elevated-hover: #242424;
-  --bg-input: #1c1c1c;
+  /* ── Backgrounds (ledger — preto quase puro com tinta verde-petróleo) ── */
+  --bg-primary: #0a0e0d;
+  --bg-secondary: #121916; /* sidebar, header */
+  --bg-elevated: #182420; /* cards, modais */
+  --bg-elevated-hover: #1e2d28;
+  --bg-input: #182420;
 
   /* ── Bordas ── */
-  --border-subtle: #2a2a2a;
-  --border-default: #333333;
+  --border-subtle: #202b27;
+  --border-default: #243330;
 
   /* ── Texto ── */
-  --text-primary: #f5f5f5;
-  --text-secondary: #9a9a9a;
-  --text-muted: #6b6b6b;
+  --text-primary: #edf2ef;
+  --text-secondary: #8fa39c;
+  --text-muted: #5a6c66;
 
-  /* ── Marca / Primária ── */
-  --primary: #4f46e5;
-  --primary-hover: #6366f1;
-  --primary-active: #4338ca;
-  --primary-muted: rgba(79, 70, 229, 0.14);
-  --primary-contrast: #ffffff; /* texto sobre --primary */
+  /* ── Marca / Primária (verde-menta — "ganho" e identidade) ── */
+  --primary: #3ddc97;
+  --primary-hover: #55e3a6;
+  --primary-active: #2fbe80;
+  --primary-muted: rgba(61, 220, 151, 0.14);
+  --primary-contrast: #06140e; /* texto sobre --primary */
 
   /* ── Status (uso exclusivo — status de ativos, não mexer) ── */
-  --status-success: #4ade80;
-  --status-success-bg: rgba(74, 222, 128, 0.12);
-  --status-danger: #f87171;
-  --status-danger-bg: rgba(248, 113, 113, 0.12);
-  --status-warning: #facc15;
-  --status-warning-bg: rgba(250, 204, 21, 0.12);
+  --status-success: #3ddc97;
+  --status-success-bg: rgba(61, 220, 151, 0.12);
+  --status-danger: #ff6b6b;
+  --status-danger-bg: rgba(255, 107, 107, 0.12);
+  --status-warning: #e8c468;
+  --status-warning-bg: rgba(232, 196, 104, 0.12);
 
   /* ── Dados/gráficos e categorias decorativas (não é status) ── */
   --chart-blue: #5b8def;
   --chart-blue-light: #a8c5f7;
-  --chart-primary: #4f46e5;
-  --chart-green: #34d399;
-  --chart-amber: #fbbf24;
+  --chart-primary: #3ddc97;
+  --chart-green: #3ddc97;
+  --chart-amber: #e8c468;
+
+  /* ── Paleta ledger dedicada (stamps, pills, gráficos de categoria) ── */
+  --mint: #3ddc97;
+  --mint-dim: #234339;
+  --gold: #e8c468;
+  --gold-dim: #3e3a22;
+  --coral: #ff6b6b;
+  --coral-dim: #3e2323;
 
   /* ── Elevação (sem box-shadow preto — usar borda) ── */
   --shadow-elevated: 0 0 0 1px var(--border-subtle);
+
+  /* ── Tipografia ── */
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-display: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
   /* ── Compatibilidade (nomes legados ainda referenciados em
      src/pages, MainLayout.vue e utilities.css) — mapeados para os
@@ -61,7 +74,7 @@
   --sidebar-width: 260px;
   --header-height: 64px;
 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   font-weight: 400;
 
@@ -98,6 +111,7 @@ h4,
 h5,
 h6 {
   color: var(--text-primary);
+  font-family: var(--font-display);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -152,7 +166,7 @@ button:hover,
 .btn:hover {
   /* background-color: var(--secondary); */
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 8px rgba(61, 220, 151, 0.2);
 }
 
 button:active,
@@ -209,7 +223,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px var(--primary-muted);
 }
 
 .card {
@@ -274,6 +288,51 @@ td {
 
 tr:hover {
   background-color: var(--bg-elevated-hover);
+}
+
+/* ── Utilidades ledger: números tabulares, stamps de categoria,
+   pills de rentabilidade — consumidas por StatCard, tabelas de
+   Carteira/Ativos e badges de categoria. Não redefinir cores aqui,
+   apenas consumir os tokens declarados em :root. ── */
+.num,
+.money {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.2px;
+}
+
+.stamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  background-color: var(--bg-elevated-hover);
+  color: var(--text-secondary);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+.pill--up {
+  background-color: var(--mint-dim);
+  color: var(--mint);
+}
+
+.pill--down {
+  background-color: var(--coral-dim);
+  color: var(--coral);
 }
 
 .loading {
