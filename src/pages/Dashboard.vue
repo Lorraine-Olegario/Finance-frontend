@@ -81,7 +81,7 @@
         :assets-by-type="assetsByType"
         :category-colors="categoryColors"
         :category-values="categoryValues"
-        :total-category-value="portfolioSummary.total_current_value"
+        :total-category-value="portfolioTotals.totalCurrentValue"
       />
 
       <LoadingSpinner
@@ -177,11 +177,12 @@ const patrimonioSubtitle = computed(
     `Investido: ${formatCurrency(portfolioTotals.value.totalInvested, visibilityStore.valuesHidden)} · ${formatPercent(portfolioTotals.value.profitLossPercent)}`
 )
 
-// Contagem e valor por categoria calculados a partir das posições da
-// carteira do usuário — nunca do catálogo geral de ativos do sistema.
+// Contagem e valor por categoria calculados a partir das posições
+// filtradas da carteira do usuário — nunca do catálogo geral de ativos do
+// sistema, nem de posições pausadas.
 const categoryBreakdown = computed(() => {
   const breakdown = {}
-  for (const position of positions.value) {
+  for (const position of filteredPositions.value) {
     const category = assetCategoryMap.value[position.code]?.nome
     if (!category) continue
     if (!breakdown[category]) breakdown[category] = { count: 0, value: 0 }

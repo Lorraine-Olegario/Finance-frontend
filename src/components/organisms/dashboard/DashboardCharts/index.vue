@@ -90,12 +90,31 @@ const props = defineProps({
 const chartCanvas = ref(null)
 let chartInstance = null
 
+// Paleta ledger usada quando a categoria não tem cor personalizada vinda do
+// backend (`categoryColors`) — mint e gold primeiro (identidade da marca),
+// depois os tons de gráfico auxiliares, em rotação para categorias extras.
+const FALLBACK_PALETTE_TOKENS = [
+  '--mint',
+  '--gold',
+  '--chart-blue',
+  '--chart-blue-light'
+]
+
+function cssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim()
+}
+
 function resolveColor(name) {
-  return (
-    props.categoryColors[name] ||
-    props.categoryColors[name?.toUpperCase()] ||
-    undefined
-  )
+  const fromApi =
+    props.categoryColors[name] || props.categoryColors[name?.toUpperCase()]
+  if (fromApi) return fromApi
+
+  const names = Object.keys(props.categoryValues)
+  const index = Math.max(names.indexOf(name), 0)
+  const token = FALLBACK_PALETTE_TOKENS[index % FALLBACK_PALETTE_TOKENS.length]
+  return cssVar(token) || cssVar('--text-muted')
 }
 
 const hasData = computed(
