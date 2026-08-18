@@ -12,9 +12,16 @@ function extractCategory(asset) {
 }
 
 /**
- * A API da carteira não retorna categoria por posição/transação — por isso
- * cruzamos o código do ativo com a listagem de ativos do usuário para
- * descobrir a categoria de cada código.
+ * A API da carteira não retorna categoria nem status por posição/transação —
+ * por isso cruzamos o código do ativo com a listagem de ativos do usuário
+ * (catálogo, via assetService) para descobrir a categoria e o status de
+ * cada código.
+ *
+ * O status ("ativo" | "inativo" | "observando") só existe no catálogo de
+ * ativos, não na carteira (`portfolioService.getSummary()` não sabe
+ * distinguir ativos pausados). Isso é um workaround de frontend — o ideal
+ * seria a API de carteira já excluir posições pausadas, mas isso está fora
+ * deste repositório.
  */
 export function useAssetCategoryMap() {
   const assetCategoryMap = ref({})
@@ -39,7 +46,10 @@ export function useAssetCategoryMap() {
       }
 
       assetCategoryMap.value = Object.fromEntries(
-        all.map(a => [a.codigo, extractCategory(a)])
+        all.map(a => [
+          a.codigo,
+          { ...extractCategory(a), status: a.status || '' }
+        ])
       )
     } catch {
       assetCategoryMap.value = {}
@@ -50,5 +60,15 @@ export function useAssetCategoryMap() {
     return assetCategoryMap.value[code] || { nome: '', color: null }
   }
 
-  return { assetCategoryMap, fetchAssetCategoryMap, resolveCategory }
+  /** Status do código no catálogo ('ativo' | 'inativo' | 'observando' | '') */
+  function resolveStatus(code) {
+    return assetCategoryMap.value[code]?.status || ''
+  }
+
+  return {
+    assetCategoryMap,
+    fetchAssetCategoryMap,
+    resolveCategory,
+    resolveStatus
+  }
 }

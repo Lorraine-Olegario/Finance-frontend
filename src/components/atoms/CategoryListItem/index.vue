@@ -6,13 +6,17 @@
     />
     <div class="category-item__info">
       <span class="category-item__name">{{ name }}</span>
-      <span class="category-item__meta">{{ count }} ativo{{ count === 1 ? '' : 's' }}</span>
+      <span class="category-item__meta">
+        {{ count }} ativo{{ count === 1 ? '' : 's' }}
+      </span>
     </div>
     <span
       v-if="value"
-      class="category-item__value"
-    >{{ value }}</span>
-    <span class="category-item__percentage">{{ percentage }}%</span>
+      class="category-item__value money"
+    >
+      {{ value }}
+    </span>
+    <span class="category-item__percentage num">{{ percentage }}%</span>
   </div>
 </template>
 
@@ -20,24 +24,24 @@
 defineProps({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   count: {
     type: Number,
-    required: true,
+    required: true
   },
   value: {
     type: String,
-    default: '',
+    default: ''
   },
   percentage: {
     type: [Number, String],
-    required: true,
+    required: true
   },
   color: {
     type: String,
-    default: '#6b7280',
-  },
+    default: 'var(--text-muted)'
+  }
 })
 </script>
 

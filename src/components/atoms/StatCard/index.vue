@@ -11,19 +11,25 @@
         <p class="stat-card__label">
           {{ label }}
         </p>
-        <p class="stat-card__value">
+        <p class="stat-card__value money">
           {{ value }}
         </p>
       </div>
     </div>
     <p
       v-if="subtitle || $slots['subtitle-icon']"
-      class="stat-card__change"
+      class="stat-card__change num"
       :class="{ 'stat-card__change--positive': isPositive }"
     >
       <slot name="subtitle-icon" />
       {{ subtitle }}
     </p>
+    <div
+      v-if="$slots.sparkline"
+      class="stat-card__sparkline"
+    >
+      <slot name="sparkline" />
+    </div>
   </div>
 </template>
 
