@@ -59,7 +59,31 @@
     strong {
       color: var(--text-primary);
       font-size: 1rem;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
     }
+  }
+
+  &__confirm {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gold);
+    cursor: pointer;
+  }
+
+  &__confirm-checkbox {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    accent-color: var(--gold);
+    cursor: pointer;
   }
 }
 

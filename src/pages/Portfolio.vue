@@ -128,8 +128,8 @@
       <template v-else-if="activeTab === 'positions'">
         <EmptyState
           v-if="filteredPositions.length === 0"
-          title="Nenhuma posição encontrada"
-          description="Registre uma transação de compra para começar a montar sua carteira"
+          :title="positionsEmptyMessage.title"
+          :description="positionsEmptyMessage.description"
         >
           <template #icon>
             <SvgIcon
@@ -139,6 +139,20 @@
           </template>
           <template #action>
             <BaseButton
+              v-if="hasActiveFilters && positions.length > 0"
+              variant="secondary"
+              @click="clearFilters"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="refresh"
+                  :size="16"
+                />
+              </template>
+              Limpar filtros
+            </BaseButton>
+            <BaseButton
+              v-else
               variant="primary"
               @click="openAddModal"
             >
@@ -203,10 +217,10 @@
                   />
                   <span v-else>-</span>
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right num">
                   {{ formatQuantity(position.quantity) }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       position.average_price,
@@ -214,7 +228,7 @@
                     )
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     position.current_price != null
                       ? formatCurrency(
@@ -224,7 +238,7 @@
                       : '—'
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       position.current_value,
@@ -232,17 +246,33 @@
                     )
                   }}
                 </td>
-                <td
-                  class="portfolio-page__td portfolio-page__td--right"
-                  :class="profitLossClass(position.daily_variation_percent)"
-                >
-                  {{ formatPercent(position.daily_variation_percent) }}
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  <span
+                    v-if="hasValue(position.daily_variation_percent)"
+                    class="pill"
+                    :class="trendPillClass(position.daily_variation_percent)"
+                  >
+                    <SvgIcon
+                      :name="trendIcon(position.daily_variation_percent)"
+                      :size="10"
+                    />
+                    {{ formatPercent(position.daily_variation_percent) }}
+                  </span>
+                  <span v-else>—</span>
                 </td>
-                <td
-                  class="portfolio-page__td portfolio-page__td--right"
-                  :class="profitLossClass(position.profit_loss_percent)"
-                >
-                  {{ formatPercent(position.profit_loss_percent) }}
+                <td class="portfolio-page__td portfolio-page__td--right">
+                  <span
+                    v-if="hasValue(position.profit_loss_percent)"
+                    class="pill"
+                    :class="trendPillClass(position.profit_loss_percent)"
+                  >
+                    <SvgIcon
+                      :name="trendIcon(position.profit_loss_percent)"
+                      :size="10"
+                    />
+                    {{ formatPercent(position.profit_loss_percent) }}
+                  </span>
+                  <span v-else>—</span>
                 </td>
               </tr>
             </tbody>
@@ -270,8 +300,8 @@
       <template v-else>
         <EmptyState
           v-if="filteredTransactions.length === 0"
-          title="Nenhuma transação encontrada"
-          description="Registre uma compra ou venda para ver o extrato aqui"
+          :title="transactionsEmptyMessage.title"
+          :description="transactionsEmptyMessage.description"
         >
           <template #icon>
             <SvgIcon
@@ -281,6 +311,20 @@
           </template>
           <template #action>
             <BaseButton
+              v-if="hasActiveFilters && transactions.length > 0"
+              variant="secondary"
+              @click="clearFilters"
+            >
+              <template #icon-left>
+                <SvgIcon
+                  name="refresh"
+                  :size="16"
+                />
+              </template>
+              Limpar filtros
+            </BaseButton>
+            <BaseButton
+              v-else
               variant="primary"
               @click="openAddModal"
             >
@@ -325,7 +369,7 @@
                 :key="transaction.id"
                 class="portfolio-page__row"
               >
-                <td class="portfolio-page__td portfolio-page__td--muted">
+                <td class="portfolio-page__td portfolio-page__td--muted num">
                   {{ formatDate(transaction.transaction_date) }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--code">
@@ -341,10 +385,10 @@
                     "
                   />
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right num">
                   {{ formatQuantity(transaction.quantity) }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       transaction.unit_price,
@@ -352,7 +396,7 @@
                     )
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       transaction.total_value,
@@ -411,6 +455,7 @@
       <AddTransactionModal
         :is-open="modals.add"
         :transaction="editingTransaction"
+        :positions="positions"
         @close="closeModal('add')"
         @submit="handleSubmitTransaction"
       />
@@ -432,7 +477,7 @@
 
 <script setup>
 // ── Imports ──────────────────────────────────────────────────────────────────
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
@@ -452,6 +497,7 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useVisibilityStore } from '@/stores/visibility'
+import { useToastStore } from '@/stores/toast'
 import portfolioService from '@/services/portfolioService'
 import categoryService from '@/services/categoryService'
 import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
@@ -461,6 +507,7 @@ import { formatPercent } from '@/utils/formatPercent'
 // ── State ────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 const visibilityStore = useVisibilityStore()
+const toastStore = useToastStore()
 
 const summary = ref({
   total_invested: 0,
@@ -479,7 +526,10 @@ const loading = ref(false)
 const fetchError = ref('')
 const activeTab = ref('positions')
 const search = ref('')
+const debouncedSearch = ref('')
 const categoryFilter = ref('')
+const SEARCH_DEBOUNCE_MS = 300
+let searchDebounceTimer = null
 
 const positionsPage = ref(1)
 const transactionsPage = ref(1)
@@ -503,11 +553,42 @@ const categoryOptions = computed(() =>
   categories.value.map(cat => ({ value: cat.name, label: cat.name }))
 )
 
+const hasActiveFilters = computed(
+  () => !!debouncedSearch.value || !!categoryFilter.value
+)
+
+const positionsEmptyMessage = computed(() => {
+  if (hasActiveFilters.value && positions.value.length > 0) {
+    return {
+      title: 'Nenhum resultado encontrado',
+      description: 'Tente ajustar a busca ou a categoria selecionada.'
+    }
+  }
+  return {
+    title: 'Nenhuma posição encontrada',
+    description:
+      'Registre uma transação de compra para começar a montar sua carteira'
+  }
+})
+
+const transactionsEmptyMessage = computed(() => {
+  if (hasActiveFilters.value && transactions.value.length > 0) {
+    return {
+      title: 'Nenhum resultado encontrado',
+      description: 'Tente ajustar a busca ou a categoria selecionada.'
+    }
+  }
+  return {
+    title: 'Nenhuma transação encontrada',
+    description: 'Registre uma compra ou venda para ver o extrato aqui'
+  }
+})
+
 const filteredPositions = computed(() => {
   let result = positions.value
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (debouncedSearch.value) {
+    const q = debouncedSearch.value.toLowerCase()
     result = result.filter(
       p =>
         p.code.toLowerCase().includes(q) ||
@@ -536,8 +617,8 @@ const sortedTransactions = computed(() =>
 const filteredTransactions = computed(() => {
   let result = sortedTransactions.value
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (debouncedSearch.value) {
+    const q = debouncedSearch.value.toLowerCase()
     result = result.filter(t => t.asset_code.toLowerCase().includes(q))
   }
 
@@ -569,17 +650,31 @@ const transactionsTotalPages = computed(() =>
 )
 
 // ── Watchers ─────────────────────────────────────────────────────────────────
-watch([search, categoryFilter], () => {
+// Debounce da busca por código: evita recalcular os computeds filtrados a
+// cada tecla digitada, aplicando o termo apenas após uma pausa na digitação.
+watch(search, value => {
+  clearTimeout(searchDebounceTimer)
+  searchDebounceTimer = setTimeout(() => {
+    debouncedSearch.value = value
+  }, SEARCH_DEBOUNCE_MS)
+})
+
+watch([debouncedSearch, categoryFilter], () => {
   positionsPage.value = 1
   transactionsPage.value = 1
 })
 
 watch(activeTab, () => {
   search.value = ''
+  debouncedSearch.value = ''
 })
 
 // ── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(loadPage)
+
+onBeforeUnmount(() => {
+  clearTimeout(searchDebounceTimer)
+})
 
 // ── Functions ────────────────────────────────────────────────────────────────
 async function fetchSummary() {
@@ -660,11 +755,22 @@ function closeModal(name) {
   editingTransaction.value = null
 }
 
-function profitLossClass(value) {
-  if (value === null || value === undefined) return ''
-  return value >= 0
-    ? 'portfolio-page__td--positive'
-    : 'portfolio-page__td--negative'
+function clearFilters() {
+  search.value = ''
+  debouncedSearch.value = ''
+  categoryFilter.value = ''
+}
+
+function hasValue(value) {
+  return value !== null && value !== undefined && !Number.isNaN(Number(value))
+}
+
+function trendPillClass(value) {
+  return Number(value) >= 0 ? 'pill--up' : 'pill--down'
+}
+
+function trendIcon(value) {
+  return Number(value) >= 0 ? 'trending-up' : 'trending-down'
 }
 
 function formatQuantity(value) {
@@ -681,11 +787,20 @@ async function handleSubmitTransaction(payload, resolve, reject) {
   try {
     // Cria a nova transação antes de excluir a antiga (modo edição) — evita
     // perda de dados caso o registro falhe (ex: 422 de quantidade insuficiente).
+    // Nota (FIN-11): o AddTransactionModal já avisa e exige confirmação
+    // extra quando a venda excede a posição conhecida no frontend, mas o
+    // backend pode ainda assim rejeitar com 422 (regra de negócio dele) —
+    // esse erro cai neste catch e é tratado normalmente (fieldErrors/toast).
     await portfolioService.registerTransaction(payload)
     if (editingTransaction.value) {
       await portfolioService.deleteTransaction(editingTransaction.value.id)
     }
     await Promise.all([fetchSummary(), fetchTransactions()])
+    toastStore.success(
+      editingTransaction.value
+        ? 'Transação atualizada com sucesso!'
+        : 'Transação registrada com sucesso!'
+    )
     resolve()
   } catch (err) {
     console.error('[Portfolio] Erro ao salvar transação:', err)
@@ -695,7 +810,9 @@ async function handleSubmitTransaction(payload, resolve, reject) {
           Object.entries(data.errors).map(([field, msgs]) => [field, msgs[0]])
         )
       : null
-    const wrapped = new Error(data?.message || 'Erro ao salvar transação.')
+    const message = data?.message || 'Erro ao salvar transação.'
+    toastStore.error(message)
+    const wrapped = new Error(message)
     wrapped.fieldErrors = fieldErrors
     reject(wrapped)
   }
@@ -705,12 +822,15 @@ async function handleDeleteTransaction({ resolve, reject }) {
   try {
     await portfolioService.deleteTransaction(selectedTransaction.value.id)
     await Promise.all([fetchSummary(), fetchTransactions()])
+    toastStore.success('Transação excluída com sucesso!')
     resolve()
   } catch (err) {
+    console.error('[Portfolio] Erro ao excluir transação:', err)
     const msg =
       err.response?.data?.message ||
       err.message ||
       'Erro ao excluir a transação'
+    toastStore.error(msg)
     reject(new Error(msg))
   }
 }
@@ -864,21 +984,13 @@ async function handleDeleteTransaction({ resolve, reject }) {
 
 .portfolio-page__td--code {
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   color: var(--text-primary);
 }
 
 .portfolio-page__td--muted {
   color: var(--text-secondary);
   white-space: normal;
-}
-
-.portfolio-page__td--positive {
-  color: var(--status-success);
-}
-
-.portfolio-page__td--negative {
-  color: var(--status-danger);
 }
 
 .portfolio-page__pagination {
