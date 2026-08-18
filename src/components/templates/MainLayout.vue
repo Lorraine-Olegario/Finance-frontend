@@ -114,12 +114,15 @@
         <slot />
       </main>
     </div>
+
+    <ToastContainer />
   </div>
 </template>
 
 <script>
 import SidebarDesktop from '@/components/organisms/navigation/SidebarDesktop/index.vue'
 import SidebarMobile from '@/components/organisms/navigation/SidebarMobile/index.vue'
+import ToastContainer from '@/components/organisms/ToastContainer/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useVisibilityStore } from '@/stores/visibility'
@@ -131,6 +134,7 @@ export default {
   components: {
     SidebarDesktop,
     SidebarMobile,
+    ToastContainer,
     SvgIcon
   },
   props: {
