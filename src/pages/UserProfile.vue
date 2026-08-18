@@ -382,21 +382,21 @@ async function updatePassword() {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  background: var(--primary);
   border-radius: 16px;
   padding: 1.75rem 2rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 16px var(--primary-muted);
 }
 
 .user-profile-page__avatar {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(6, 20, 14, 0.15);
   backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  color: white;
+  border: 2px solid rgba(6, 20, 14, 0.3);
+  color: var(--primary-contrast);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -409,13 +409,13 @@ async function updatePassword() {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--primary-contrast);
 }
 
 .user-profile-page__banner-email {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(6, 20, 14, 0.75);
 }
 
 /* Grid */

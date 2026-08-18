@@ -109,12 +109,12 @@
     &--apply {
       background: var(--primary);
       border: 1px solid var(--primary);
-      color: white;
+      color: var(--primary-contrast);
 
       &:hover {
-        background: var(--primary-dark);
-        border-color: var(--primary-dark);
-        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        background: var(--primary-active);
+        border-color: var(--primary-active);
+        box-shadow: 0 2px 8px var(--primary-muted);
       }
     }
   }

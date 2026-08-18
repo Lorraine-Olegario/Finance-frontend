@@ -34,13 +34,13 @@
   }
 
   &--edit:not(:disabled):hover {
-    background: rgba(79, 70, 229, 0.08);
+    background: var(--primary-muted);
     border-color: var(--primary);
     color: var(--primary);
   }
 
   &--delete:not(:disabled):hover {
-    background: rgba(220, 38, 38, 0.08);
+    background: var(--status-danger-bg);
     border-color: var(--danger);
     color: var(--danger);
   }

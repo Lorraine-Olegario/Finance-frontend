@@ -436,7 +436,9 @@ async function fetchCategories() {
   try {
     const res = await categoryService.getAll()
     if (res.data && Array.isArray(res.data.data)) {
-      categories.value = res.data.data.map(cat => cat.nome || cat.name || String(cat))
+      categories.value = res.data.data.map(
+        cat => cat.nome || cat.name || String(cat)
+      )
     }
   } catch {
     // erro opcional — categorias derivam do fallback vazio
@@ -601,8 +603,8 @@ function formatPrice(value) {
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
-  color: white;
+  background: var(--primary);
+  color: var(--primary-contrast);
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
@@ -611,7 +613,7 @@ function formatPrice(value) {
 }
 
 .observed-assets-page__empty-link:hover {
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 12px var(--primary-muted);
   transform: translateY(-1px);
 }
 
