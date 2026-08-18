@@ -341,7 +341,7 @@
                 :key="transaction.id"
                 class="portfolio-page__row"
               >
-                <td class="portfolio-page__td portfolio-page__td--muted">
+                <td class="portfolio-page__td portfolio-page__td--muted num">
                   {{ formatDate(transaction.transaction_date) }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--code">
@@ -357,10 +357,10 @@
                     "
                   />
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right num">
                   {{ formatQuantity(transaction.quantity) }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       transaction.unit_price,
@@ -368,7 +368,7 @@
                     )
                   }}
                 </td>
-                <td class="portfolio-page__td portfolio-page__td--right">
+                <td class="portfolio-page__td portfolio-page__td--right money">
                   {{
                     formatCurrency(
                       transaction.total_value,
@@ -468,6 +468,7 @@ import AlertMessage from '@/components/atoms/AlertMessage/index.vue'
 import Pagination from '@/components/atoms/Pagination/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useVisibilityStore } from '@/stores/visibility'
+import { useToastStore } from '@/stores/toast'
 import portfolioService from '@/services/portfolioService'
 import categoryService from '@/services/categoryService'
 import { useAssetCategoryMap } from '@/hooks/useAssetCategoryMap'
@@ -477,6 +478,7 @@ import { formatPercent } from '@/utils/formatPercent'
 // ── State ────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 const visibilityStore = useVisibilityStore()
+const toastStore = useToastStore()
 
 const summary = ref({
   total_invested: 0,
@@ -702,11 +704,20 @@ async function handleSubmitTransaction(payload, resolve, reject) {
   try {
     // Cria a nova transação antes de excluir a antiga (modo edição) — evita
     // perda de dados caso o registro falhe (ex: 422 de quantidade insuficiente).
+    // Nota (FIN-11): o AddTransactionModal já avisa e exige confirmação
+    // extra quando a venda excede a posição conhecida no frontend, mas o
+    // backend pode ainda assim rejeitar com 422 (regra de negócio dele) —
+    // esse erro cai neste catch e é tratado normalmente (fieldErrors/toast).
     await portfolioService.registerTransaction(payload)
     if (editingTransaction.value) {
       await portfolioService.deleteTransaction(editingTransaction.value.id)
     }
     await Promise.all([fetchSummary(), fetchTransactions()])
+    toastStore.success(
+      editingTransaction.value
+        ? 'Transação atualizada com sucesso!'
+        : 'Transação registrada com sucesso!'
+    )
     resolve()
   } catch (err) {
     console.error('[Portfolio] Erro ao salvar transação:', err)
@@ -716,7 +727,9 @@ async function handleSubmitTransaction(payload, resolve, reject) {
           Object.entries(data.errors).map(([field, msgs]) => [field, msgs[0]])
         )
       : null
-    const wrapped = new Error(data?.message || 'Erro ao salvar transação.')
+    const message = data?.message || 'Erro ao salvar transação.'
+    toastStore.error(message)
+    const wrapped = new Error(message)
     wrapped.fieldErrors = fieldErrors
     reject(wrapped)
   }
@@ -726,12 +739,15 @@ async function handleDeleteTransaction({ resolve, reject }) {
   try {
     await portfolioService.deleteTransaction(selectedTransaction.value.id)
     await Promise.all([fetchSummary(), fetchTransactions()])
+    toastStore.success('Transação excluída com sucesso!')
     resolve()
   } catch (err) {
+    console.error('[Portfolio] Erro ao excluir transação:', err)
     const msg =
       err.response?.data?.message ||
       err.message ||
       'Erro ao excluir a transação'
+    toastStore.error(msg)
     reject(new Error(msg))
   }
 }
