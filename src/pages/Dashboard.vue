@@ -84,6 +84,11 @@
         :total-category-value="portfolioTotals.totalCurrentValue"
       />
 
+      <DashboardMovers
+        :gainers="movers.gainers"
+        :losers="movers.losers"
+      />
+
       <LoadingSpinner
         v-if="loading"
         fullscreen
@@ -104,6 +109,7 @@ import Sparkline from '@/components/atoms/Sparkline/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome/index.vue'
 import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/index.vue'
+import DashboardMovers from '@/components/organisms/dashboard/DashboardMovers/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useVisibilityStore } from '@/stores/visibility'
 import assetService from '@/services/assetService'
@@ -209,6 +215,31 @@ const categoryValues = computed(() =>
     ])
   )
 )
+
+// Maiores variações (rentabilidade (atual-pm)/pm) entre as posições
+// filtradas — top 4 altas e top 4 baixas, ambas com rentabilidade
+// calculável.
+const movers = computed(() => {
+  const withPercent = filteredPositions.value
+    .map(p => ({
+      code: p.code,
+      name: p.name || '',
+      percent:
+        p.profit_loss_percent === null || p.profit_loss_percent === undefined
+          ? null
+          : Number(p.profit_loss_percent)
+    }))
+    .filter(p => p.percent !== null && !Number.isNaN(p.percent))
+    .sort((a, b) => a.percent - b.percent)
+
+  const losers = withPercent.filter(p => p.percent < 0).slice(0, 4)
+  const gainers = withPercent
+    .filter(p => p.percent >= 0)
+    .slice(-4)
+    .reverse()
+
+  return { gainers, losers }
+})
 
 onMounted(loadDashboard)
 
