@@ -448,7 +448,7 @@
 
 <script setup>
 // ── Imports ──────────────────────────────────────────────────────────────────
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
 import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
@@ -497,7 +497,10 @@ const loading = ref(false)
 const fetchError = ref('')
 const activeTab = ref('positions')
 const search = ref('')
+const debouncedSearch = ref('')
 const categoryFilter = ref('')
+const SEARCH_DEBOUNCE_MS = 300
+let searchDebounceTimer = null
 
 const positionsPage = ref(1)
 const transactionsPage = ref(1)
@@ -524,8 +527,8 @@ const categoryOptions = computed(() =>
 const filteredPositions = computed(() => {
   let result = positions.value
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (debouncedSearch.value) {
+    const q = debouncedSearch.value.toLowerCase()
     result = result.filter(
       p =>
         p.code.toLowerCase().includes(q) ||
@@ -554,8 +557,8 @@ const sortedTransactions = computed(() =>
 const filteredTransactions = computed(() => {
   let result = sortedTransactions.value
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (debouncedSearch.value) {
+    const q = debouncedSearch.value.toLowerCase()
     result = result.filter(t => t.asset_code.toLowerCase().includes(q))
   }
 
@@ -587,17 +590,31 @@ const transactionsTotalPages = computed(() =>
 )
 
 // ── Watchers ─────────────────────────────────────────────────────────────────
-watch([search, categoryFilter], () => {
+// Debounce da busca por código: evita recalcular os computeds filtrados a
+// cada tecla digitada, aplicando o termo apenas após uma pausa na digitação.
+watch(search, value => {
+  clearTimeout(searchDebounceTimer)
+  searchDebounceTimer = setTimeout(() => {
+    debouncedSearch.value = value
+  }, SEARCH_DEBOUNCE_MS)
+})
+
+watch([debouncedSearch, categoryFilter], () => {
   positionsPage.value = 1
   transactionsPage.value = 1
 })
 
 watch(activeTab, () => {
   search.value = ''
+  debouncedSearch.value = ''
 })
 
 // ── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(loadPage)
+
+onBeforeUnmount(() => {
+  clearTimeout(searchDebounceTimer)
+})
 
 // ── Functions ────────────────────────────────────────────────────────────────
 async function fetchSummary() {
