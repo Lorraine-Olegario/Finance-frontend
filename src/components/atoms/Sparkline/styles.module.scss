@@ -1,0 +1,14 @@
+.sparkline {
+  display: block;
+  overflow: visible;
+
+  &__line {
+    &--up {
+      stroke: var(--mint);
+    }
+
+    &--down {
+      stroke: var(--coral);
+    }
+  }
+}

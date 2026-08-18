@@ -124,4 +124,12 @@
       height: 13px;
     }
   }
+
+  &__sparkline {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    opacity: 0.85;
+    pointer-events: none;
+  }
 }

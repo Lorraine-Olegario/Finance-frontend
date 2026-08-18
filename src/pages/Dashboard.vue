@@ -27,7 +27,7 @@
           label="Patrimônio Total"
           :value="
             formatCurrency(
-              portfolioSummary.total_current_value,
+              portfolioTotals.totalCurrentValue,
               visibilityStore.valuesHidden
             )
           "
@@ -37,24 +37,27 @@
           <template #icon>
             <SvgIcon name="dollar" />
           </template>
+          <template #sparkline>
+            <Sparkline :positive="portfolioTotals.profitLoss >= 0" />
+          </template>
         </StatCard>
 
         <StatCard
           label="Lucro Total"
           :value="
             formatCurrency(
-              portfolioSummary.profit_loss,
+              portfolioTotals.profitLoss,
               visibilityStore.valuesHidden
             )
           "
           :variant="portfolioProfitVariant"
-          :subtitle="formatPercent(portfolioSummary.profit_loss_percent)"
-          :is-positive="portfolioSummary.profit_loss >= 0"
+          :subtitle="formatPercent(portfolioTotals.profitLossPercent)"
+          :is-positive="portfolioTotals.profitLoss >= 0"
         >
           <template #icon>
             <SvgIcon
               :name="
-                portfolioSummary.profit_loss >= 0
+                portfolioTotals.profitLoss >= 0
                   ? 'trending-up'
                   : 'trending-down'
               "
@@ -97,6 +100,7 @@ import MainLayout from '@/components/templates/MainLayout.vue'
 import StatCard from '@/components/atoms/StatCard/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import Sparkline from '@/components/atoms/Sparkline/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import DashboardWelcome from '@/components/organisms/dashboard/DashboardWelcome/index.vue'
 import DashboardCharts from '@/components/organisms/dashboard/DashboardCharts/index.vue'
@@ -111,7 +115,8 @@ import { formatPercent } from '@/utils/formatPercent'
 // ── State ─────────────────────────────────────────────────────────────────────
 const authStore = useAuthStore()
 const visibilityStore = useVisibilityStore()
-const { assetCategoryMap, fetchAssetCategoryMap } = useAssetCategoryMap()
+const { assetCategoryMap, fetchAssetCategoryMap, resolveStatus } =
+  useAssetCategoryMap()
 
 const loading = ref(true)
 const categoryColors = ref({})
@@ -133,12 +138,43 @@ const currentDate = computed(() =>
   })
 )
 
+// Posições com ativo pausado ("inativo" no catálogo — é o que Assets.vue
+// chama de "pausar") ficam de fora de todos os cálculos do dashboard.
+// `positions[]` (retornado dentro de portfolio/summary) não traz status —
+// status só existe no catálogo de ativos do usuário, por isso cruzamos
+// pelo código via `useAssetCategoryMap`/`resolveStatus`. Ativos
+// "observando" não são afetados por este filtro. Isso é um workaround de
+// frontend; o ideal seria a API de carteira já excluir pausados, mas isso
+// está fora deste repositório.
+const filteredPositions = computed(() =>
+  positions.value.filter(p => resolveStatus(p.code) !== 'inativo')
+)
+
+// Patrimônio/Lucro recalculados a partir das posições filtradas — nunca
+// usar total_current_value/profit_loss agregados de portfolioSummary
+// diretamente, pois o backend pode incluir posições pausadas nesse total.
+const portfolioTotals = computed(() => {
+  const totalInvested = filteredPositions.value.reduce(
+    (sum, p) => sum + (p.average_price || 0) * (p.quantity || 0),
+    0
+  )
+  const totalCurrentValue = filteredPositions.value.reduce(
+    (sum, p) => sum + (p.current_value || 0),
+    0
+  )
+  const profitLoss = totalCurrentValue - totalInvested
+  const profitLossPercent =
+    totalInvested > 0 ? (profitLoss / totalInvested) * 100 : null
+
+  return { totalInvested, totalCurrentValue, profitLoss, profitLossPercent }
+})
+
 const portfolioProfitVariant = computed(() =>
-  portfolioSummary.value.profit_loss >= 0 ? 'success' : 'danger'
+  portfolioTotals.value.profitLoss >= 0 ? 'success' : 'danger'
 )
 const patrimonioSubtitle = computed(
   () =>
-    `Investido: ${formatCurrency(portfolioSummary.value.total_invested, visibilityStore.valuesHidden)} · ${formatPercent(portfolioSummary.value.profit_loss_percent)}`
+    `Investido: ${formatCurrency(portfolioTotals.value.totalInvested, visibilityStore.valuesHidden)} · ${formatPercent(portfolioTotals.value.profitLossPercent)}`
 )
 
 // Contagem e valor por categoria calculados a partir das posições da
@@ -254,5 +290,6 @@ async function loadDashboard() {
   background: var(--primary-hover);
   color: var(--primary-contrast);
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--primary-muted);
 }
 </style>
