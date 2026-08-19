@@ -1,14 +1,14 @@
 :root {
-  /* ── Backgrounds (ledger — preto quase puro com tinta verde-petróleo) ── */
-  --bg-primary: #0a0e0d;
-  --bg-secondary: #121916; /* sidebar, header */
-  --bg-elevated: #182420; /* cards, modais */
-  --bg-elevated-hover: #1e2d28;
-  --bg-input: #182420;
+  /* ── Backgrounds (ledger — preto quase neutro, tinta verde-petróleo sutil) ── */
+  --bg-primary: #0a0b0b;
+  --bg-secondary: #111413; /* sidebar, header */
+  --bg-elevated: #141817; /* cards, modais */
+  --bg-elevated-hover: #1a201f;
+  --bg-input: #141817;
 
   /* ── Bordas ── */
-  --border-subtle: #202b27;
-  --border-default: #243330;
+  --border-subtle: #1e2422;
+  --border-default: #262d2b;
 
   /* ── Texto ── */
   --text-primary: #edf2ef;
@@ -71,7 +71,7 @@
   --accent-green: var(--chart-green);
   --accent-blue: var(--chart-blue);
 
-  --sidebar-width: 260px;
+  --sidebar-width: 224px;
   --header-height: 64px;
 
   font-family: var(--font-sans);

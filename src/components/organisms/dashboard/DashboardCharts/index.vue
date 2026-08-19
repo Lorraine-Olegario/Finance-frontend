@@ -6,9 +6,26 @@
       </template>
       <div
         v-if="hasData"
-        class="dashboard-charts__canvas-wrapper"
+        class="dashboard-charts__breakdown"
       >
-        <canvas ref="chartCanvas" />
+        <div class="dashboard-charts__donut-wrapper">
+          <canvas ref="chartCanvas" />
+          <div class="dashboard-charts__donut-center">
+            <span class="dashboard-charts__donut-percent">100%</span>
+          </div>
+        </div>
+
+        <div class="dashboard-charts__categories">
+          <CategoryListItem
+            v-for="category in topCategories"
+            :key="category.name"
+            :name="category.name"
+            :count="category.count"
+            :value="category.formattedValue"
+            :percentage="category.percentage"
+            :color="category.color"
+          />
+        </div>
       </div>
       <EmptyState
         v-else
@@ -24,31 +41,6 @@
           </RouterLink>
         </template>
       </EmptyState>
-    </DashboardCard>
-
-    <DashboardCard title="Categorias Principais">
-      <template #icon>
-        <SvgIcon name="trending-up" />
-      </template>
-      <div
-        v-if="topCategories.length > 0"
-        class="dashboard-charts__categories"
-      >
-        <CategoryListItem
-          v-for="category in topCategories"
-          :key="category.name"
-          :name="category.name"
-          :count="category.count"
-          :value="category.formattedValue"
-          :percentage="category.percentage"
-          :color="category.color"
-        />
-      </div>
-      <EmptyState
-        v-else
-        title="Sem dados"
-        description="Nenhuma categoria disponível no momento"
-      />
     </DashboardCard>
   </div>
 </template>
@@ -168,17 +160,22 @@ function buildChart() {
     data: {
       labels,
       datasets: [
-        { data, backgroundColor: colors, borderWidth: 2, borderColor: cardBg }
+        {
+          data,
+          backgroundColor: colors,
+          borderWidth: 2,
+          borderColor: cardBg
+        }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      cutout: '72%',
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { padding: 15, font: { size: 12 } }
-        },
+        // Legenda nativa do Chart.js desligada — substituída pela lista
+        // customizada de CategoryListItem ao lado do donut.
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: ctx => {

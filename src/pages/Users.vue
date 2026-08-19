@@ -1,26 +1,25 @@
 <template>
-  <MainLayout page-title="Usuários">
-    <div class="users-page">
-      <PageHeader
-        title="Gerenciar Usuários"
-        subtitle="Administre os usuários da plataforma"
+  <MainLayout
+    page-title="Gerenciar Usuários"
+    page-subtitle="Administre os usuários da plataforma"
+  >
+    <template #actions>
+      <BaseButton
+        variant="primary"
+        size="sm"
+        @click="openCreateModal"
       >
-        <template #actions>
-          <BaseButton
-            variant="primary"
-            @click="openCreateModal"
-          >
-            <template #icon-left>
-              <SvgIcon
-                name="plus"
-                :size="16"
-              />
-            </template>
-            Novo Usuário
-          </BaseButton>
+        <template #icon-left>
+          <SvgIcon
+            name="plus"
+            :size="16"
+          />
         </template>
-      </PageHeader>
+        Novo Usuário
+      </BaseButton>
+    </template>
 
+    <div class="users-page">
       <!-- Users Card -->
       <div class="users-page__card">
         <!-- Search -->
@@ -216,7 +215,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import SearchBar from '@/components/molecules/SearchBar/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 import ActionButton from '@/components/atoms/ActionButton/index.vue'

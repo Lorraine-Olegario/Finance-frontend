@@ -1,20 +1,42 @@
 .dashboard-charts {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
   margin-bottom: 2rem;
 
-  &__canvas-wrapper {
-    height: 320px;
+  // Donut + legenda customizada lado a lado, dentro do mesmo card
+  // "Distribuição por Categoria" — substitui a legenda nativa do Chart.js.
+  &__breakdown {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__donut-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+
+  &__donut-center {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
+  }
+
+  &__donut-percent {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-secondary);
   }
 
   &__categories {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
   }
 
   &__cta {
@@ -42,8 +64,15 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 640px) {
   .dashboard-charts {
-    grid-template-columns: 1fr;
+    &__breakdown {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__donut-wrapper {
+      align-self: center;
+    }
   }
 }

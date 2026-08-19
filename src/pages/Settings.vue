@@ -1,32 +1,32 @@
 <template>
-  <MainLayout page-title="Configurações de Cores">
-    <div class="settings-page">
-      <PageHeader
-        title="Personalizar Cores das Categorias"
-        subtitle="Escolha uma cor para cada tipo de ativo no seu dashboard"
+  <MainLayout
+    page-title="Personalizar Cores das Categorias"
+    page-subtitle="Escolha uma cor para cada tipo de ativo no seu dashboard"
+  >
+    <template
+      v-if="hasChanges"
+      #actions
+    >
+      <BaseButton
+        variant="secondary"
+        size="sm"
+        :disabled="saving"
+        @click="resetColors"
       >
-        <template
-          v-if="hasChanges"
-          #actions
-        >
-          <BaseButton
-            variant="secondary"
-            :disabled="saving"
-            @click="resetColors"
-          >
-            Resetar
-          </BaseButton>
-          <BaseButton
-            variant="primary"
-            :loading="saving"
-            :disabled="saving"
-            @click="saveColors"
-          >
-            Salvar Cores
-          </BaseButton>
-        </template>
-      </PageHeader>
+        Resetar
+      </BaseButton>
+      <BaseButton
+        variant="primary"
+        size="sm"
+        :loading="saving"
+        :disabled="saving"
+        @click="saveColors"
+      >
+        Salvar Cores
+      </BaseButton>
+    </template>
 
+    <div class="settings-page">
       <AlertMessage
         v-if="message"
         :type="messageType"
@@ -79,7 +79,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, reactive, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'

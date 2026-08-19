@@ -1,11 +1,9 @@
 <template>
-  <MainLayout page-title="Meu Perfil">
+  <MainLayout
+    page-title="Meu Perfil"
+    page-subtitle="Gerencie suas informações pessoais e segurança da conta"
+  >
     <div class="user-profile-page">
-      <PageHeader
-        title="Meu Perfil"
-        subtitle="Gerencie suas informações pessoais e segurança da conta"
-      />
-
       <!-- User Banner -->
       <div class="user-profile-page__banner">
         <div class="user-profile-page__avatar">
@@ -257,7 +255,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import BaseInput from '@/components/atoms/BaseInput/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 import AlertMessage from '@/components/atoms/AlertMessage/index.vue'

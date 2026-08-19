@@ -6,10 +6,7 @@
       @toggle="handleSidebarToggle"
     />
 
-    <div
-      class="main-layout__wrapper"
-      :class="{ 'main-layout__wrapper--sidebar-collapsed': sidebarCollapsed }"
-    >
+    <div class="main-layout__wrapper">
       <header class="main-layout__header">
         <div class="main-layout__header-left">
           <button
@@ -22,16 +19,23 @@
               :size="20"
             />
           </button>
-          <h1 class="main-layout__page-title">
-            {{ pageTitle }}
-          </h1>
+          <div class="main-layout__title-block">
+            <h1 class="main-layout__page-title">
+              {{ pageTitle }}
+            </h1>
+            <!-- Sempre renderizado (com espaço reservado via   quando
+                 vazio) para o header ter a mesma altura em toda a aplicação
+                 — páginas sem subtítulo não podem deixar o header mais baixo
+                 e "pular" ao navegar entre telas. -->
+            <p class="main-layout__page-subtitle">
+              {{ pageSubtitle || ' ' }}
+            </p>
+          </div>
         </div>
 
-        <div
-          v-if="authStore.user"
-          class="main-layout__header-user"
-        >
+        <div class="main-layout__header-right">
           <button
+            v-if="authStore.user"
             type="button"
             class="main-layout__visibility-btn"
             :aria-label="
@@ -53,8 +57,16 @@
           </button>
 
           <div
+            v-if="$slots.actions"
+            class="main-layout__header-actions"
+          >
+            <slot name="actions" />
+          </div>
+
+          <div
+            v-if="authStore.user"
             ref="userMenu"
-            class="main-layout__user-menu"
+            class="main-layout__user-menu main-layout__user-menu--mobile-only"
           >
             <button
               type="button"
@@ -141,6 +153,10 @@ export default {
     pageTitle: {
       type: String,
       default: 'Finance'
+    },
+    pageSubtitle: {
+      type: String,
+      default: ''
     }
   },
   setup() {
@@ -214,16 +230,15 @@ export default {
 }
 
 .main-layout__wrapper {
+  /* A sidebar desktop virou position: sticky (fica em fluxo, ocupa espaço
+     real no flex row do .main-layout) — não precisa mais de margin-left
+     compensando uma sidebar fixed. Manter os dois juntos duplicaria o
+     espaçamento (gap em branco do tamanho da sidebar). */
   flex: 1;
-  margin-left: var(--sidebar-width);
-  transition: margin-left 0.3s ease;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.main-layout__wrapper--sidebar-collapsed {
-  margin-left: 0;
 }
 
 .main-layout__header {
@@ -258,25 +273,44 @@ export default {
   color: var(--text-primary);
 }
 
+.main-layout__title-block {
+  min-width: 0;
+}
+
 .main-layout__page-title {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.main-layout__page-subtitle {
+  margin: 0.125rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 @media (max-width: 768px) {
-  .main-layout__page-title {
+  .main-layout__title-block {
     display: none;
   }
 }
 
-.main-layout__header-user {
+.main-layout__header-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   position: relative;
   z-index: 100;
+}
+
+.main-layout__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .main-layout__visibility-btn {
@@ -303,6 +337,15 @@ export default {
 
 .main-layout__user-menu {
   position: relative;
+}
+
+/* Em telas desktop o usuário/logout já vivem no rodapé do SidebarDesktop —
+   este bloco do header só é necessário no mobile, onde a sidebar fixa não
+   aparece (vira drawer via SidebarMobile). */
+@media (min-width: 769px) {
+  .main-layout__user-menu--mobile-only {
+    display: none;
+  }
 }
 
 .main-layout__user-trigger {

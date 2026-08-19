@@ -1,49 +1,49 @@
 <template>
-  <MainLayout page-title="Cotações">
-    <div class="quotes-page">
-      <PageHeader
-        title="Cotações"
-        :subtitle="`${filteredQuotes.length} ativo${filteredQuotes.length !== 1 ? 's' : ''} em tempo real`"
+  <MainLayout
+    page-title="Cotações"
+    :page-subtitle="`${filteredQuotes.length} ativo${filteredQuotes.length !== 1 ? 's' : ''} em tempo real`"
+  >
+    <template #actions>
+      <BaseButton
+        variant="secondary"
+        size="sm"
+        @click="isFilterOpen = true"
       >
-        <template #actions>
-          <BaseButton
-            variant="secondary"
-            @click="isFilterOpen = true"
-          >
-            <template #icon-left>
-              <SvgIcon
-                name="filter"
-                :size="16"
-              />
-            </template>
-            Filtros
-            <template
-              v-if="activeFiltersCount > 0"
-              #icon-right
-            >
-              <span class="quotes-page__filter-count">
-                {{ activeFiltersCount }}
-              </span>
-            </template>
-          </BaseButton>
-
-          <BaseButton
-            variant="primary"
-            :disabled="loading"
-            @click="loadPage(pagination.currentPage)"
-          >
-            <template #icon-left>
-              <SvgIcon
-                name="refresh"
-                :size="16"
-                :class="{ 'quotes-page__spin': loading }"
-              />
-            </template>
-            Atualizar
-          </BaseButton>
+        <template #icon-left>
+          <SvgIcon
+            name="filter"
+            :size="16"
+          />
         </template>
-      </PageHeader>
+        Filtros
+        <template
+          v-if="activeFiltersCount > 0"
+          #icon-right
+        >
+          <span class="quotes-page__filter-count">
+            {{ activeFiltersCount }}
+          </span>
+        </template>
+      </BaseButton>
 
+      <BaseButton
+        variant="primary"
+        size="sm"
+        :disabled="loading"
+        @click="loadPage(pagination.currentPage)"
+      >
+        <template #icon-left>
+          <SvgIcon
+            name="refresh"
+            :size="16"
+            :class="{ 'quotes-page__spin': loading }"
+          />
+        </template>
+        Atualizar
+      </BaseButton>
+    </template>
+
+    <div class="quotes-page">
       <LoadingSpinner
         v-if="loading"
         message="Carregando cotações..."
@@ -152,7 +152,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'

@@ -1,11 +1,9 @@
 <template>
-  <MainLayout page-title="Histórico">
+  <MainLayout
+    page-title="Histórico de Ativos"
+    page-subtitle="Consulte o histórico de preços de um ativo pelo seu código"
+  >
     <div class="history-page">
-      <PageHeader
-        title="Histórico de Ativos"
-        subtitle="Consulte o histórico de preços de um ativo pelo seu código"
-      />
-
       <div class="history-page__form">
         <div class="history-page__search">
           <SearchBar
@@ -142,7 +140,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import SearchBar from '@/components/molecules/SearchBar/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
