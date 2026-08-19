@@ -1,31 +1,29 @@
 <template>
-  <MainLayout page-title="Ativos Observados">
-    <div class="observed-assets-page">
-      <PageHeader
-        title="Ativos Observados"
-        subtitle="Gerencie os alertas dos seus ativos observados"
+  <MainLayout
+    page-title="Ativos Observados"
+    page-subtitle="Gerencie os alertas dos seus ativos observados"
+  >
+    <template #actions>
+      <button
+        type="button"
+        class="observed-assets-page__filter-btn"
+        @click="filterOpen = true"
       >
-        <template #actions>
-          <button
-            type="button"
-            class="observed-assets-page__filter-btn"
-            @click="filterOpen = true"
-          >
-            <SvgIcon
-              name="filter"
-              :size="18"
-            />
-            Filtros
-            <span
-              v-if="activeFiltersCount > 0"
-              class="observed-assets-page__filter-badge"
-            >
-              {{ activeFiltersCount }}
-            </span>
-          </button>
-        </template>
-      </PageHeader>
+        <SvgIcon
+          name="filter"
+          :size="16"
+        />
+        Filtros
+        <span
+          v-if="activeFiltersCount > 0"
+          class="observed-assets-page__filter-badge"
+        >
+          {{ activeFiltersCount }}
+        </span>
+      </button>
+    </template>
 
+    <div class="observed-assets-page">
       <StatsGrid
         v-if="!loading && filteredAssets.length > 0"
         style="margin-bottom: 2rem"
@@ -296,7 +294,6 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import StatCard from '@/components/atoms/StatCard/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
@@ -436,7 +433,9 @@ async function fetchCategories() {
   try {
     const res = await categoryService.getAll()
     if (res.data && Array.isArray(res.data.data)) {
-      categories.value = res.data.data.map(cat => cat.nome || cat.name || String(cat))
+      categories.value = res.data.data.map(
+        cat => cat.nome || cat.name || String(cat)
+      )
     }
   } catch {
     // erro opcional — categorias derivam do fallback vazio
@@ -557,12 +556,12 @@ function formatPrice(value) {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.375rem 0.875rem;
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
   transition: all 0.2s;
@@ -601,8 +600,8 @@ function formatPrice(value) {
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
-  color: white;
+  background: var(--primary);
+  color: var(--primary-contrast);
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
@@ -611,7 +610,7 @@ function formatPrice(value) {
 }
 
 .observed-assets-page__empty-link:hover {
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 12px var(--primary-muted);
   transform: translateY(-1px);
 }
 

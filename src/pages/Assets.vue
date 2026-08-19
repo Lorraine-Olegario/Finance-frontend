@@ -1,47 +1,47 @@
 <template>
-  <MainLayout page-title="Meus Ativos">
-    <div class="assets-page">
-      <PageHeader
-        title="Meus Ativos"
-        subtitle="Gerencie sua carteira de investimentos"
+  <MainLayout
+    page-title="Meus Ativos"
+    page-subtitle="Gerencie sua carteira de investimentos"
+  >
+    <template #actions>
+      <div class="assets-page__filter-wrapper">
+        <BaseButton
+          variant="secondary"
+          size="sm"
+          @click="filterOpen = !filterOpen"
+        >
+          <template #icon-left>
+            <SvgIcon
+              name="filter"
+              :size="16"
+            />
+          </template>
+          Filtros
+        </BaseButton>
+        <span
+          v-if="activeFiltersCount > 0"
+          class="assets-page__filter-count"
+        >
+          {{ activeFiltersCount }}
+        </span>
+      </div>
+
+      <BaseButton
+        variant="primary"
+        size="sm"
+        @click="openAddModal"
       >
-        <template #actions>
-          <div class="assets-page__filter-wrapper">
-            <BaseButton
-              variant="secondary"
-              @click="filterOpen = !filterOpen"
-            >
-              <template #icon-left>
-                <SvgIcon
-                  name="filter"
-                  :size="16"
-                />
-              </template>
-              Filtros
-            </BaseButton>
-            <span
-              v-if="activeFiltersCount > 0"
-              class="assets-page__filter-count"
-            >
-              {{ activeFiltersCount }}
-            </span>
-          </div>
-
-          <BaseButton
-            variant="primary"
-            @click="openAddModal"
-          >
-            <template #icon-left>
-              <SvgIcon
-                name="plus"
-                :size="16"
-              />
-            </template>
-            Adicionar Ativos
-          </BaseButton>
+        <template #icon-left>
+          <SvgIcon
+            name="plus"
+            :size="16"
+          />
         </template>
-      </PageHeader>
+        Adicionar Ativos
+      </BaseButton>
+    </template>
 
+    <div class="assets-page">
       <AssetsFilterDrawer
         :is-open="filterOpen"
         :filters="filters"
@@ -299,7 +299,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import AssetsFilterDrawer from '@/components/organisms/assets/AssetsFilterDrawer/index.vue'
 import AddAssetModal from '@/components/organisms/assets/AddAssetModal/index.vue'
 import EditAssetModal from '@/components/organisms/assets/EditAssetModal/index.vue'

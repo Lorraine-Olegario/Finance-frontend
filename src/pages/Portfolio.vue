@@ -1,26 +1,25 @@
 <template>
-  <MainLayout page-title="Carteira">
-    <div class="portfolio-page">
-      <PageHeader
-        title="Carteira"
-        subtitle="Acompanhe suas posições, transações e patrimônio"
+  <MainLayout
+    page-title="Carteira"
+    page-subtitle="Posições, transações e patrimônio"
+  >
+    <template #actions>
+      <BaseButton
+        variant="primary"
+        size="sm"
+        @click="openAddModal"
       >
-        <template #actions>
-          <BaseButton
-            variant="primary"
-            @click="openAddModal"
-          >
-            <template #icon-left>
-              <SvgIcon
-                name="plus"
-                :size="16"
-              />
-            </template>
-            Nova Transação
-          </BaseButton>
+        <template #icon-left>
+          <SvgIcon
+            name="plus"
+            :size="16"
+          />
         </template>
-      </PageHeader>
+        Nova Transação
+      </BaseButton>
+    </template>
 
+    <div class="portfolio-page">
       <StatsGrid
         :cols="3"
         style="margin-bottom: 1.5rem"
@@ -479,7 +478,6 @@
 // ── Imports ──────────────────────────────────────────────────────────────────
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import StatsGrid from '@/components/molecules/StatsGrid/index.vue'
 import SearchBar from '@/components/molecules/SearchBar/index.vue'
 import TableActions from '@/components/molecules/TableActions/index.vue'

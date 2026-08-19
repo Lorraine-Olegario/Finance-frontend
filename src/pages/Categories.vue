@@ -1,23 +1,24 @@
 <template>
-  <MainLayout page-title="Categorias">
-    <div class="categories-page">
-      <PageHeader
-        title="Categorias de Ativos"
-        subtitle="Gerencie os tipos de ativos do sistema"
+  <MainLayout
+    page-title="Categorias de Ativos"
+    page-subtitle="Gerencie os tipos de ativos do sistema"
+  >
+    <template #actions>
+      <BaseButton
+        size="sm"
+        @click="openAdd"
       >
-        <template #actions>
-          <BaseButton @click="openAdd">
-            <template #icon-left>
-              <SvgIcon
-                name="plus"
-                :size="18"
-              />
-            </template>
-            Nova Categoria
-          </BaseButton>
+        <template #icon-left>
+          <SvgIcon
+            name="plus"
+            :size="16"
+          />
         </template>
-      </PageHeader>
+        Nova Categoria
+      </BaseButton>
+    </template>
 
+    <div class="categories-page">
       <AlertMessage
         v-if="alert.message"
         :type="alert.type"
@@ -147,7 +148,6 @@
 // ── Imports ───────────────────────────────────────────────────────────────────
 import { ref, onMounted } from 'vue'
 import MainLayout from '@/components/templates/MainLayout.vue'
-import PageHeader from '@/components/molecules/PageHeader/index.vue'
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/index.vue'
 import EmptyState from '@/components/atoms/EmptyState/index.vue'
 import BaseButton from '@/components/atoms/BaseButton/index.vue'

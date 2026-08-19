@@ -82,7 +82,7 @@
 }
 
 .ds-nav__link--active {
-  background: rgba(79, 70, 229, 0.08);
+  background: rgba(61, 220, 151, 0.08);
   color: var(--primary);
   font-weight: 600;
 }
@@ -128,7 +128,7 @@
 }
 
 .ds-section__desc code {
-  background: rgba(79, 70, 229, 0.08);
+  background: rgba(61, 220, 151, 0.08);
   color: var(--primary);
   padding: 1px 5px;
   border-radius: 4px;
@@ -167,7 +167,7 @@
 }
 
 .ds-group__pill--atoms {
-  background: rgba(79, 70, 229, 0.08);
+  background: rgba(61, 220, 151, 0.08);
   color: var(--primary);
 }
 
@@ -234,8 +234,8 @@
 .ds-props {
   margin-top: 0.875rem;
   padding: 0.75rem 1rem;
-  background: rgba(79, 70, 229, 0.03);
-  border: 1px solid rgba(79, 70, 229, 0.12);
+  background: rgba(61, 220, 151, 0.03);
+  border: 1px solid rgba(61, 220, 151, 0.12);
   border-radius: 8px;
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -243,7 +243,7 @@
 }
 
 .ds-props code {
-  background: rgba(79, 70, 229, 0.1);
+  background: rgba(61, 220, 151, 0.1);
   color: var(--primary);
   padding: 1px 5px;
   border-radius: 3px;

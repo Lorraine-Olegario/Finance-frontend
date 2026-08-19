@@ -1,23 +1,26 @@
 <template>
-  <MainLayout page-title="Dashboard">
+  <MainLayout 
+    page-title="Dashboard"
+    page-subtitle="Resumo da sua carteira de investimentos"
+  >
+    <template #actions>
+      <RouterLink
+        to="/portfolio"
+        class="dashboard-page__cta"
+      >
+        <SvgIcon
+          name="plus"
+          :size="16"
+        />
+        Nova Transação
+      </RouterLink>
+    </template>
+
     <div class="dashboard-page">
       <DashboardWelcome
         :user-name="authStore.user?.name || 'Usuário'"
         :date="currentDate"
-      >
-        <template #actions>
-          <RouterLink
-            to="/portfolio"
-            class="dashboard-page__cta"
-          >
-            <SvgIcon
-              name="plus"
-              :size="14"
-            />
-            Nova Transação
-          </RouterLink>
-        </template>
-      </DashboardWelcome>
+      />
 
       <StatsGrid
         :cols="3"
@@ -68,7 +71,7 @@
         <StatCard
           label="Proventos Recebidos"
           value="—"
-          variant="info"
+          variant="warning"
           subtitle="Em breve"
         >
           <template #icon>
@@ -299,20 +302,21 @@ async function loadDashboard() {
 
 <style scoped>
 .dashboard-page {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .dashboard-page__cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0.5rem 0.875rem;
+  padding: 0.375rem 0.875rem;
   font-size: 0.8125rem;
   font-weight: 600;
+  line-height: 1;
   background: var(--primary);
   color: var(--primary-contrast);
   border-radius: 6px;
+  border: 1px solid transparent;
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s;
