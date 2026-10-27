@@ -12,6 +12,7 @@ import ObservedAssets from '../pages/ObservedAssets.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import Categories from '../pages/Categories.vue'
 import Settings from '../pages/Settings.vue'
+import ImportB3 from '../pages/ImportB3.vue'
 
 const routes = [
   {
@@ -48,6 +49,12 @@ const routes = [
     path: '/portfolio',
     name: 'Portfolio',
     component: Portfolio,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/portfolio/import-b3',
+    name: 'ImportB3',
+    component: ImportB3,
     meta: { requiresAuth: true }
   },
   {

@@ -5,6 +5,20 @@
   >
     <template #actions>
       <BaseButton
+        variant="danger"
+        size="sm"
+        :disabled="transactions.length === 0"
+        @click="modals.clear = true"
+      >
+        <template #icon-left>
+          <SvgIcon
+            name="trash"
+            :size="16"
+          />
+        </template>
+        Limpar carteira
+      </BaseButton>
+      <BaseButton
         variant="primary"
         size="sm"
         @click="openAddModal"
@@ -460,6 +474,18 @@
       />
 
       <ConfirmationModal
+        :is-open="modals.clear"
+        type="danger"
+        title="Limpar carteira"
+        message="Deseja realmente apagar todas as suas compras e vendas?"
+        warning-message="Todas as transações serão excluídas. Seus ativos observados não são afetados. Esta ação não pode ser desfeita."
+        confirm-text="Limpar carteira"
+        loading-text="Limpando..."
+        @close="closeModal('clear')"
+        @confirm="handleClearPortfolio"
+      />
+
+      <ConfirmationModal
         :is-open="modals.delete"
         type="danger"
         title="Excluir Transação"
@@ -535,7 +561,7 @@ const perPage = 10
 
 const selectedTransaction = ref(null)
 const editingTransaction = ref(null)
-const modals = ref({ add: false, delete: false })
+const modals = ref({ add: false, delete: false, clear: false })
 
 // ── Computed ─────────────────────────────────────────────────────────────────
 const profitVariant = computed(() =>
@@ -813,6 +839,21 @@ async function handleSubmitTransaction(payload, resolve, reject) {
     const wrapped = new Error(message)
     wrapped.fieldErrors = fieldErrors
     reject(wrapped)
+  }
+}
+
+async function handleClearPortfolio({ resolve, reject }) {
+  try {
+    await portfolioService.clearPortfolio()
+    await Promise.all([fetchSummary(), fetchTransactions()])
+    toastStore.success('Carteira limpa com sucesso!')
+    resolve()
+  } catch (err) {
+    console.error('[Portfolio] Erro ao limpar carteira:', err)
+    const msg =
+      err.response?.data?.message || err.message || 'Erro ao limpar a carteira'
+    toastStore.error(msg)
+    reject(new Error(msg))
   }
 }
 
