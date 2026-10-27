@@ -681,17 +681,12 @@ const paginatedPositions = computed(() => {
   return filteredPositions.value.slice(start, start + perPage)
 })
 
-const paginatedTransactions = computed(() => {
-  const start = (transactionsPage.value - 1) * perPage
-  return filteredTransactions.value.slice(start, start + perPage)
-})
-
-// Agrupa a página atual por dia (a lista já vem ordenada da mais recente para
-// a mais antiga), mantendo a paginação por transação.
-const transactionsByDay = computed(() => {
+// Agrupa o extrato por dia (a lista já vem ordenada da mais recente para a
+// mais antiga).
+const allTransactionsByDay = computed(() => {
   const groups = []
 
-  for (const transaction of paginatedTransactions.value) {
+  for (const transaction of filteredTransactions.value) {
     const last = groups[groups.length - 1]
 
     if (last && last.date === transaction.transaction_date) {
@@ -707,12 +702,39 @@ const transactionsByDay = computed(() => {
   return groups
 })
 
+// Pagina por dia: cada página junta dias inteiros até atingir `perPage`
+// transações, para que um dia nunca fique dividido entre páginas.
+const transactionPages = computed(() => {
+  const pages = []
+  let current = []
+  let count = 0
+
+  for (const group of allTransactionsByDay.value) {
+    current.push(group)
+    count += group.items.length
+
+    if (count >= perPage) {
+      pages.push(current)
+      current = []
+      count = 0
+    }
+  }
+
+  if (current.length) pages.push(current)
+
+  return pages
+})
+
+const transactionsByDay = computed(
+  () => transactionPages.value[transactionsPage.value - 1] ?? []
+)
+
 const positionsTotalPages = computed(() =>
   Math.max(1, Math.ceil(filteredPositions.value.length / perPage))
 )
 
 const transactionsTotalPages = computed(() =>
-  Math.max(1, Math.ceil(filteredTransactions.value.length / perPage))
+  Math.max(1, transactionPages.value.length)
 )
 
 // ── Watchers ─────────────────────────────────────────────────────────────────
