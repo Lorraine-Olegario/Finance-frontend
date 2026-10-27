@@ -57,13 +57,6 @@
           </button>
 
           <div
-            v-if="$slots.actions"
-            class="main-layout__header-actions"
-          >
-            <slot name="actions" />
-          </div>
-
-          <div
             v-if="authStore.user"
             ref="userMenu"
             class="main-layout__user-menu main-layout__user-menu--mobile-only"
@@ -123,6 +116,12 @@
       </header>
 
       <main class="main-layout__content">
+        <div
+          v-if="$slots.actions"
+          class="main-layout__page-actions"
+        >
+          <slot name="actions" />
+        </div>
         <slot />
       </main>
     </div>
@@ -306,11 +305,15 @@ export default {
   z-index: 100;
 }
 
-.main-layout__header-actions {
+/* Ações da página ficam no topo do conteúdo, nunca no header (que no mobile
+   só comporta menu, visibilidade e usuário). */
+.main-layout__page-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-bottom: 1.5rem;
 }
 
 .main-layout__visibility-btn {
