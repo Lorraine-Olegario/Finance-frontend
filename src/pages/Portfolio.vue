@@ -359,7 +359,6 @@
           <table class="portfolio-page__table">
             <thead>
               <tr>
-                <th class="portfolio-page__th">Data</th>
                 <th class="portfolio-page__th">Código</th>
                 <th class="portfolio-page__th">Tipo</th>
                 <th class="portfolio-page__th portfolio-page__th--right">
@@ -377,71 +376,93 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="transaction in paginatedTransactions"
-                :key="transaction.id"
-                class="portfolio-page__row"
+              <template
+                v-for="group in transactionsByDay"
+                :key="group.date"
               >
-                <td class="portfolio-page__td portfolio-page__td--muted num">
-                  {{ formatDate(transaction.transaction_date) }}
-                </td>
-                <td class="portfolio-page__td portfolio-page__td--code">
-                  {{ transaction.asset_code }}
-                </td>
-                <td class="portfolio-page__td">
-                  <Badge
-                    :label="transaction.type === 'buy' ? 'Compra' : 'Venda'"
-                    :color="
-                      transaction.type === 'buy'
-                        ? 'var(--status-success)'
-                        : 'var(--status-danger)'
-                    "
-                  />
-                </td>
-                <td class="portfolio-page__td portfolio-page__td--right num">
-                  {{ formatQuantity(transaction.quantity) }}
-                </td>
-                <td class="portfolio-page__td portfolio-page__td--right money">
-                  {{
-                    formatCurrency(
-                      transaction.unit_price,
-                      visibilityStore.valuesHidden
-                    )
-                  }}
-                </td>
-                <td class="portfolio-page__td portfolio-page__td--right money">
-                  {{
-                    formatCurrency(
-                      transaction.total_value,
-                      visibilityStore.valuesHidden
-                    )
-                  }}
-                </td>
-                <td class="portfolio-page__td">
-                  <TableActions>
-                    <ActionButton
-                      variant="edit"
-                      title="Editar transação"
-                      @click="openEditModal(transaction)"
-                    >
-                      <SvgIcon
-                        name="edit"
-                        :size="16"
-                      />
-                    </ActionButton>
-                    <ActionButton
-                      variant="delete"
-                      title="Excluir transação"
-                      @click="openDeleteModal(transaction)"
-                    >
-                      <SvgIcon
-                        name="trash"
-                        :size="16"
-                      />
-                    </ActionButton>
-                  </TableActions>
-                </td>
-              </tr>
+                <tr class="portfolio-page__day-row">
+                  <td
+                    colspan="6"
+                    class="portfolio-page__day"
+                  >
+                    <span class="portfolio-page__day-label">
+                      {{ formatDayLabel(group.date) }}
+                    </span>
+                    <span class="portfolio-page__day-count">
+                      {{ group.items.length }}
+                      {{
+                        group.items.length === 1 ? 'transação' : 'transações'
+                      }}
+                    </span>
+                  </td>
+                </tr>
+                <tr
+                  v-for="transaction in group.items"
+                  :key="transaction.id"
+                  class="portfolio-page__row"
+                >
+                  <td class="portfolio-page__td portfolio-page__td--code">
+                    {{ transaction.asset_code }}
+                  </td>
+                  <td class="portfolio-page__td">
+                    <Badge
+                      :label="transaction.type === 'buy' ? 'Compra' : 'Venda'"
+                      :color="
+                        transaction.type === 'buy'
+                          ? 'var(--status-success)'
+                          : 'var(--status-danger)'
+                      "
+                    />
+                  </td>
+                  <td class="portfolio-page__td portfolio-page__td--right num">
+                    {{ formatQuantity(transaction.quantity) }}
+                  </td>
+                  <td
+                    class="portfolio-page__td portfolio-page__td--right money"
+                  >
+                    {{
+                      formatCurrency(
+                        transaction.unit_price,
+                        visibilityStore.valuesHidden
+                      )
+                    }}
+                  </td>
+                  <td
+                    class="portfolio-page__td portfolio-page__td--right money"
+                  >
+                    {{
+                      formatCurrency(
+                        transaction.total_value,
+                        visibilityStore.valuesHidden
+                      )
+                    }}
+                  </td>
+                  <td class="portfolio-page__td">
+                    <TableActions>
+                      <ActionButton
+                        variant="edit"
+                        title="Editar transação"
+                        @click="openEditModal(transaction)"
+                      >
+                        <SvgIcon
+                          name="edit"
+                          :size="16"
+                        />
+                      </ActionButton>
+                      <ActionButton
+                        variant="delete"
+                        title="Excluir transação"
+                        @click="openDeleteModal(transaction)"
+                      >
+                        <SvgIcon
+                          name="trash"
+                          :size="16"
+                        />
+                      </ActionButton>
+                    </TableActions>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
 
@@ -665,6 +686,27 @@ const paginatedTransactions = computed(() => {
   return filteredTransactions.value.slice(start, start + perPage)
 })
 
+// Agrupa a página atual por dia (a lista já vem ordenada da mais recente para
+// a mais antiga), mantendo a paginação por transação.
+const transactionsByDay = computed(() => {
+  const groups = []
+
+  for (const transaction of paginatedTransactions.value) {
+    const last = groups[groups.length - 1]
+
+    if (last && last.date === transaction.transaction_date) {
+      last.items.push(transaction)
+    } else {
+      groups.push({
+        date: transaction.transaction_date,
+        items: [transaction]
+      })
+    }
+  }
+
+  return groups
+})
+
 const positionsTotalPages = computed(() =>
   Math.max(1, Math.ceil(filteredPositions.value.length / perPage))
 )
@@ -801,10 +843,16 @@ function formatQuantity(value) {
   return Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 4 })
 }
 
-function formatDate(value) {
+function formatDayLabel(value) {
   if (!value) return '-'
-  const [year, month, day] = value.split('-')
-  return `${day}/${month}/${year}`
+  const [year, month, day] = value.split('-').map(Number)
+  const label = new Date(year, month - 1, day).toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  })
+  return label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 async function handleSubmitTransaction(payload, resolve, reject) {
@@ -876,6 +924,24 @@ async function handleDeleteTransaction({ resolve, reject }) {
 </script>
 
 <style scoped>
+.portfolio-page__day {
+  display: table-cell;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.portfolio-page__day-label {
+  font-weight: 600;
+}
+
+.portfolio-page__day-count {
+  margin-left: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
 .portfolio-page {
   max-width: 100%;
   animation: portfolio-fade-in 0.3s ease;
