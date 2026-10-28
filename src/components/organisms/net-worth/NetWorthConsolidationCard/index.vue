@@ -16,7 +16,10 @@
       />
     </template>
 
-    <NetWorthDonutBreakdown :items="items" />
+    <NetWorthDonutBreakdown
+      :items="items"
+      :diversify-colors="view === 'asset'"
+    />
   </NetWorthCard>
 </template>
 
