@@ -48,6 +48,8 @@ import moreHorizontalRaw from "./more-horizontal.svg?raw";
 import eyeRaw from "./eye.svg?raw";
 import eyeOffRaw from "./eye-off.svg?raw";
 import bellRaw from "./bell.svg?raw";
+import sunRaw from "./sun.svg?raw";
+import moonRaw from "./moon.svg?raw";
 
 // ── Finanças / Gráficos ────────────────────────────────────────────────────
 import dollarRaw from "./dollar.svg?raw";
@@ -118,6 +120,8 @@ export const icons = {
   eye: inner(eyeRaw),
   "eye-off": inner(eyeOffRaw),
   bell: inner(bellRaw),
+  sun: inner(sunRaw),
+  moon: inner(moonRaw),
 
   // ── Finanças / Gráficos ────────────────────────────────────────────────────
   dollar: inner(dollarRaw),

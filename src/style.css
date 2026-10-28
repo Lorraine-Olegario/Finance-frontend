@@ -1,49 +1,49 @@
 :root {
   /* ── Backgrounds (ledger — preto quase neutro, tinta verde-petróleo sutil) ── */
-  --bg-primary: #0a0b0b;
-  --bg-secondary: #111413; /* sidebar, header */
-  --bg-elevated: #141817; /* cards, modais */
-  --bg-elevated-hover: #1a201f;
-  --bg-input: #141817;
+  --bg-primary: #f5f7f6;
+  --bg-secondary: #ffffff; /* sidebar, header */
+  --bg-elevated: #ffffff; /* cards, modais */
+  --bg-elevated-hover: #eef2f0;
+  --bg-input: #ffffff;
 
   /* ── Bordas ── */
-  --border-subtle: #1e2422;
-  --border-default: #262d2b;
+  --border-subtle: #e3e8e6;
+  --border-default: #d2dad7;
 
   /* ── Texto ── */
-  --text-primary: #edf2ef;
-  --text-secondary: #8fa39c;
-  --text-muted: #5a6c66;
+  --text-primary: #14201b;
+  --text-secondary: #51645d;
+  --text-muted: #7d8f88;
 
   /* ── Marca / Primária (verde-menta — "ganho" e identidade) ── */
-  --primary: #3ddc97;
-  --primary-hover: #55e3a6;
-  --primary-active: #2fbe80;
-  --primary-muted: rgba(61, 220, 151, 0.14);
-  --primary-contrast: #06140e; /* texto sobre --primary */
+  --primary: #0f9d62;
+  --primary-hover: #12b373;
+  --primary-active: #0b8452;
+  --primary-muted: rgba(15, 157, 98, 0.12);
+  --primary-contrast: #ffffff; /* texto sobre --primary */
 
   /* ── Status (uso exclusivo — status de ativos, não mexer) ── */
-  --status-success: #3ddc97;
-  --status-success-bg: rgba(61, 220, 151, 0.12);
-  --status-danger: #ff6b6b;
-  --status-danger-bg: rgba(255, 107, 107, 0.12);
-  --status-warning: #e8c468;
-  --status-warning-bg: rgba(232, 196, 104, 0.12);
+  --status-success: #0f9d62;
+  --status-success-bg: rgba(15, 157, 98, 0.12);
+  --status-danger: #d93a3a;
+  --status-danger-bg: rgba(217, 58, 58, 0.1);
+  --status-warning: #b8870b;
+  --status-warning-bg: rgba(184, 135, 11, 0.12);
 
   /* ── Dados/gráficos e categorias decorativas (não é status) ── */
-  --chart-blue: #5b8def;
-  --chart-blue-light: #a8c5f7;
-  --chart-primary: #3ddc97;
-  --chart-green: #3ddc97;
-  --chart-amber: #e8c468;
+  --chart-blue: #3b6fd8;
+  --chart-blue-light: #8fb0ee;
+  --chart-primary: #0f9d62;
+  --chart-green: #0f9d62;
+  --chart-amber: #d9a520;
 
   /* ── Paleta ledger dedicada (stamps, pills, gráficos de categoria) ── */
-  --mint: #3ddc97;
-  --mint-dim: #234339;
-  --gold: #e8c468;
-  --gold-dim: #3e3a22;
-  --coral: #ff6b6b;
-  --coral-dim: #3e2323;
+  --mint: #0f9d62;
+  --mint-dim: #d3efe2;
+  --gold: #b8870b;
+  --gold-dim: #f6ecc9;
+  --coral: #d93a3a;
+  --coral-dim: #f8d9d9;
 
   /* ── Elevação (sem box-shadow preto — usar borda) ── */
   --shadow-elevated: 0 0 0 1px var(--border-subtle);
@@ -85,6 +85,50 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Tema escuro — sobrescreve os tokens claros de :root ── */
+:root[data-theme='dark'] {
+  --bg-primary: #0a0b0b;
+  --bg-secondary: #111413;
+  --bg-elevated: #141817;
+  --bg-elevated-hover: #1a201f;
+  --bg-input: #141817;
+
+  --border-subtle: #1e2422;
+  --border-default: #262d2b;
+
+  --text-primary: #edf2ef;
+  --text-secondary: #8fa39c;
+  --text-muted: #5a6c66;
+
+  --primary: #3ddc97;
+  --primary-hover: #55e3a6;
+  --primary-active: #2fbe80;
+  --primary-muted: rgba(61, 220, 151, 0.14);
+  --primary-contrast: #06140e;
+
+  --status-success: #3ddc97;
+  --status-success-bg: rgba(61, 220, 151, 0.12);
+  --status-danger: #ff6b6b;
+  --status-danger-bg: rgba(255, 107, 107, 0.12);
+  --status-warning: #e8c468;
+  --status-warning-bg: rgba(232, 196, 104, 0.12);
+
+  --chart-blue: #5b8def;
+  --chart-blue-light: #a8c5f7;
+  --chart-primary: #3ddc97;
+  --chart-green: #3ddc97;
+  --chart-amber: #e8c468;
+
+  --mint: #3ddc97;
+  --mint-dim: #234339;
+  --gold: #e8c468;
+  --gold-dim: #3e3a22;
+  --coral: #ff6b6b;
+  --coral-dim: #3e2323;
+
+  color-scheme: dark;
 }
 
 * {

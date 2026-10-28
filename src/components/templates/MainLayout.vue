@@ -35,6 +35,27 @@
 
         <div class="main-layout__header-right">
           <button
+            type="button"
+            class="main-layout__visibility-btn"
+            :aria-label="
+              themeStore.theme === 'dark'
+                ? 'Mudar para tema claro'
+                : 'Mudar para tema escuro'
+            "
+            :title="
+              themeStore.theme === 'dark'
+                ? 'Mudar para tema claro'
+                : 'Mudar para tema escuro'
+            "
+            @click="themeStore.toggleTheme"
+          >
+            <SvgIcon
+              :name="themeStore.theme === 'dark' ? 'sun' : 'moon'"
+              :size="18"
+            />
+          </button>
+
+          <button
             v-if="authStore.user"
             type="button"
             class="main-layout__visibility-btn"
@@ -137,6 +158,7 @@ import ToastContainer from '@/components/organisms/ToastContainer/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useVisibilityStore } from '@/stores/visibility'
+import { useThemeStore } from '@/stores/theme'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -161,6 +183,7 @@ export default {
   setup() {
     const authStore = useAuthStore()
     const visibilityStore = useVisibilityStore()
+    const themeStore = useThemeStore()
     const router = useRouter()
 
     const userInitials = computed(() => {
@@ -176,6 +199,7 @@ export default {
     return {
       authStore,
       visibilityStore,
+      themeStore,
       userInitials,
       router
     }
