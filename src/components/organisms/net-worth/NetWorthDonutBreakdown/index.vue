@@ -11,7 +11,7 @@
 
       <ul class="net-worth-donut__list">
         <li
-          v-for="item in items"
+          v-for="item in visibleItems"
           :key="item.label"
           class="net-worth-donut__item"
         >
@@ -42,6 +42,19 @@
             />
           </span>
         </li>
+        <li
+          v-if="hasHiddenItems"
+          class="net-worth-donut__more"
+        >
+          <button
+            type="button"
+            class="net-worth-donut__toggle"
+            :aria-expanded="expanded"
+            @click="expanded = !expanded"
+          >
+            {{ expanded ? 'Ver menos' : `Ver todos (${items.length})` }}
+          </button>
+        </li>
       </ul>
     </div>
 
@@ -59,7 +72,7 @@
 
       <ul class="net-worth-donut__list net-worth-donut__list--ideal">
         <li
-          v-for="item in idealItems"
+          v-for="item in visibleIdealItems"
           :key="item.label"
           class="net-worth-donut__item net-worth-donut__item--ideal"
         >
@@ -88,7 +101,8 @@ import { useVisibilityStore } from '@/stores/visibility'
 Chart.register(...registerables)
 
 const UNCLASSIFIED_LABEL = 'Sem classificação'
-const PALETTE_SIZE = 8
+const PALETTE_SIZE = 16
+const MAX_COLLAPSED_ITEMS = 8
 const MIN_LABELED_PERCENT = 3
 const MAX_LABEL_LENGTH = 24
 
@@ -104,6 +118,12 @@ const props = defineProps({
   canClassify: {
     type: Boolean,
     default: false
+  },
+  // Uma cor distinta da paleta por item, em vez da cor devolvida pelo back
+  // (que no nível de ativo é só um tom da cor da categoria).
+  diversifyColors: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -115,12 +135,23 @@ const visibilityStore = useVisibilityStore()
 const chartCanvas = ref(null)
 const idealCanvas = ref(null)
 const charts = []
+const expanded = ref(false)
 
 const idealItems = computed(() =>
   props.items
     .filter(item => item.ideal_percent != null)
     .map(item => ({ ...item, percent: item.ideal_percent }))
     .sort((a, b) => b.percent - a.percent)
+)
+
+const hasHiddenItems = computed(() => props.items.length > MAX_COLLAPSED_ITEMS)
+const visibleItems = computed(() =>
+  expanded.value ? props.items : props.items.slice(0, MAX_COLLAPSED_ITEMS)
+)
+const visibleIdealItems = computed(() =>
+  expanded.value
+    ? idealItems.value
+    : idealItems.value.slice(0, MAX_COLLAPSED_ITEMS)
 )
 
 const ariaLabel = computed(() => summarize(props.items))
@@ -170,7 +201,12 @@ const externalLabelsPlugin = {
 }
 
 watch(
-  () => [props.items, props.showIdeal, visibilityStore.valuesHidden],
+  () => [
+    props.items,
+    props.showIdeal,
+    props.diversifyColors,
+    visibilityStore.valuesHidden
+  ],
   async () => {
     await nextTick()
     renderCharts()
@@ -193,9 +229,10 @@ function truncate(label) {
 }
 
 function colorFor(item, index) {
-  return (
-    item.color || getCssVar(`--chart-palette-${(index % PALETTE_SIZE) + 1}`)
-  )
+  if (props.diversifyColors || !item.color) {
+    return getCssVar(`--chart-palette-${(index % PALETTE_SIZE) + 1}`)
+  }
+  return item.color
 }
 
 function destroyCharts() {
