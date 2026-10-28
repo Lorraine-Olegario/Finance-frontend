@@ -1,0 +1,231 @@
+.dividends-import {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--text-primary);
+
+  &__hint,
+  &__notice {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  &__notice {
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    background: var(--primary-muted);
+    font-size: 0.85rem;
+  }
+
+  &__link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--primary);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 2rem 1rem;
+    border: 2px dashed var(--border-default);
+    border-radius: 12px;
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    text-align: center;
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
+
+    strong {
+      color: var(--text-primary);
+    }
+
+    &:hover,
+    &:focus-visible,
+    &--active {
+      border-color: var(--primary);
+      background: var(--primary-muted);
+      outline: none;
+    }
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    background: var(--bg-input);
+    color: var(--primary);
+  }
+
+  &__file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+
+    strong {
+      overflow: hidden;
+      color: var(--text-primary);
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__remove {
+    padding: 0.4rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__result-title,
+  &__list-title {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  &__list-title {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.8rem;
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+
+    strong {
+      color: var(--text-primary);
+      font-size: 1.4rem;
+    }
+
+    &--success strong {
+      color: var(--success);
+    }
+
+    &--warning strong {
+      color: var(--status-warning);
+    }
+
+    &--danger strong {
+      color: var(--danger);
+    }
+  }
+
+  &__scroll {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    white-space: nowrap;
+
+    th,
+    td {
+      padding: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+
+    th {
+      color: var(--text-secondary);
+    }
+  }
+
+  &__right {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__errors {
+    margin: 0;
+    padding: 0.9rem 1rem 0.9rem 2rem;
+    border-radius: 8px;
+    background: var(--status-danger-bg);
+    line-height: 1.6;
+  }
+
+  &__skipped {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+
+    ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+    }
+  }
+
+  &__button {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: var(--primary);
+    color: var(--primary-contrast);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    &--secondary {
+      border-color: var(--border-default);
+      background: transparent;
+      color: var(--text-primary);
+
+      &:hover:not(:disabled) {
+        background: var(--bg-hover);
+      }
+    }
+  }
+}
