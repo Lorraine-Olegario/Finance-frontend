@@ -55,6 +55,18 @@ export const menuItems = [
     `
   },
   {
+    id: 'dividends',
+    to: '/dividends',
+    label: 'Proventos',
+    icon: /* html */ `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M14.5 9.5a2.5 2 0 0 0-2.5-1.5c-1.4 0-2.5.8-2.5 2s1.1 1.7 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2a2.5 2 0 0 1-2.5-1.5" />
+        <path d="M12 6v2m0 8v2" />
+      </svg>
+    `
+  },
+  {
     id: 'my-assets',
     to: '/my-assets',
     label: 'Ativos',

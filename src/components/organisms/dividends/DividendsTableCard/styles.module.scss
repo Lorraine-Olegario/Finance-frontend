@@ -1,0 +1,79 @@
+.dividends-table {
+  &__total {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--primary-muted);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+  }
+
+  &__scroll {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+
+    th,
+    td {
+      padding: 0.7rem 0.6rem;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+
+    th {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+  }
+
+  &__right {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__strong {
+    font-weight: 700;
+  }
+
+  &__sort {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  &__asset {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+
+  &__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary-muted);
+    color: var(--primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  &__category {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--bg-elevated-hover);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+  }
+}

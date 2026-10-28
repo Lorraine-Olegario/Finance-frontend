@@ -36,6 +36,21 @@
   --chart-primary: #0f9d62;
   --chart-green: #0f9d62;
   --chart-amber: #d9a520;
+  --chart-palette-1: #2196d3;
+  --chart-palette-2: #12b8d9;
+  --chart-palette-3: #4cd8d4;
+  --chart-palette-4: #8ee0b0;
+  --chart-palette-5: #ffd25e;
+  --chart-palette-6: #ff8f6b;
+  --chart-palette-7: #f0629c;
+  --chart-palette-8: #b86fe0;
+  --chart-palette-other: #9aa7a2;
+
+  /* Status de pagamento de proventos (não usa verde/amarelo/vermelho de status de ativos) */
+  --dividend-paid: #2d5fc4;
+  --dividend-paid-bg: rgba(59, 111, 216, 0.14);
+  --dividend-pending: #5a6c86;
+  --dividend-pending-bg: rgba(143, 176, 238, 0.28);
 
   /* ── Paleta ledger dedicada (stamps, pills, gráficos de categoria) ── */
   --mint: #0f9d62;
@@ -120,6 +135,20 @@
   --chart-primary: #3ddc97;
   --chart-green: #3ddc97;
   --chart-amber: #e8c468;
+  --chart-palette-1: #3aa7e8;
+  --chart-palette-2: #29c9ea;
+  --chart-palette-3: #5ce3df;
+  --chart-palette-4: #9be9bb;
+  --chart-palette-5: #ffd96e;
+  --chart-palette-6: #ff9c7b;
+  --chart-palette-7: #f577aa;
+  --chart-palette-8: #c585ea;
+  --chart-palette-other: #6f7f79;
+
+  --dividend-paid: #8fb0ee;
+  --dividend-paid-bg: rgba(91, 141, 239, 0.2);
+  --dividend-pending: #a6b3c9;
+  --dividend-pending-bg: rgba(168, 197, 247, 0.16);
 
   --mint: #3ddc97;
   --mint-dim: #234339;
