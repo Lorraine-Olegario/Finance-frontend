@@ -87,6 +87,21 @@
         </tbody>
       </table>
     </div>
+
+    <Pagination
+      v-if="pagination"
+      :current-page="pagination.page"
+      :last-page="pagination.last_page"
+      :total="pagination.total_items"
+      :per-page="pagination.per_page"
+      :show-page-info="true"
+      @page-change="$emit('page-change', $event)"
+    >
+      <template #totalLabel="{ total: totalItems }">
+        Total de proventos:
+        <strong>{{ totalItems }}</strong>
+      </template>
+    </Pagination>
   </DividendsCard>
 </template>
 
@@ -94,6 +109,7 @@
 import { computed } from 'vue'
 import DividendsCard from '@/components/molecules/DividendsCard/index.vue'
 import BaseSelect from '@/components/atoms/BaseSelect/index.vue'
+import Pagination from '@/components/atoms/Pagination/index.vue'
 import EmptyState from '@/components/atoms/EmptyState/index.vue'
 import DividendStatusBadge from '@/components/atoms/DividendStatusBadge/index.vue'
 import { useVisibilityStore } from '@/stores/visibility'
@@ -125,6 +141,11 @@ const props = defineProps({
     type: Object,
     default: null
   },
+  // { page, per_page, total_items, last_page } devolvido pelo back
+  pagination: {
+    type: Object,
+    default: null
+  },
   year: {
     type: [String, Number],
     default: ''
@@ -152,6 +173,7 @@ defineEmits<{
   retry: []
   'update:year': [year: string]
   sort: [column: string]
+  'page-change': [page: number]
 }>()
 
 const visibilityStore = useVisibilityStore()
