@@ -1,0 +1,52 @@
+.dividends-history {
+  &__total {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--primary-muted);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+  }
+
+  &__scroll {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+
+    th,
+    td {
+      padding: 0.6rem 0.6rem;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+
+    th {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+  }
+
+  &__right {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__year,
+  &__strong {
+    font-weight: 700;
+  }
+
+  &__sort {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+}

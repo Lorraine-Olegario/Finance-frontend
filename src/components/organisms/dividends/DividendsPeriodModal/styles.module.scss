@@ -1,0 +1,34 @@
+.dividends-period-modal {
+  &__empty {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  &__scroll {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-primary);
+    white-space: nowrap;
+
+    th,
+    td {
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+
+    th {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+  }
+
+  &__right {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+  }
+}
