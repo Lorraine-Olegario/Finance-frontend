@@ -2,14 +2,25 @@
   <ConfirmationModal
     :is-open="isOpen"
     type="info"
-    title="Como obter o relatório da B3"
+    :title="
+      isDividends
+        ? 'Como obter o relatório de proventos da B3'
+        : 'Como obter o relatório da B3'
+    "
     size="large"
     @close="$emit('close')"
   >
     <div class="b3-guide">
       <p class="b3-guide__intro">
-        Importe suas compras e vendas a partir do relatório de movimentação da
-        B3. Recomendamos importar
+        <template v-if="isDividends">
+          Importe os proventos realmente creditados a partir do relatório de
+          movimentação da B3. Eles servem de conferência dos meses anteriores e
+          prevalecem sobre o valor calculado. Recomendamos importar
+        </template>
+        <template v-else>
+          Importe suas compras e vendas a partir do relatório de movimentação da
+          B3. Recomendamos importar
+        </template>
         <strong>ano por ano</strong>
         .
       </p>
@@ -40,11 +51,20 @@
             <p>
               Clique em
               <strong>Filtrar</strong>
-              , escolha o período do ano e marque o tipo de movimentação
-              <strong>Compra e venda</strong>
-              .
+              , escolha o período do ano e
+              <template v-if="isDividends">
+                <strong>não</strong>
+                marque “Compra e venda” (ou marque apenas os tipos de provento:
+                Dividendo, Juros Sobre Capital Próprio e Rendimento).
+              </template>
+              <template v-else>
+                marque o tipo de movimentação
+                <strong>Compra e venda</strong>
+                .
+              </template>
             </p>
             <img
+              v-if="!isDividends"
               class="b3-guide__image--narrow"
               src="/img/b3/b3-filtro-movimentacao.png"
               alt="Filtros da Movimentação na B3 com Compra e venda selecionado"
@@ -79,14 +99,22 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import ConfirmationModal from '@/components/organisms/ConfirmationModal/index.vue'
 
-defineProps({
+const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true
+  },
+  variant: {
+    type: String,
+    default: 'portfolio',
+    validator: value => ['portfolio', 'dividends'].includes(value)
   }
 })
+
+const isDividends = computed(() => props.variant === 'dividends')
 
 defineEmits(['close'])
 </script>

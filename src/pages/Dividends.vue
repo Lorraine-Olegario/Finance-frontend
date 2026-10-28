@@ -3,6 +3,22 @@
     page-title="Proventos"
     page-subtitle="Dividendos, JCP e rendimentos da sua carteira"
   >
+    <template #actions>
+      <BaseButton
+        variant="secondary"
+        size="sm"
+        @click="modals.importB3 = true"
+      >
+        <template #icon-left>
+          <SvgIcon
+            name="upload"
+            :size="16"
+          />
+        </template>
+        Importar da B3
+      </BaseButton>
+    </template>
+
     <div class="dividends-page">
       <DividendsFilterBar
         v-model:asset-category-id="dividendsStore.assetCategoryId"
@@ -67,6 +83,12 @@
       @close="modals.distribution = false"
     />
 
+    <DividendsImportB3Modal
+      :is-open="modals.importB3"
+      @close="modals.importB3 = false"
+      @imported="reloadCards"
+    />
+
     <DividendsPeriodModal
       :is-open="modals.period"
       :title="periodTitle"
@@ -89,6 +111,9 @@ import DividendsDistributionModal from '@/components/organisms/dividends/Dividen
 import DividendsEvolutionCard from '@/components/organisms/dividends/DividendsEvolutionCard/index.vue'
 import DividendsMonthlyHistoryCard from '@/components/organisms/dividends/DividendsMonthlyHistoryCard/index.vue'
 import DividendsTableCard from '@/components/organisms/dividends/DividendsTableCard/index.vue'
+import BaseButton from '@/components/atoms/BaseButton/index.vue'
+import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
+import DividendsImportB3Modal from '@/components/organisms/dividends/DividendsImportB3Modal/index.vue'
 import DividendsPeriodModal from '@/components/organisms/dividends/DividendsPeriodModal/index.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useDividendsStore } from '@/stores/dividends'
@@ -118,7 +143,11 @@ const listYear = ref('')
 const listSort = ref('payment_date')
 const listDirection = ref('desc')
 const periodTitle = ref('')
-const modals = reactive({ distribution: false, period: false })
+const modals = reactive({
+  distribution: false,
+  period: false,
+  importB3: false
+})
 
 // ── Watchers ─────────────────────────────────────────────────────────────────
 watch(() => dividendsStore.params, reloadCards, { deep: true })
