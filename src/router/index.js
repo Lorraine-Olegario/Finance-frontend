@@ -7,6 +7,7 @@ import Users from '../pages/Users.vue'
 import Assets from '../pages/Assets.vue'
 import Portfolio from '../pages/Portfolio.vue'
 import Dividends from '../pages/Dividends.vue'
+import NetWorth from '../pages/NetWorth.vue'
 import Quotes from '../pages/Quotes.vue'
 import History from '../pages/History.vue'
 import ObservedAssets from '../pages/ObservedAssets.vue'
@@ -56,6 +57,12 @@ const routes = [
     path: '/dividends',
     name: 'Dividends',
     component: Dividends,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/net-worth',
+    name: 'NetWorth',
+    component: NetWorth,
     meta: { requiresAuth: true }
   },
   {
