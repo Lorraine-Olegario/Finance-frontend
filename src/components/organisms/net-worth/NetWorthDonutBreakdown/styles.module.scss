@@ -1,0 +1,124 @@
+.net-worth-donut {
+  display: grid;
+  gap: 1.5rem;
+
+  &__block {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__chart {
+    position: relative;
+    height: 320px;
+    min-width: 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) auto auto 120px;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+
+    &--ideal {
+      grid-template-columns: auto auto minmax(0, 1fr);
+      gap: 0.6rem;
+    }
+  }
+
+  &__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  &__item--ideal &__name {
+    font-weight: 400;
+  }
+
+  &__value {
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  &__percent {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  &__track {
+    display: block;
+    height: 24px;
+  }
+
+  &__bar {
+    display: block;
+    height: 100%;
+    border-radius: 6px;
+  }
+
+  &__dot {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+  }
+
+  &__classify {
+    padding: 2px 8px;
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 992px) {
+  .net-worth-donut {
+    &__block {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    &__item {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+
+      .net-worth-donut__track {
+        grid-column: 1 / -1;
+        height: 10px;
+      }
+    }
+
+    &__item--ideal {
+      grid-template-columns: auto auto minmax(0, 1fr);
+    }
+
+    &__chart {
+      height: 280px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .net-worth-donut__chart canvas {
+    max-width: 100%;
+  }
+}

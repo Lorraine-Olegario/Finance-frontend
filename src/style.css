@@ -52,6 +52,12 @@
   --dividend-pending: #5a6c86;
   --dividend-pending-bg: rgba(143, 176, 238, 0.28);
 
+  /* ── Patrimônio: valor aplicado, ganho/perda de capital (não é status de ativo) ── */
+  --networth-invested: #0a9d63;
+  --networth-gain: #86e0b9;
+  --networth-positive: #0b8452;
+  --networth-negative: #c43232;
+
   /* ── Paleta ledger dedicada (stamps, pills, gráficos de categoria) ── */
   --mint: #0f9d62;
   --mint-dim: #d3efe2;
@@ -149,6 +155,11 @@
   --dividend-paid-bg: rgba(91, 141, 239, 0.2);
   --dividend-pending: #a6b3c9;
   --dividend-pending-bg: rgba(168, 197, 247, 0.16);
+
+  --networth-invested: #2fbe80;
+  --networth-gain: #1f7a56;
+  --networth-positive: #3ddc97;
+  --networth-negative: #ff6b6b;
 
   --mint: #3ddc97;
   --mint-dim: #234339;

@@ -1,0 +1,19 @@
+.net-worth-category {
+  &__ideal {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+
+    input {
+      width: auto;
+      accent-color: var(--primary);
+    }
+  }
+
+  &__help {
+    display: inline-flex;
+    color: var(--text-muted);
+  }
+}

@@ -67,6 +67,19 @@ export const menuItems = [
     `
   },
   {
+    id: 'net-worth',
+    to: '/net-worth',
+    label: 'Patrimônio',
+    icon: /* html */ `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 3v18h18" />
+        <rect x="7" y="12" width="3" height="6" />
+        <rect x="12" y="8" width="3" height="10" />
+        <rect x="17" y="5" width="3" height="13" />
+      </svg>
+    `
+  },
+  {
     id: 'my-assets',
     to: '/my-assets',
     label: 'Ativos',

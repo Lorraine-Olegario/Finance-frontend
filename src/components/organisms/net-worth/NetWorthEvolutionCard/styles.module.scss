@@ -1,0 +1,41 @@
+.net-worth-evolution {
+  &__select {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+  }
+
+  &__custom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    input {
+      padding: 6px 10px;
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      background: var(--bg-input);
+      color: var(--text-primary);
+    }
+  }
+
+  &__range-error {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+
+  &__chart {
+    position: relative;
+    height: 340px;
+  }
+}
