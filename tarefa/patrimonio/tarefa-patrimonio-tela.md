@@ -49,3 +49,19 @@ Um card por categoria do usuário (lista do Card 2 com `view=category`). `GET /a
 - Responsivo; cores não são o único indicador (rótulos e % sempre visíveis), gráficos com `aria-label`.
 - Verde/amarelo/vermelho são reservados a status de ativos no `CLAUDE.md`: para ganho/perda e valor aplicado definir tokens novos no `src/style.css` antes de usar.
 - Checklist: `npm run fix`, `npm run build`, teste manual de cada filtro/aba/estado contra as capturas.
+
+---
+
+## Realizado
+
+### Item 1 — Aba "Patrimônio" (menu, rota, service e três tipos de card)
+- Branch: `tarefa-patrimonio-tela/1-aba-patrimonio`
+- Commit: `b4c8205`
+- O que foi feito: item de menu `net-worth` e rota `/net-worth`; `src/services/netWorthService.js` (usa o `apiClientV2`, que já era módulo compartilhado); página `src/pages/NetWorth.vue` (`fetch*` + `load*` com `Promise.all`); organismos em `src/components/organisms/net-worth/` (`NetWorthEvolutionCard`, `NetWorthConsolidationCard`, `NetWorthCategoryCard`, `NetWorthDonutBreakdown` reutilizado pelos cards 2 e 3, `NetWorthClassifyModal`); molécula `NetWorthCard`; util `formatPlainPercent`; tokens `--networth-*` em `src/style.css` (claro e escuro).
+- Validação: `npm run fix` (reverti a reformatação de arquivos fora do escopo) e `npm run build` com Node 20 sem erros. Não testei manualmente contra o back nem contra as capturas.
+- Observações:
+  - Posição ideal: o toggle só aparece se algum item vier com `ideal_percent`; hoje o back não implementa, então fica oculto.
+  - "Classificar" aparece nas abas que não são "Consolidado" para itens "Sem classificação". O modal lista os ativos da categoria (view `consolidated`, assumindo `id` e `label` nos itens) e envia setor/segmento/tipo de fundo como texto livre, pois o back não expõe a lista de valores válidos.
+  - O ganho no tooltip usa `--networth-positive`/`--networth-negative` em vez dos tokens de status de ativos.
+  - Meses zerados antes da primeira compra são cortados no front.
+  - `docker-compose.yml` tinha uma alteração local anterior (URL da API) e não foi commitado.
