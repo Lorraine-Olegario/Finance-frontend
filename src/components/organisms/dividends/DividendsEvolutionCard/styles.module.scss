@@ -24,7 +24,8 @@
 
   &__chart {
     position: relative;
-    height: 320px;
+    flex: 1;
+    min-height: 320px;
   }
 
   &__hint {
