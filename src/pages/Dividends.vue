@@ -68,12 +68,14 @@
         v-model:year="listYear"
         :dividends="list.data.value?.data || []"
         :total="list.data.value?.total || null"
+        :pagination="list.data.value?.pagination || null"
         :sort="listSort"
         :direction="listDirection"
         :loading="list.loading.value"
         :error="list.error.value"
         @retry="loadList"
         @sort="handleSort"
+        @page-change="handlePageChange"
       />
     </div>
 
@@ -140,6 +142,7 @@ const evolutionControls = ref({
 })
 const historyStatus = ref('all')
 const listYear = ref('')
+const listPage = ref(1)
 const listSort = ref('payment_date')
 const listDirection = ref('desc')
 const periodTitle = ref('')
@@ -150,10 +153,10 @@ const modals = reactive({
 })
 
 // ── Watchers ─────────────────────────────────────────────────────────────────
-watch(() => dividendsStore.params, reloadCards, { deep: true })
+watch(() => dividendsStore.params, handleFiltersChange, { deep: true })
 watch(evolutionControls, loadEvolution, { deep: true })
 watch(historyStatus, loadHistory)
-watch(listYear, loadList)
+watch(listYear, handleListFilterChange)
 
 // ── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(loadPage)
@@ -194,6 +197,7 @@ async function fetchList() {
   const res = await dividendService.getDividends({
     ...dividendsStore.params,
     ...(listYear.value ? { year: listYear.value } : {}),
+    page: listPage.value,
     sort: listSort.value,
     direction: listDirection.value
   })
@@ -265,6 +269,21 @@ function reloadCards() {
   ])
 }
 
+function handleFiltersChange() {
+  listPage.value = 1
+  return reloadCards()
+}
+
+function handleListFilterChange() {
+  listPage.value = 1
+  return loadList()
+}
+
+function handlePageChange(page) {
+  listPage.value = page
+  return loadList()
+}
+
 function handleSort(column) {
   if (listSort.value === column) {
     listDirection.value = listDirection.value === 'asc' ? 'desc' : 'asc'
@@ -272,6 +291,7 @@ function handleSort(column) {
     listSort.value = column
     listDirection.value = column === 'asset' ? 'asc' : 'desc'
   }
+  listPage.value = 1
   loadList()
 }
 
