@@ -18,35 +18,17 @@
       </div>
 
       <div class="dividends-summary__block">
-        <button
-          type="button"
-          class="dividends-summary__toggle"
-          :aria-expanded="expanded"
-          @click="expanded = !expanded"
-        >
-          <span class="dividends-summary__label">
-            Total de 12 meses
-            <SvgIcon
-              name="info"
-              :size="14"
-              label="Soma dos proventos líquidos já recebidos nos últimos 12 meses"
-            />
-          </span>
+        <span class="dividends-summary__label">
+          Total de 12 meses
           <SvgIcon
-            :name="expanded ? 'chevron-up' : 'chevron-down'"
-            :size="16"
+            name="info"
+            :size="14"
+            label="Soma dos proventos líquidos já recebidos nos últimos 12 meses. A média mensal é esse total dividido por 12."
           />
-        </button>
+        </span>
         <strong class="dividends-summary__value">
           {{ money(summary?.last_12_months_total) }}
         </strong>
-        <p
-          v-if="expanded"
-          class="dividends-summary__help"
-        >
-          Soma dos proventos líquidos já recebidos nos últimos 12 meses. A média
-          mensal é esse total dividido por 12.
-        </p>
       </div>
 
       <div class="dividends-summary__block">
@@ -60,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import DividendsCard from '@/components/molecules/DividendsCard/index.vue'
 import SvgIcon from '@/components/atoms/SvgIcon/index.vue'
 import { useVisibilityStore } from '@/stores/visibility'
@@ -86,7 +67,6 @@ defineEmits<{
 }>()
 
 const visibilityStore = useVisibilityStore()
-const expanded = ref(false)
 
 function money(value) {
   return formatCurrency(value ?? 0, visibilityStore.valuesHidden)

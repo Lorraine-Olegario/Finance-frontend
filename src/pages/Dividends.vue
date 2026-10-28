@@ -305,7 +305,7 @@ async function openPeriodModal(periodKey) {
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
   gap: 1.5rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .dividends-page__side {
