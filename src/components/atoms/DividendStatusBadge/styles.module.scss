@@ -1,0 +1,18 @@
+.dividend-status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--paid {
+    background: var(--dividend-paid-bg);
+    color: var(--dividend-paid);
+  }
+
+  &--pending {
+    background: var(--dividend-pending-bg);
+    color: var(--dividend-pending);
+  }
+}
