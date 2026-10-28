@@ -33,5 +33,18 @@ export default {
   // Força a sincronização. Resposta: { synced, throttled }
   sync() {
     return apiClientV2.post('/dividends/sync')
+  },
+
+  // Importa o relatório "Movimentação" da B3 (.xlsx) sem o filtro de compra e venda.
+  // Resposta: { imported, duplicated, skipped, skipped_lines: [{ line, movement }],
+  //   divergences: [{ line, asset, type, payment_date, b3_total, calculated_total }],
+  //   errors: [{ line, message }] }
+  importB3(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return apiClientV2.post('/dividends/import/b3', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   }
 }
