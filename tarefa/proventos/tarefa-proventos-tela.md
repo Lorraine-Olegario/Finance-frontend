@@ -54,3 +54,31 @@ Cada card abaixo vira um organismo em `src/components/organisms/dividends/` (usa
 - Responsivo; tabelas com rolagem horizontal no mobile.
 - Token/401 tratados pelo interceptor já existente.
 - Checklist: `npm run fix`, `npm run build` sem erros, teste manual no navegador de cada filtro e estado, conferido contra as capturas.
+
+---
+
+## Realizado
+
+O arquivo não tem itens de primeiro nível (só seções), então foi tratado como **uma única tarefa**; identificador nas branches: `tarefa-proventos-tela`.
+
+### Item 1 — Aba "Proventos"
+- Branch: `tarefa-proventos-tela/1-aba-proventos`
+- Commit: `50cbcf9`
+- O que foi feito:
+  - Menu "Proventos" (após "Importar carteira B3") e rota `/dividends` → `src/pages/Dividends.vue` (padrão de página: `fetch*`/`load*`, checa `authStore.user?.id`).
+  - `src/services/apiClientV2.js` extraído do `portfolioService` (comportamento igual) e reaproveitado em `src/services/dividendService.js` (`getDividends`, `getMonthlyHistory`, `getSummary`, `getDistribution`, `getEvolution`, `sync`). `api.js` não foi tocado.
+  - Store `src/stores/dividends.js` com filtros compartilhados Tipo de ativo / Ativos (categorias via `categoryService.getAll()`, ativos via posições da carteira).
+  - Ao abrir: `sync()` em segundo plano (erro em silêncio; se sincronizou, recarrega os cards) e carga dos cards em paralelo, cada um com loading/erro com "Tentar novamente"/vazio independentes (`useAsyncCard`).
+  - Organismos em `src/components/organisms/dividends/`: Resumo, Distribuição (rosca + "Ver todos" em modal), Evolução (barras recebidos × a receber, Mensal/Anual, 12m/2a/5a/personalizada sem datas futuras, clique na barra abre detalhe do período via `GET /dividends?year=&month=`), Histórico mensal (Recebidos/A receber/Todos, ordenação por ano/média/total, chip de total) e Meus proventos (todas as colunas, ordenação no servidor, filtro de ano, chip de total). Moléculas `DividendsCard`, `DividendsFilterBar`, `SegmentedControl`; átomo `DividendStatusBadge`.
+  - `src/style.css`: tokens novos (claro e escuro) para status de pagamento (`--dividend-paid*`, `--dividend-pending*`) e para a paleta da rosca (`--chart-palette-*`), sem usar o verde/amarelo/vermelho de status de ativos.
+  - Utils: `formatDate` (dd/mm/aaaa sem fuso), `dividendLabels`, `cssVar`.
+- Validação: `npm run build` sem erros; prettier nos arquivos novos; teste manual no navegador (back local com proventos de teste, depois removidos): cards carregam, filtro Tipo de ativo (estado vazio nos cards), alternância Mensal/Anual, clique na barra abrindo o detalhe do mês, "Limpar filtros" e layout mobile em coluna única. ESLint nos arquivos novos só acusa "Parsing error" nos `.vue` com `lang="ts"` — o mesmo que já ocorre nos componentes existentes (a config não tem parser TS). Não validado: modal "Ver todos", datas personalizadas, tema escuro e os dados reais da Brapi (token inválido no back).
+- Observações:
+  - **Meta de média mensal:** o back não define meta, então a barra/% do card Resumo foi omitida (como previsto).
+  - **Filtros compartilhados:** uma única barra Tipo de ativo/Ativos no topo vale para Evolução, Histórico, Meus proventos, Resumo e Distribuição, em vez de uma por card.
+  - **Ativos no filtro:** vêm das posições atuais; ativos totalmente vendidos que ainda têm proventos não aparecem na lista (o filtro por categoria os cobre).
+  - **Logo do ativo:** a API não devolve logo, então a coluna Ativo mostra um avatar com as iniciais do ticker.
+  - **Paginação:** a API não pagina; a tabela mostra tudo com rolagem horizontal.
+  - **Sync** depende do `BRAPI_TOKEN` do back; sem ele a aba mostra só o que já está gravado.
+  - Cores do Chart.js são lidas das variáveis CSS ao desenhar; trocar o tema com a página aberta só atualiza o gráfico no próximo carregamento.
+  - O `docker-compose.yml` modificado no working tree é anterior a esta tarefa e **não** foi commitado.
