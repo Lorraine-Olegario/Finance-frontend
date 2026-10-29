@@ -41,7 +41,7 @@
       :items="items"
       :show-ideal="hasIdeal && showIdeal"
       :can-classify="view !== 'consolidated'"
-      :diversify-colors="view === 'consolidated'"
+      diversify-colors
       @classify="modals.classify = true"
     />
   </NetWorthCard>
