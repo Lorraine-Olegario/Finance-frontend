@@ -203,6 +203,9 @@
                   Valor Total
                 </th>
                 <th class="portfolio-page__th portfolio-page__th--right">
+                  Resultado
+                </th>
+                <th class="portfolio-page__th portfolio-page__th--right">
                   Variação
                 </th>
                 <th class="portfolio-page__th portfolio-page__th--right">
@@ -257,6 +260,23 @@
                       position.current_value,
                       visibilityStore.valuesHidden
                     )
+                  }}
+                </td>
+                <td
+                  class="portfolio-page__td portfolio-page__td--right money"
+                  :class="
+                    hasValue(position.profit_loss)
+                      ? resultClass(position.profit_loss)
+                      : ''
+                  "
+                >
+                  {{
+                    hasValue(position.profit_loss)
+                      ? formatCurrency(
+                          position.profit_loss,
+                          visibilityStore.valuesHidden
+                        )
+                      : '—'
                   }}
                 </td>
                 <td class="portfolio-page__td portfolio-page__td--right">
@@ -857,6 +877,12 @@ function trendPillClass(value) {
   return Number(value) >= 0 ? 'pill--up' : 'pill--down'
 }
 
+function resultClass(value) {
+  return Number(value) >= 0
+    ? 'portfolio-page__td--gain'
+    : 'portfolio-page__td--loss'
+}
+
 function trendIcon(value) {
   return Number(value) >= 0 ? 'trending-up' : 'trending-down'
 }
@@ -1113,6 +1139,14 @@ async function handleDeleteTransaction({ resolve, reject }) {
   font-weight: 600;
   font-family: var(--font-mono);
   color: var(--text-primary);
+}
+
+.portfolio-page__td--gain {
+  color: var(--mint);
+}
+
+.portfolio-page__td--loss {
+  color: var(--coral);
 }
 
 .portfolio-page__td--muted {
