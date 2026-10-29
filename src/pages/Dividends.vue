@@ -200,17 +200,6 @@ async function fetchList() {
   return res.data
 }
 
-async function fetchSync() {
-  // Sincronização em segundo plano: erro tratado em silêncio, não bloqueia a tela.
-  try {
-    const res = await dividendService.sync()
-    return Boolean(res.data?.synced)
-  } catch (err) {
-    console.error('[Dividends] Erro ao sincronizar proventos:', err)
-    return false
-  }
-}
-
 async function fetchOptions() {
   try {
     await dividendsStore.fetchOptions()
@@ -246,12 +235,7 @@ async function loadPage() {
 
   fetchOptions()
 
-  // O sync roda sem bloquear: os cards carregam o que já existe e são
-  // recarregados quando ele termina.
-  fetchSync().then(synced => {
-    if (synced) reloadCards()
-  })
-
+  // Só lê o banco: os proventos são atualizados pelo backend (cotações 2x ao dia).
   await reloadCards()
 }
 
