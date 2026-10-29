@@ -16,6 +16,10 @@
           class="net-worth-donut__item"
         >
           <span class="net-worth-donut__name">
+            <span
+              class="net-worth-donut__dot"
+              :style="{ backgroundColor: colorFor(item, items.indexOf(item)) }"
+            />
             {{ item.label }}
             <button
               v-if="canClassify && item.label === UNCLASSIFIED_LABEL"
@@ -103,7 +107,7 @@ Chart.register(...registerables)
 const UNCLASSIFIED_LABEL = 'Sem classificação'
 const PALETTE_SIZE = 16
 const MAX_COLLAPSED_ITEMS = 8
-const MIN_LABELED_PERCENT = 3
+const MIN_LABEL_GAP = 15
 const MAX_LABEL_LENGTH = 24
 
 const props = defineProps({
@@ -169,9 +173,10 @@ const externalLabelsPlugin = {
     ctx.font = `12px ${getCssVar('--font-sans')}`
     ctx.textBaseline = 'middle'
 
-    chart.getDatasetMeta(0).data.forEach((arc, index) => {
-      if (chart.$percents[index] < MIN_LABELED_PERCENT) return
+    // Todas as fatias recebem nome; só pula o rótulo que sobreporia o anterior do mesmo lado.
+    const lastY = { 1: -Infinity, '-1': -Infinity }
 
+    chart.getDatasetMeta(0).data.forEach((arc, index) => {
       const { x, y, outerRadius, startAngle, endAngle } = arc.getProps(
         ['x', 'y', 'outerRadius', 'startAngle', 'endAngle'],
         true
@@ -183,6 +188,9 @@ const externalLabelsPlugin = {
       const elbowX = x + cos * (outerRadius + 12)
       const elbowY = y + sin * (outerRadius + 12)
       const endX = elbowX + side * 10
+
+      if (Math.abs(elbowY - lastY[side]) < MIN_LABEL_GAP) return
+      lastY[side] = elbowY
 
       ctx.strokeStyle = dataset.backgroundColor[index]
       ctx.beginPath()
